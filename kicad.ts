@@ -22,7 +22,6 @@ export class KiCAD {
         // if it found a path, figure out where 'kicad-cli' is
         if (kicad_path) {
             if (platform() == 'win32') {
-                console.log('windows')
                 kicad_cli_path = kicad_path + 'bin/kicad-cli.exe';
             } else {
                 // whereis

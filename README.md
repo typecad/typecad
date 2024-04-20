@@ -15,28 +15,26 @@ The schematic portion of hardware can be done with just a few simple TypeScript 
 Code can be version controlled, status tracked, git push/pull/PR/issues can be used, and all the typical tools for software design can be used for hardware design now
 
 ## Example
-This **type**CAD code 
+This **type**CAD code...
 ```ts
-import { Schematic, Component } from '@typecad/typecad'
+import { Schematic, Component, Power } from '@typecad/typecad'
 import { Resistor, LED } from '@typecad/passives/0805'
-import { Power } from '@typecad/typecad/buses';
 
 let typecad = new Schematic('typecad');
-
 let bt1 = new Component('Device:Battery_Cell', 'BT1', '2450', 'Battery:BatteryHolder_Keystone_3008_1x2450');
 let r1 = new Resistor('R1', '1 kOhm');
-let led = new LED('D1', 'green');
-let batt_pwr = new Power(typecad, 'batt', bt1.pin(1), bt1.pin(2))
+let d1 = new LED('D1', 'green');
 
-typecad.net(batt_pwr.power.net, r1.pin(1));
-typecad.net('r-led', r1.pin(2), led.pin(2));
-typecad.net(batt_pwr.ground.net, led.pin(1));
+typecad.net('vcc', bt1.pin(1), r1.pin(1));
+typecad.net('r-led', r1.pin(2), d1.pin(2));
+typecad.net('gnd', d1.pin(1));
 
 typecad.create(r1, led, bt1);
 typecad.netlist();
 ```
 
-is the same as this schematic
+...is the same as this schematic.
+
 ![simple led circuit](https://typecad.net/led-circuit.png)
 
 >The difference is that code can be copied, turned into reusable packages, version controlled, and used within the npm/Node.js system.

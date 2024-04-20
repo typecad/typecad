@@ -35,6 +35,7 @@ export class Component {
     Description?: string;
     MPN?: string;
     uuid?: string;
+    #symbol_lib: string = '';
 
     /**
      * `constructor` for Component.
@@ -119,9 +120,12 @@ export class Component {
      * @ignore
      */
     symbol_lib(symbol: string): string {
+        // if we already found this symbol, return it before doing anything
+        if (this.#symbol_lib != '') return this.#symbol_lib;
+        
         let symbol_file_contents = "";
         let symbol_file_name = symbol.split(":");
-        let symbol_lib = '';
+        //let symbol_lib = '';
         let kicad_symbol:string = '';
 
         if (platform() == 'win32') {
@@ -151,8 +155,6 @@ export class Component {
                 if (l[i][1] == `\`${symbol_file_name[1]}\``) {
                     // replace the name with the fqn
                     l[i][1] = `"${symbol_file_name[0]}:${symbol_file_name[1]}"`;
-
-
                     for (var ii in l[i]) {
                         if (l[i][ii][1] == '`Reference`') {
 
@@ -182,20 +184,18 @@ export class Component {
                     }
 
                     // replace ` with "
-                    symbol_lib = S.serialize(l[i]).replaceAll("`", '"');
+                    this.#symbol_lib = S.serialize(l[i]).replaceAll("`", '"');
                 }
             }
         } catch (err) {
             console.error(err);
         }
 
-        if (symbol_lib == '') {
-            // try in project folder
-
+        if (this.#symbol_lib == '') {
             console.log('- ', chalk.red.bold(`ERROR: symbol ${symbol} not found`))
         }
 
-        return symbol_lib;
+        return this.#symbol_lib;
     }
 
     
