@@ -34,6 +34,7 @@ export class Schematic {
     #nets: string[] = []; // all the nets
     #sheets: string[] = [];
     #boxes: string[] = [];
+    #dnc: string[] = [];
     #net_list: NetList[] = [];
 
 
@@ -109,6 +110,10 @@ export class Schematic {
         for (var i in this.#boxes) {
             this.#schematic += this.#boxes[i];
         }
+        for (var i in this.#dnc) {
+            this.#schematic += this.#dnc[i];
+        }
+
         this.#schematic += '(sheet_instances(path "/"(page "1"))))';
         try {
             fs.writeFileSync(`${this.#Sheetname}.kicad_sch`, this.#schematic);
@@ -251,17 +256,99 @@ export class Schematic {
         });
     }
 
-    /**
-     * Used internally
-     * @ignore
-     */
-    #hier_pin(sheet_pin: Pin, ...pins: Pin[]) {
-        var x = 0;
-        var y = 0;
-        var a = 0;
-        var effects: string = "";
+    // /**
+    //  * Used internally
+    //  * @ignore
+    //  */
+    // #hier_pin(sheet_pin: Pin, ...pins: Pin[]) {
+    //     var x = 0;
+    //     var y = 0;
+    //     var a = 0;
+    //     var effects: string = "";
 
+    //     pins.forEach((pin) => {
+    //         if (pin.Owner != undefined) {
+    //             const l = fsexp(pin.Owner.symbol_lib(pin.Owner.symbol)).pop();
+    //             for (var i in l) {
+    //                 for (var ii in l[i]) {
+    //                     if (l[i][ii][0] == "pin") {
+    //                         for (var iii in l[i][ii]) {
+    //                             if (l[i][ii][iii][0] == "number") {
+    //                                 if (l[i][ii][iii][1] == pin.Number) {
+    //                                     for (var iiii in l[i][ii]) {
+    //                                         if (l[i][ii][iiii][0] == "at") {
+    //                                             x = parseFloat(l[i][ii][iiii][1]);
+    //                                             y = parseFloat(l[i][ii][iiii][2]);
+    //                                             a = parseFloat(l[i][ii][iiii][3]);
+    //                                         }
+    //                                     }
+    //                                 }
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //             // fix label direction
+    //             switch (a) {
+    //                 case 0:
+    //                     a = 0;
+    //                     effects = "(effects(justify right bottom))";
+    //                     break;
+    //                 case 180:
+    //                     a = 0;
+    //                     break;
+    //                 case 90:
+    //                     a = 0;
+    //                     effects = "(effects(justify right top))";
+    //                     break;
+    //                 case 270:
+    //                     a = 180;
+    //                     break;
+    //                 default:
+    //                     break;
+    //             }
+    //             this.#nets.push(
+    //                 `(hierarchical_label "${sheet_pin.Name}"(at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y
+    //                 } ${a})(shape ${sheet_pin.type})${effects})`
+    //             );
+    //             console.log(
+    //                 chalk.white("+"),
+    //                 chalk.yellow("hier label"),
+    //                 chalk.white.bold(pin.Name)
+    //             );
+    //             if (pin.hier == true) {
+    //                 this.#nets.push(
+    //                     `(hierarchical_label "${pin.Name}"(at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y
+    //                     } ${a})(shape ${pin.type})${effects})`
+    //                 );
+    //                 console.log(
+    //                     chalk.white("+"),
+    //                     chalk.yellow("hier label"),
+    //                     chalk.white.bold(pin.Name)
+    //                 );
+    //             }
+    //         }
+    //     });
+    // }
+
+    
+    /**
+     * Add a no-connection flag to a pin
+     *
+     * @param {...Pin[]} pins
+     * @example
+     * ```ts
+     * let typecad = new Schematic('sheetname');
+     * let r1 = new Resistor('R1', '10 kOhm');
+     * typecad.dnc(r1.pin(1));
+     * ```
+     */
+    dnc(...pins: Pin[]) {
         pins.forEach((pin) => {
+            var x: number = -1;
+            var y: number = -1;
+
+            // determine pin locations if there is an owner (symbol associated)
             if (pin.Owner != undefined) {
                 const l = fsexp(pin.Owner.symbol_lib(pin.Owner.symbol)).pop();
                 for (var i in l) {
@@ -274,7 +361,6 @@ export class Schematic {
                                             if (l[i][ii][iiii][0] == "at") {
                                                 x = parseFloat(l[i][ii][iiii][1]);
                                                 y = parseFloat(l[i][ii][iiii][2]);
-                                                a = parseFloat(l[i][ii][iiii][3]);
                                             }
                                         }
                                     }
@@ -283,49 +369,21 @@ export class Schematic {
                         }
                     }
                 }
-                // fix label direction
-                switch (a) {
-                    case 0:
-                        a = 0;
-                        effects = "(effects(justify right bottom))";
-                        break;
-                    case 180:
-                        a = 0;
-                        break;
-                    case 90:
-                        a = 0;
-                        effects = "(effects(justify right top))";
-                        break;
-                    case 270:
-                        a = 180;
-                        break;
-                    default:
-                        break;
-                }
-                this.#nets.push(
-                    `(hierarchical_label "${sheet_pin.Name}"(at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y
-                    } ${a})(shape ${sheet_pin.type})${effects})`
-                );
-                console.log(
-                    chalk.white("+"),
-                    chalk.yellow("hier label"),
-                    chalk.white.bold(pin.Name)
-                );
-                if (pin.hier == true) {
-                    this.#nets.push(
-                        `(hierarchical_label "${pin.Name}"(at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y
-                        } ${a})(shape ${pin.type})${effects})`
-                    );
-                    console.log(
-                        chalk.white("+"),
-                        chalk.yellow("hier label"),
-                        chalk.white.bold(pin.Name)
-                    );
+                if (x == -1) {
+                    console.log('- ', chalk.red.bold(`ERROR: pin ${pin.Number} of ${pin.Owner.symbol} not found`))
                 }
             }
+
+            this.#dnc.push(
+                `(no_connect (at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y}))`
+            );
+            console.log(
+                chalk.white("+"),
+                chalk.gray("dnc")
+            );
+
         });
     }
-
 
     /**
      * Creates a box in the schematic file. 
