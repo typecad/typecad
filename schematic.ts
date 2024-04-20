@@ -11,7 +11,6 @@ import { Component } from "./component";
 import { kicad_cli_path } from './kicad'
 
 const S = new SExpr()
-
 /**
  * Used internally
  * @ignore
@@ -157,6 +156,62 @@ export class Schematic {
         runCommand(`"${kicad_cli_path}" sch export netlist ${this.#Sheetname}.kicad_sch`)
     }
 
+    
+    /**
+     * Runs KiCAD's schematic Electric Rules Checker. Process exits with `1` if errors are found. Run this after a schematic is created.
+     */
+    erc() {
+        let erc_failed: boolean = false;
+        const runCommand = (command: string) => {
+            try {
+                execSync(`${command}`);
+            } catch (e) {
+
+            }
+            return true;
+        };
+
+        console.log(chalk.white("+"), chalk.magenta("erc"));
+        runCommand(`"${kicad_cli_path}" sch erc --exit-code-violations --format json ${this.#Sheetname}.kicad_sch`);
+
+            if (fs.existsSync(`${this.#Sheetname}.json`)) {
+                let erc_results_text = fs.readFileSync(
+                    `${this.#Sheetname}.json`,
+                    "utf8"
+                );
+
+                let erc_results = JSON.parse(erc_results_text);
+
+                for (let k in erc_results.sheets[0].violations){
+                    // console.log(erc_results.sheets[0].violations[k].error)
+                    if (erc_results.sheets[0].violations[k].severity == 'error') {
+                        erc_failed = true;
+                        console.log(
+                            chalk.white(" -"),
+                            chalk.red("ERROR"),
+                            chalk.white.bold(erc_results.sheets[0].violations[k].type),
+                            ':',
+                            chalk.white(erc_results.sheets[0].violations[k].items[0].description)
+                        );
+                    }
+
+                    if (erc_results.sheets[0].violations[k].severity == 'warning') {
+                        console.log(
+                            chalk.white(" -"),
+                            chalk.yellow("WARN"),
+                            chalk.white.bold(erc_results.sheets[0].violations[k].type),
+                            ':',
+                            chalk.white(erc_results.sheets[0].violations[k].items[0].description)
+                        );
+                    }
+                }
+            }
+
+
+        if (erc_failed == true) {
+            process.exit(1);
+        }
+    }
 
     /**
      * Connects a pin or group of pins into a together under a net
@@ -331,7 +386,7 @@ export class Schematic {
     //     });
     // }
 
-    
+
     /**
      * Add a no-connection flag to a pin
      *
