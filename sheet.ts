@@ -118,9 +118,11 @@ export class Sheet extends Schematic {
      * sheet.create(resistor);
      * ```
      */
-    create(...components: Component[]) {
+    create(...components: Component[]):boolean {
         this.#Schematic.sheet(this);
         super.create(...components);
+        
+        return true;
     }
 
     

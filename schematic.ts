@@ -3,7 +3,6 @@ import SExpr from "s-expression.js";
 import chalk from 'chalk';
 import fsexp from "fast-sexpr";
 import { execSync } from "node:child_process";
-import { expect } from "chai";
 import { KiCodeTextBox } from '.'
 import { Pin } from "./pin";
 import { Sheet } from './sheet';
@@ -83,7 +82,7 @@ export class Schematic {
      * typecad.create(r1, r2);
      * ```
      */
-    create(...components: Component[]) {
+    create(...components: Component[]): boolean {
         components.forEach((component) => {
             this.#component(component);
         });
@@ -118,6 +117,7 @@ export class Schematic {
             fs.writeFileSync(`${this.#Sheetname}.kicad_sch`, this.#schematic);
         } catch (err) {
             console.error(err);
+            return false;
         }
 
 
@@ -127,7 +127,7 @@ export class Schematic {
         this.#nets = [];
         this.#sheets = [];
         this.#boxes = [];
-
+        return true;
     }
 
 
@@ -156,11 +156,10 @@ export class Schematic {
         runCommand(`"${kicad_cli_path}" sch export netlist ${this.#Sheetname}.kicad_sch`)
     }
 
-    
     /**
      * Runs KiCAD's schematic Electric Rules Checker. Process exits with `1` if errors are found. Run this after a schematic is created.
      */
-    erc() {
+    erc(): boolean {
         let erc_failed: boolean = false;
         const runCommand = (command: string) => {
             try {
@@ -174,43 +173,45 @@ export class Schematic {
         console.log(chalk.white("+"), chalk.magenta("erc"));
         runCommand(`"${kicad_cli_path}" sch erc --exit-code-violations --format json ${this.#Sheetname}.kicad_sch`);
 
-            if (fs.existsSync(`${this.#Sheetname}.json`)) {
-                let erc_results_text = fs.readFileSync(
-                    `${this.#Sheetname}.json`,
-                    "utf8"
-                );
+        if (fs.existsSync(`${this.#Sheetname}.json`)) {
+            let erc_results_text = fs.readFileSync(
+                `${this.#Sheetname}.json`,
+                "utf8"
+            );
 
-                let erc_results = JSON.parse(erc_results_text);
+            let erc_results = JSON.parse(erc_results_text);
 
-                for (let k in erc_results.sheets[0].violations){
-                    // console.log(erc_results.sheets[0].violations[k].error)
-                    if (erc_results.sheets[0].violations[k].severity == 'error') {
-                        erc_failed = true;
-                        console.log(
-                            chalk.white(" -"),
-                            chalk.red("ERROR"),
-                            chalk.white.bold(erc_results.sheets[0].violations[k].type),
-                            ':',
-                            chalk.white(erc_results.sheets[0].violations[k].items[0].description)
-                        );
-                    }
+            for (let k in erc_results.sheets[0].violations) {
+                // console.log(erc_results.sheets[0].violations[k].error)
+                if (erc_results.sheets[0].violations[k].severity == 'error') {
+                    erc_failed = true;
+                    console.log(
+                        chalk.white(" -"),
+                        chalk.red("ERROR"),
+                        chalk.white.bold(erc_results.sheets[0].violations[k].type),
+                        ':',
+                        chalk.white(erc_results.sheets[0].violations[k].items[0].description)
+                    );
+                }
 
-                    if (erc_results.sheets[0].violations[k].severity == 'warning') {
-                        console.log(
-                            chalk.white(" -"),
-                            chalk.yellow("WARN"),
-                            chalk.white.bold(erc_results.sheets[0].violations[k].type),
-                            ':',
-                            chalk.white(erc_results.sheets[0].violations[k].items[0].description)
-                        );
-                    }
+                if (erc_results.sheets[0].violations[k].severity == 'warning') {
+                    console.log(
+                        chalk.white(" -"),
+                        chalk.yellow("WARN"),
+                        chalk.white.bold(erc_results.sheets[0].violations[k].type),
+                        ':',
+                        chalk.white(erc_results.sheets[0].violations[k].items[0].description)
+                    );
                 }
             }
+        }
 
 
         if (erc_failed == true) {
             process.exit(1);
+            return false;
         }
+        return true;
     }
 
     /**
@@ -226,7 +227,9 @@ export class Schematic {
      * typecad.net('vcc', r1.pin(1), r2,pin(1));
      * ```
      */
-    net(name: string, ...pins: Pin[]) {
+    net(name: string, ...pins: Pin[]): boolean {
+        let err: boolean = false;
+
         pins.forEach((pin) => {
             var x: number = -1;
             var y: number = -1;
@@ -256,7 +259,8 @@ export class Schematic {
                     }
                 }
                 if (x == -1) {
-                    console.log('- ', chalk.red.bold(`ERROR: pin ${pin.Number} of ${pin.Owner.symbol} not found`))
+                    console.log('- ', chalk.red.bold(`ERROR: pin ${pin.Number} of ${pin.Owner.symbol} not found`));
+                    err = true;
                 }
                 // fix label direction
                 switch (a) {
@@ -309,83 +313,12 @@ export class Schematic {
                 );
             }
         });
+        if (err) {
+            return false;
+        } else {
+            return true;
+        }
     }
-
-    // /**
-    //  * Used internally
-    //  * @ignore
-    //  */
-    // #hier_pin(sheet_pin: Pin, ...pins: Pin[]) {
-    //     var x = 0;
-    //     var y = 0;
-    //     var a = 0;
-    //     var effects: string = "";
-
-    //     pins.forEach((pin) => {
-    //         if (pin.Owner != undefined) {
-    //             const l = fsexp(pin.Owner.symbol_lib(pin.Owner.symbol)).pop();
-    //             for (var i in l) {
-    //                 for (var ii in l[i]) {
-    //                     if (l[i][ii][0] == "pin") {
-    //                         for (var iii in l[i][ii]) {
-    //                             if (l[i][ii][iii][0] == "number") {
-    //                                 if (l[i][ii][iii][1] == pin.Number) {
-    //                                     for (var iiii in l[i][ii]) {
-    //                                         if (l[i][ii][iiii][0] == "at") {
-    //                                             x = parseFloat(l[i][ii][iiii][1]);
-    //                                             y = parseFloat(l[i][ii][iiii][2]);
-    //                                             a = parseFloat(l[i][ii][iiii][3]);
-    //                                         }
-    //                                     }
-    //                                 }
-    //                             }
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //             // fix label direction
-    //             switch (a) {
-    //                 case 0:
-    //                     a = 0;
-    //                     effects = "(effects(justify right bottom))";
-    //                     break;
-    //                 case 180:
-    //                     a = 0;
-    //                     break;
-    //                 case 90:
-    //                     a = 0;
-    //                     effects = "(effects(justify right top))";
-    //                     break;
-    //                 case 270:
-    //                     a = 180;
-    //                     break;
-    //                 default:
-    //                     break;
-    //             }
-    //             this.#nets.push(
-    //                 `(hierarchical_label "${sheet_pin.Name}"(at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y
-    //                 } ${a})(shape ${sheet_pin.type})${effects})`
-    //             );
-    //             console.log(
-    //                 chalk.white("+"),
-    //                 chalk.yellow("hier label"),
-    //                 chalk.white.bold(pin.Name)
-    //             );
-    //             if (pin.hier == true) {
-    //                 this.#nets.push(
-    //                     `(hierarchical_label "${pin.Name}"(at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y
-    //                     } ${a})(shape ${pin.type})${effects})`
-    //                 );
-    //                 console.log(
-    //                     chalk.white("+"),
-    //                     chalk.yellow("hier label"),
-    //                     chalk.white.bold(pin.Name)
-    //                 );
-    //             }
-    //         }
-    //     });
-    // }
-
 
     /**
      * Add a no-connection flag to a pin
@@ -398,7 +331,9 @@ export class Schematic {
      * typecad.dnc(r1.pin(1));
      * ```
      */
-    dnc(...pins: Pin[]) {
+    dnc(...pins: Pin[]): boolean {
+        let err: boolean = false;
+
         pins.forEach((pin) => {
             var x: number = -1;
             var y: number = -1;
@@ -425,7 +360,8 @@ export class Schematic {
                     }
                 }
                 if (x == -1) {
-                    console.log('- ', chalk.red.bold(`ERROR: pin ${pin.Number} of ${pin.Owner.symbol} not found`))
+                    console.log('- ', chalk.red.bold(`ERROR: pin ${pin.Number} of ${pin.Owner.symbol} not found`));
+                    err = true;
                 }
             }
 
@@ -438,6 +374,11 @@ export class Schematic {
             );
 
         });
+        if (err) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
