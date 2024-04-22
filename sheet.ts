@@ -139,9 +139,18 @@ export class Sheet extends Schematic {
      * sheet.create(resistor);
      * ```
      */
-    hier(name: string, ...pins: Pin[]) {
+    hier(name: string, ...pins: Pin[]): boolean {
         let dup: boolean = false;
+        let err: boolean = false;
         pins.forEach((pin) => {
+
+            // check that the information needed for the pin is there
+            if ("Name" in pin == false) {
+                console.log('- ', chalk.red.bold('ERROR: pin passed for DNC is malformed (missing Owner or Number)'));
+                err = false;
+                return false;
+            }
+
             pin.hier = true;
             pin.Name = name;
             this.#pins_list.forEach((_pin) => {
@@ -154,6 +163,12 @@ export class Sheet extends Schematic {
             }
             super.net(name, pin);    // add hier pin in sheet
         });
+
+        if (err) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**

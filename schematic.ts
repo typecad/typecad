@@ -236,6 +236,13 @@ export class Schematic {
             var a: number = -1;
             var effects: string = "";
 
+            // check that the information needed for the pin is there
+            if ("Owner" in pin == false || "Number" in pin == false) {
+                console.log('- ', chalk.red.bold('ERROR: pin passed for DNC is malformed (missing Owner or Number)'));
+                err = true;
+                return false;
+            }
+
             // determine pin locations if there is an owner (symbol associated)
             if (pin.Owner != undefined) {
                 const l = fsexp(pin.Owner.symbol_lib(pin.Owner.symbol)).pop();
@@ -284,7 +291,12 @@ export class Schematic {
             }
 
             if (pin.hier == true) {
-                // console.log(pin)
+                // check that the information needed for the pin is there
+                if ("Name" in pin == false) {
+                    console.log('- ', chalk.red.bold('ERROR: pin passed for DNC is malformed (missing Name)'));
+                    err = true;
+                    return false;
+                }
                 this.#nets.push(
                     `(hierarchical_label "${pin.Name}"(at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y
                     } ${a})(shape ${pin.type}))`
@@ -337,6 +349,13 @@ export class Schematic {
         pins.forEach((pin) => {
             var x: number = -1;
             var y: number = -1;
+
+            // check that the information needed for the pin is there
+            if ("Owner" in pin == false || "Number" in pin == false) {
+                console.log('- ', chalk.red.bold('ERROR: pin passed for DNC is malformed (missing Owner or Number)'));
+                err = true;
+                return false;
+            }
 
             // determine pin locations if there is an owner (symbol associated)
             if (pin.Owner != undefined) {
