@@ -7,6 +7,7 @@ export { Bounds } from './bounds'
 export { UART, USB, GPIO } from './buses'
 export { Power } from './power'
 
+import chalk from 'chalk';
 import { KiCAD, kicad_cli_path, kicad_path } from './kicad'
 import { exit } from 'node:process'
 
@@ -14,7 +15,7 @@ let kicad = new KiCAD();
 
 if (kicad_path && kicad_cli_path) {
 } else {
-    console.log("kicad not found")
+    console.log('- ', chalk.red.bold('ERROR: KiCAD not found, go to https://github.com/typecad/typecad/wiki/typecad.json for more information'));
     exit();
 }
 
