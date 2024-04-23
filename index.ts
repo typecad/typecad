@@ -6,6 +6,7 @@ export { Pin, IPin } from "./pin"
 export { Bounds } from './bounds'
 export { UART, USB, GPIO } from './buses'
 export { Power } from './power'
+
 import { KiCAD, kicad_cli_path, kicad_path } from './kicad'
 import { exit } from 'node:process'
 
