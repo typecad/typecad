@@ -4,7 +4,7 @@
 ##  KiCAD + TypeScript + npm = **type**CAD
 > typeCAD is a way to programmatically create hardware designs.
 
-It's accomplished with TypeScript and all the goodness of the npm/Node.js ecosystem.
+It's done with TypeScript and all the goodness of the npm/Node.js ecosystem.
 
 - millions of packages that you can use
 - create portable/importable/shareable packages
@@ -22,8 +22,8 @@ import { Resistor, LED } from '@typecad/passives/0805'
 
 let typecad = new Schematic('typecad');
 let bt1 = new Component('Device:Battery_Cell', 'BT1', '2450', 'Battery:BatteryHolder_Keystone_3008_1x2450');
-let r1 = new Resistor('R1', '1 kOhm');
-let d1 = new LED('D1', 'green');
+let r1 = new Resistor({ value: "1 kOhm"});
+let d1 = new LED();
 
 typecad.net('vcc', bt1.pin(1), r1.pin(1));
 typecad.net('r-led', r1.pin(2), d1.pin(2));

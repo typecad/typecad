@@ -3,7 +3,7 @@ export { Component } from './component'
 export { Sheet } from './sheet'
 export { Schematic } from './schematic'
 export { Pin, IPin } from "./pin"
-export { Bounds } from './bounds'
+export { Bounds, Box } from './bounds'
 export { UART, USB, GPIO } from './buses'
 export { Power } from './power'
 
@@ -40,13 +40,3 @@ export class KiCodeTextBox {
     };
     justify = "top left";
 }
-
-// /** Devices */
-// export enum Devices {
-//     /** small capacitor: p1, p2 */
-//     C_Small = 'Device:C_Small',
-//     /** small diode: pin 1 anode, pin 2 cathode */
-//     D_Small = 'Device:D_Small',
-//     /** small resistor: p1, p2 */
-//     R_Small = 'Device:R_Small',
-// }
