@@ -4,7 +4,7 @@ export { Sheet } from './sheet'
 export { Schematic } from './schematic'
 export { Pin, IPin } from "./pin"
 export { Bounds, Box } from './bounds'
-export { UART, USB, GPIO } from './buses'
+export { UART, USB, GPIO, I2C } from './buses'
 export { Power } from './power'
 
 import chalk from 'chalk';

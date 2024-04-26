@@ -26,16 +26,16 @@ const S = new SExpr()
  * @property {string} uuid - UUID of component used by KiCAD
  */
 export class Component {
-    Footprint?:string;
+    Footprint?: string;
     symbol: string;
     coord? = { x: 0, y: 0 };
-    Reference?:string;
-    Value:string = '';
-    Datasheet?: string;
+    Reference?: string;
+    Value: string = '';
+    Datasheet?: string = '';
     Description?: string;
     MPN?: string;
     uuid?: string;
-    #symbol_lib: string = '';
+    #symbol_lib?: string = '';
 
     /**
      * `constructor` for Component.
@@ -69,7 +69,7 @@ export class Component {
         }
     }
 
-    
+
     /**
      * Returns a {@link Pin} object from the component
      * 
@@ -85,7 +85,7 @@ export class Component {
         return new Pin({ Number: number, Owner: this, type: 'passive' });
     }
 
-    
+
     /**
      * Used internally
      * @ignore
@@ -114,19 +114,19 @@ export class Component {
         return s;
     }
 
-    
+
     /**
      * Used internally
      * @ignore
      */
     symbol_lib(symbol: string): string {
         // if we already found this symbol, return it before doing anything
-        if (this.#symbol_lib != '') return this.#symbol_lib;
-        
+        if (this.#symbol_lib != '') return this.#symbol_lib!;
+
         let symbol_file_contents = "";
         let symbol_file_name = symbol.split(":");
         //let symbol_lib = '';
-        let kicad_symbol:string = '';
+        let kicad_symbol: string = '';
 
         if (platform() == 'win32') {
             kicad_symbol = kicad_path + 'share/kicad/symbols';
@@ -168,6 +168,12 @@ export class Component {
                                 this.Value = l[i][ii][2].replaceAll(`\``, "");
                             }
                         }
+
+                        if (l[i][ii][1] == '`Datasheet`') {
+                            if (this.Datasheet == '') {
+                                this.Datasheet = l[i][ii][2].replaceAll(`\``, "");
+                            }
+                        }
                     }
 
                     // check if this is an 'extends' part
@@ -195,10 +201,10 @@ export class Component {
             console.log('- ', chalk.red.bold(`ERROR: symbol ${symbol} not found`))
         }
 
-        return this.#symbol_lib;
+        return this.#symbol_lib!;
     }
 
-    
+
     /**
      * Defines the component's X and Y location in the KiCAD Schematic file
      *
@@ -210,5 +216,71 @@ export class Component {
         if (y == undefined) y = Math.floor(Math.random() * 100);
         this.coord!.x = 2.54 * Math.ceil(x / 2.54);
         this.coord!.y = 2.54 * Math.ceil(y / 2.54);
+    }
+
+    pinout() {
+        let _footprint: string = '';
+        let _datasheet: string = '';
+        let _description: string = '';
+        let _type: string = '';
+        let _name: string = '';
+        let _number: number = -1;
+        let _symbol: string = '';
+        let _markdown: string = '';
+
+        let _pins: { type: string, name: string, number: number }[] = [];
+
+        const l = fsexp(this.#symbol_lib).pop();
+        for (var i in l) {
+            for (var ii in l[i]) {
+                if (l[i][ii] == 'Footprint') {
+                    _footprint = l[i][parseInt(ii) + 1];
+                }
+
+                if (l[i][ii] == 'Datasheet') {
+                    _datasheet = l[i][parseInt(ii) + 1];
+                }
+
+                if (l[i][ii] == 'Description') {
+                    _description = l[i][parseInt(ii) + 1];
+                }
+
+                if (l[i][ii] == 'Value') {
+                    _symbol = l[i][parseInt(ii) + 1];
+                }
+
+                if (l[i][ii][0] == "pin") {
+                    _type = l[i][ii][1];
+                    for (var iii in l[i][ii]) {
+                        if (l[i][ii][iii][0] == "name") {
+                            _name = l[i][ii][iii][1];
+                        }
+                        if (l[i][ii][iii][0] == "number") {
+                            _number = l[i][ii][iii][1];
+                        }
+                    }
+                    _pins.push({type: _type, name: _name, number: _number});
+                }
+            }
+        }
+        
+        _markdown = `### ${_symbol}\n`;
+        _markdown += `**${_description}*\n`
+        _markdown += `- Datasheet: ${this.Datasheet}\n`;
+        _markdown += `- Footprint: ${this.Footprint}\n\n`;
+        _markdown += `| Pin # | Name | Type |\n`;
+        _markdown += `| --: | :-- | :-- |\n`
+        _pins.forEach((pin) => {
+            _markdown += `| ${pin.number} | ${pin.name} | ${pin.type} |\n`;
+        });
+
+        try {
+            if (!fs.existsSync('./pinout/')){
+                fs.mkdirSync('./pinout/');
+            }
+            fs.writeFileSync(`./pinout/${_symbol}.md`, _markdown);
+        } catch (err) {
+            console.error(err);
+        }
     }
 }
