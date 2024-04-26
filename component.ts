@@ -218,6 +218,10 @@ export class Component {
         this.coord!.y = 2.54 * Math.ceil(y / 2.54);
     }
 
+    
+    /**
+     * Creates a file listing the pinout of the component in `./pinout/[symbol name].md`
+     */
     pinout() {
         let _footprint: string = '';
         let _datasheet: string = '';
