@@ -16,6 +16,9 @@ const S = new SExpr()
  */
 export type NetList = { name: string, pins: Pin };
 
+let symbols:string[] = ['▖', '▗', '▘', '▙', '▚', '▛', '▜', '▝', '▞', '▟']
+const getRandomElement = () =>
+    symbols.length ? symbols[Math.floor(Math.random() * symbols.length)] : undefined
 
 /**
  * The main class for typeCAD. Holds all {@link Component} and {@link Sheet} classes, creates work files, and creates nets. 
@@ -114,7 +117,7 @@ export class Schematic {
 
         this.#schematic += '(sheet_instances(path "/"(page "1"))))';
         try {
-            fs.writeFileSync(`${this.#Sheetname}.kicad_sch`, this.#schematic);
+            fs.writeFileSync(`./build/${this.#Sheetname}.kicad_sch`, this.#schematic);
         } catch (err) {
             console.error(err);
             return false;
@@ -152,8 +155,10 @@ export class Schematic {
             return true;
         };
 
-        console.log(chalk.white("+"), chalk.cyan("netlist"));
-        runCommand(`"${kicad_cli_path}" sch export netlist ${this.#Sheetname}.kicad_sch`)
+        // console.log(chalk.white("\n+"), chalk.cyan("netlist"));
+        process.stdout.write(chalk.white("\n+"));
+        process.stdout.write(chalk.cyan("netlist"));
+        runCommand(`"${kicad_cli_path}" sch export netlist --output ./build/${this.#Sheetname}.net ./build/${this.#Sheetname}.kicad_sch`)
     }
 
     /**
@@ -170,19 +175,22 @@ export class Schematic {
             return true;
         };
 
-        console.log(chalk.white("+"), chalk.magenta("erc"));
-        runCommand(`"${kicad_cli_path}" sch erc --exit-code-violations --format json ${this.#Sheetname}.kicad_sch`);
+        // console.log(chalk.white("\n+"), chalk.magenta("erc"));
+        process.stdout.write(chalk.white("\n+"));
+        process.stdout.write(chalk.magenta("erc\n"));
 
-        if (fs.existsSync(`${this.#Sheetname}.json`)) {
+
+        runCommand(`"${kicad_cli_path}" sch erc --exit-code-violations --output ./build/${this.#Sheetname}.json --format json ./build/${this.#Sheetname}.kicad_sch`);
+
+        if (fs.existsSync(`./build/${this.#Sheetname}.json`)) {
             let erc_results_text = fs.readFileSync(
-                `${this.#Sheetname}.json`,
+                `./build/${this.#Sheetname}.json`,
                 "utf8"
             );
 
             let erc_results = JSON.parse(erc_results_text);
 
             for (let k in erc_results.sheets[0].violations) {
-                // console.log(erc_results.sheets[0].violations[k].error)
                 if (erc_results.sheets[0].violations[k].severity == 'error') {
                     erc_failed = true;
                     console.log(
@@ -238,7 +246,9 @@ export class Schematic {
 
             // check that the information needed for the pin is there
             if ("Owner" in pin == false || "Number" in pin == false) {
-                console.log('- ', chalk.red.bold('ERROR: pin passed for DNC is malformed (missing Owner or Number)'));
+                console.log('\n- ', chalk.red.bold('ERROR: pin passed is malformed (missing Owner or Number)'));
+                // process.stdout.write(chalk.white("\n-"));
+                // process.stdout.write(chalk.magenta("erc\n"));
                 err = true;
                 return false;
             }
@@ -266,7 +276,7 @@ export class Schematic {
                     }
                 }
                 if (x == -1) {
-                    console.log('- ', chalk.red.bold(`ERROR: pin ${pin.Number} of ${pin.Owner.symbol} not found`));
+                    console.log('\n- ', chalk.red.bold(`ERROR: pin ${pin.Number} of ${pin.Owner.symbol} not found`));
                     err = true;
                 }
                 // fix label direction
@@ -293,7 +303,7 @@ export class Schematic {
             if (pin.hier == true) {
                 // check that the information needed for the pin is there
                 if ("Name" in pin == false) {
-                    console.log('- ', chalk.red.bold('ERROR: pin passed for DNC is malformed (missing Name)'));
+                    console.log('\n- ', chalk.red.bold('ERROR: pin passed is malformed (missing Name)'));
                     err = true;
                     return false;
                 }
@@ -301,11 +311,12 @@ export class Schematic {
                     `(hierarchical_label "${pin.Name}"(at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y
                     } ${a})(shape ${pin.type}))`
                 );
-                console.log(
-                    chalk.white("+"),
-                    chalk.yellow("hier label"),
-                    chalk.white.bold(pin.Name)
-                );
+                // console.log(
+                //     chalk.white("+"),
+                //     chalk.yellow("hier label"),
+                //     chalk.white.bold(pin.Name)
+                // );
+                process.stdout.write(chalk.yellow(getRandomElement()));
             }
             else if (pin.sheet == true) {
                 this.#nets.push(
@@ -318,11 +329,12 @@ export class Schematic {
                     `(label "${name}"(at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y
                     } ${a}) ${effects})`
                 );
-                console.log(
-                    chalk.white("+"),
-                    chalk.blue("net label"),
-                    chalk.white.bold(name)
-                );
+                // console.log(
+                    // chalk.white("+"),
+                    // chalk.blue(getRandomElement()),
+                    process.stdout.write(chalk.blue(getRandomElement()));
+                    // chalk.white.bold(name)
+                // );
             }
         });
         if (err) {
@@ -352,7 +364,7 @@ export class Schematic {
 
             // check that the information needed for the pin is there
             if ("Owner" in pin == false || "Number" in pin == false) {
-                console.log('- ', chalk.red.bold('ERROR: pin passed for DNC is malformed (missing Owner or Number)'));
+                console.log('\n- ', chalk.red.bold('ERROR: pin passed for DNC is malformed (missing Owner or Number)'));
                 err = true;
                 return false;
             }
@@ -379,7 +391,7 @@ export class Schematic {
                     }
                 }
                 if (x == -1) {
-                    console.log('- ', chalk.red.bold(`ERROR: pin ${pin.Number} of ${pin.Owner.symbol} not found`));
+                    console.log('\n- ', chalk.red.bold(`ERROR: pin ${pin.Number} of ${pin.Owner.symbol} not found`));
                     err = true;
                 }
             }
@@ -387,10 +399,11 @@ export class Schematic {
             this.#dnc.push(
                 `(no_connect (at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y}))`
             );
-            console.log(
-                chalk.white("+"),
-                chalk.gray("dnc")
-            );
+            // console.log(
+            //     chalk.white("+"),
+            //     chalk.gray("dnc")
+            // );
+            process.stdout.write(chalk.gray(getRandomElement()));
 
         });
         if (err) {
@@ -415,7 +428,8 @@ export class Schematic {
             )`
             );
 
-            console.log(chalk.white("+"), chalk.gray("box"));
+            // console.log(chalk.white("+"), chalk.gray("box"));
+            process.stdout.write(chalk.white(getRandomElement()));
         });
     }
 
@@ -426,7 +440,8 @@ export class Schematic {
     #component(component: Component) {
         this.#symbol_libs.push(component.symbol_lib(component.symbol));      // has to be before next line to get the right references and 
         this.#symbols.push(component.update());
-        console.log(chalk.white("+"), chalk.green("component"), chalk.white.bold(component.symbol));
+        // console.log(chalk.white("+"), chalk.green("component"), chalk.white.bold(component.symbol));
+        process.stdout.write(chalk.greenBright(getRandomElement()));
     }
 
 

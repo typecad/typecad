@@ -9,6 +9,9 @@ import { platform } from 'node:os';
 
 // const kicad_symbol = "C:/Program Files/KiCad/8.0/share/kicad/symbols"
 const S = new SExpr()
+let symbols:string[] = ['▖', '▗', '▘', '▙', '▚', '▛', '▜', '▝', '▞', '▟']
+const getRandomElement = () =>
+    symbols.length ? symbols[Math.floor(Math.random() * symbols.length)] : undefined
 
 /**
  * Create a new component, defined as a schematic symbol, a footprint, value, and reference designator. 
@@ -141,7 +144,7 @@ export class Component {
                 );
             } else {
                 symbol_file_contents = fs.readFileSync(
-                    `./lib/${symbol_file_name[0]}.kicad_sym`,
+                    `./build/lib/${symbol_file_name[0]}.kicad_sym`,
                     "utf8"
                 );
             }
@@ -279,10 +282,10 @@ export class Component {
         });
 
         try {
-            if (!fs.existsSync('./pinout/')){
-                fs.mkdirSync('./pinout/');
+            if (!fs.existsSync('./build/pinout/')){
+                fs.mkdirSync('./build/pinout/');
             }
-            fs.writeFileSync(`./pinout/${_symbol}.md`, _markdown);
+            fs.writeFileSync(`./build/pinout/${_symbol}.md`, _markdown);
         } catch (err) {
             console.error(err);
         }
