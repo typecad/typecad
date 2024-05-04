@@ -8,6 +8,7 @@ import { Pin } from "./pin";
 import { Sheet } from './sheet';
 import { Component } from "./component";
 import { kicad_cli_path } from './kicad'
+import { Bus } from "./buses";
 
 const S = new SExpr()
 /**
@@ -16,7 +17,7 @@ const S = new SExpr()
  */
 export type NetList = { name: string, pins: Pin };
 
-let symbols:string[] = ['▖', '▗', '▘', '▙', '▚', '▛', '▜', '▝', '▞', '▟']
+let symbols: string[] = ['▖', '▗', '▘', '▙', '▚', '▛', '▜', '▝', '▞', '▟']
 const getRandomElement = () =>
     symbols.length ? symbols[Math.floor(Math.random() * symbols.length)] : undefined
 
@@ -37,6 +38,7 @@ export class Schematic {
     #boxes: string[] = [];
     #dnc: string[] = [];
     #net_list: NetList[] = [];
+    #tie_count: number = 0;
 
 
     /**
@@ -162,6 +164,33 @@ export class Schematic {
     }
 
     /**
+ * Creates a CSV BOM for the schematic
+ * @example
+ * ```ts
+ * let typecad = new Schematic('sheetname');
+ * let r1 = new Component("Device:R_Small", 'R1', '1 kOhm', "Resistor_SMD:R_0603_1608Metric");
+ * typecad.create(r1);
+ * typecad.bom();
+ * ```
+ */
+    bom() {
+        const runCommand = (command: string) => {
+            try {
+                execSync(`${command}`, { stdio: "inherit" });
+            } catch (e) {
+                console.error(`Failed executing ${command}`, e);
+                return false;
+            }
+            return true;
+        };
+
+        // console.log(chalk.white("\n+"), chalk.cyan("netlist"));
+        process.stdout.write(chalk.white("\n+"));
+        process.stdout.write(chalk.red("bom"));
+        runCommand(`"${kicad_cli_path}" sch export bom --fields "*" --output ./build/${this.#Sheetname}.csv ./build/${this.#Sheetname}.kicad_sch`)
+    }
+
+    /**
      * Runs KiCAD's schematic Electric Rules Checker. Process exits with `1` if errors are found. Run this after a schematic is created.
      */
     erc(): boolean {
@@ -245,8 +274,16 @@ export class Schematic {
             var effects: string = "";
 
             // check that the information needed for the pin is there
+            if (pin == undefined) {
+                console.log('\n- ', chalk.red.bold('ERROR: pin is malformed (undefined)'));
+                // process.stdout.write(chalk.white("\n-"));
+                // process.stdout.write(chalk.magenta("erc\n"));
+                err = true;
+                return false;
+            }
+
             if ("Owner" in pin == false || "Number" in pin == false) {
-                console.log('\n- ', chalk.red.bold('ERROR: pin passed is malformed (missing Owner or Number)'));
+                console.log('\n- ', chalk.red.bold('ERROR: pin is malformed (missing Owner or Number)'));
                 // process.stdout.write(chalk.white("\n-"));
                 // process.stdout.write(chalk.magenta("erc\n"));
                 err = true;
@@ -330,10 +367,10 @@ export class Schematic {
                     } ${a}) ${effects})`
                 );
                 // console.log(
-                    // chalk.white("+"),
-                    // chalk.blue(getRandomElement()),
-                    process.stdout.write(chalk.blue(getRandomElement()));
-                    // chalk.white.bold(name)
+                // chalk.white("+"),
+                // chalk.blue(getRandomElement()),
+                process.stdout.write(chalk.blue(getRandomElement()));
+                // chalk.white.bold(name)
                 // );
             }
         });
@@ -438,12 +475,12 @@ export class Schematic {
      * @ignore
      */
     #component(component: Component) {
+        if (component.symbol_lib == undefined) return;
         this.#symbol_libs.push(component.symbol_lib(component.symbol));      // has to be before next line to get the right references and 
         this.#symbols.push(component.update());
         // console.log(chalk.white("+"), chalk.green("component"), chalk.white.bold(component.symbol));
         process.stdout.write(chalk.greenBright(getRandomElement()));
     }
-
 
     /**
      * Creates a new sheet in the schematic. The same as KiCAD's hierarchical sheet. 
@@ -455,5 +492,37 @@ export class Schematic {
      */
     sheet(sheet: Sheet) {
         this.#sheets.push(sheet.add())
+    }
+
+    
+    /**
+     * Ties 2, 3, or 4 nets together
+     *
+     * @param {string} net1
+     * @param {string} net2
+     * @param {?string} [net3]
+     * @param {?string} [net4]
+     */
+    tie(net1: string, net2: string, net3?: string, net4?: string) {
+        this.#tie_count++;
+        if (net4 && net3) {
+            let nt = new Component("Device:NetTie_4", ("NT" + this.#tie_count), '', "NetTie:NetTie-4_SMD_Pad0.5mm");
+            this.net(net1, nt.pin(1));
+            this.net(net2, nt.pin(2));
+            this.net(net3, nt.pin(3));
+            this.net(net4, nt.pin(4));
+            this.add(nt);
+        } else if (net3) {
+            let nt = new Component("Device:NetTie_3", ("NT" + this.#tie_count), '', "NetTie:NetTie-3_SMD_Pad0.5mm");
+            this.net(net1, nt.pin(1));
+            this.net(net2, nt.pin(2));
+            this.net(net3, nt.pin(3));
+            this.add(nt);
+        } else {
+            let nt = new Component("Device:NetTie_2", ("NT" + this.#tie_count), '', "NetTie:NetTie-2_SMD_Pad0.5mm");
+            this.net(net1, nt.pin(1));
+            this.net(net2, nt.pin(2));
+            this.add(nt);
+        }
     }
 }

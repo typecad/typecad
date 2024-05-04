@@ -3,6 +3,9 @@ import { HierPin, Pin } from './pin'
 import { Component } from ".";
 import chalk from 'chalk';
 
+let symbols:string[] = ['▖', '▗', '▘', '▙', '▚', '▛', '▜', '▝', '▞', '▟']
+const getRandomElement = () =>
+    symbols.length ? symbols[Math.floor(Math.random() * symbols.length)] : undefined
 
 /**
  * Adds a new sheet in the schematic. The same as KiCAD's hierarchical sheet. 
@@ -98,11 +101,13 @@ export class Sheet extends Schematic {
         });
 
         s += `)`;
-        console.log(
-            chalk.white("+"),
-            chalk.red("sheet"),
-            chalk.white.bold(this.#Sheetname)
-        );
+        // console.log(
+        //     chalk.white("+"),
+        //     chalk.red("sheet"),
+        //     chalk.white.bold(this.#Sheetname)
+        // );
+
+        process.stdout.write(chalk.red(getRandomElement()));
         return s;
     }
 

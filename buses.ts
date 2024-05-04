@@ -1,6 +1,6 @@
 import { Pin } from './pin';
 
-class Bus {}
+export class Bus {}
 
 export class GPIO extends Bus {
     io = new Pin;
@@ -33,11 +33,11 @@ export class UART extends Bus {
 }
 
 export class USB extends Bus {
-    DP = new Pin;
-    DN = new Pin;
+    dP = new Pin;
+    dN = new Pin;
     constructor(DP: Pin, DN: Pin){
         super();
-        this.DP = DP;
-        this.DN = DN;
+        this.dP = DP;
+        this.dN = DN;
     }
 }
