@@ -17,8 +17,8 @@ Code can be version controlled, status tracked, git push/pull/PR/issues can be u
 ## Example
 This **type**CAD code...
 ```ts
-import { Schematic, Component, Power } from '@typecad/typecad'
-import { Resistor, LED } from '@typecad/passives/0805'
+import { Schematic, Component } from '@typecad/typecad'
+import { Resistor, LED } from './modules/passives/0805'
 
 let typecad = new Schematic('typecad');
 let bt1 = new Component('Device:Battery_Cell', 'BT1', '2450', 'Battery:BatteryHolder_Keystone_3008_1x2450');
@@ -43,7 +43,7 @@ typecad.netlist();
 Read through the [documentation](https://typecad.net/docs/walkthrough/get-started) for a full walkthrough:
 
 ```bash
-npx @typecad/create-typecad-project blinky_typecad
+npx @typecad/create-typecad
 ```
 
 ---
