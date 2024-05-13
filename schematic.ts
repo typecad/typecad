@@ -346,7 +346,7 @@ export class Schematic {
                 }
                 this.#nets.push(
                     `(hierarchical_label "${pin.Name}"(at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y
-                    } ${a})(shape ${pin.type}))`
+                    } ${a})(shape ${pin.type})  ${effects})`
                 );
                 // console.log(
                 //     chalk.white("+"),

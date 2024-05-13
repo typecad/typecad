@@ -50,7 +50,11 @@ export class Pin {
         if (y != undefined) this.y = y;
         if (a != undefined) this.a = a;
         if (hier != undefined) this.hier = hier;
-        if (type != undefined) this.type = type;
+        if (type != undefined) {
+            this.type = type;
+        } else {
+            this.type = 'passive';
+        }
         if (order != undefined) this.order = order;
         if (x != undefined) this.hier_to_net = true;
         if (sheet != undefined) this.sheet = sheet;

@@ -3,7 +3,7 @@ import { HierPin, Pin } from './pin'
 import { Component } from ".";
 import chalk from 'chalk';
 
-let symbols:string[] = ['▖', '▗', '▘', '▙', '▚', '▛', '▜', '▝', '▞', '▟']
+let symbols: string[] = ['▖', '▗', '▘', '▙', '▚', '▛', '▜', '▝', '▞', '▟']
 const getRandomElement = () =>
     symbols.length ? symbols[Math.floor(Math.random() * symbols.length)] : undefined
 
@@ -22,7 +22,7 @@ export class Sheet extends Schematic {
     #Sheetname;
     #Schematic: Schematic;
 
-    
+
     /**
      * `constructor` for Sheet`
      *
@@ -47,7 +47,7 @@ export class Sheet extends Schematic {
 
     }
 
-    
+
     /**
      * Defines the sheet's X and Y location in the KiCAD Schematic file
      *
@@ -59,7 +59,7 @@ export class Sheet extends Schematic {
         this.#coord.y = 2.54 * Math.ceil(y / 2.54);
     }
 
-    
+
     /**
      * Used internally
      * @ignore
@@ -111,7 +111,7 @@ export class Sheet extends Schematic {
         return s;
     }
 
-    
+
     /**
      * Creates the sheet with all the passed components
      *
@@ -123,14 +123,13 @@ export class Sheet extends Schematic {
      * sheet.create(resistor);
      * ```
      */
-    create(...components: Component[]):boolean {
+    create(...components: Component[]): boolean {
         this.#Schematic.sheet(this);
         super.create(...components);
-        
+
         return true;
     }
 
-    
     /**
      * Creates connections between a sheet and the schematic that holds it. A `hier` pin is the same as KiCAD's hierarchical sheet pin.
      *
@@ -144,7 +143,7 @@ export class Sheet extends Schematic {
      * sheet.create(resistor);
      * ```
      */
-    hier(name: string, ...pins: Pin[]): boolean {
+    net(name: string, ...pins: Pin[]): boolean {
         let dup: boolean = false;
         let err: boolean = false;
         pins.forEach((pin) => {
@@ -159,12 +158,12 @@ export class Sheet extends Schematic {
             pin.hier = true;
             pin.Name = name;
             this.#pins_list.forEach((_pin) => {
-                if (pin.Name == _pin.Name){
+                if (pin.Name == _pin.Name) {
                     dup = true;
                 }
             });
-            if (dup == false){
-            this.#pins_list.push(pin); // add to sheet symbol pin list
+            if (dup == false) {
+                this.#pins_list.push(pin); // add to sheet symbol pin list
             }
             super.net(name, pin);    // add hier pin in sheet
         });
