@@ -8,6 +8,6 @@ test('create a sheet', () => {
     let resistor = new Component('Device:R', 'R1');
 
     expect(sheet.create(resistor)).toBe(true)
-    expect(fs.existsSync(`${process.cwd()}\\hw\\build\\sheet.kicad_sch`)).toBe(true);
-    fs.unlinkSync(`${process.cwd()}\\hw\\build\\sheet.kicad_sch`);
+    expect(fs.existsSync(`${process.cwd()}\\build\\sheet.kicad_sch`)).toBe(true);
+    fs.unlinkSync(`${process.cwd()}\\build\\sheet.kicad_sch`);
 });

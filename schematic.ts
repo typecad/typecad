@@ -276,12 +276,12 @@ export class Schematic {
 
         if (net) {
             // if a net was passed, use that
-            this._net(net, ...pins);
+            return this._net(net, ...pins);
         }
         else {
             // if no net passed, create a name for a net
             let net_name = pins[0].Owner.Reference + '.' + pins[0].Number;
-            this._net(net_name, ...pins);
+            return this._net(net_name, ...pins);
         }
     }
 
