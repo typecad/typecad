@@ -1,4 +1,4 @@
-import { Schematic } from "./schematic";
+import { Schematic, INet } from "./schematic";
 import { HierPin, Pin } from './pin'
 import { Component } from ".";
 import chalk from 'chalk';
@@ -97,15 +97,10 @@ export class Sheet extends Schematic {
             pin.sheet = true;
             pin.x = this.#coord.x;
             pin.y = this.#coord.y;
-            this.#Schematic.net(pin.Name, pin);
+            this.#Schematic._net(pin.Name, pin);
         });
 
         s += `)`;
-        // console.log(
-        //     chalk.white("+"),
-        //     chalk.red("sheet"),
-        //     chalk.white.bold(this.#Sheetname)
-        // );
 
         process.stdout.write(chalk.red(getRandomElement()));
         return s;
@@ -130,32 +125,53 @@ export class Sheet extends Schematic {
         return true;
     }
 
+    in({ net, pins }: INet = {}) {
+        if (!pins) {
+            return;
+        }
+        if (!net) {
+            return;
+        }
+
+        pins.forEach((pin) => {
+            pin.hier = true;
+            pin.type = "input"
+        });
+        this._net(net, ...pins);
+    }
+
+    out({ net, pins }: INet = {}) {
+        if (!pins) {
+            return;
+        }
+        if (!net) {
+            return;
+        }
+
+        pins.forEach((pin) => {
+            pin.hier = true;
+            pin.type = "output"
+        });
+        this._net(net, ...pins);
+    }
+
     /**
-     * Creates connections between a sheet and the schematic that holds it. A `hier` pin is the same as KiCAD's hierarchical sheet pin.
-     *
-     * @param {string} name
-     * @param {...Pin[]} pins
-     * @example
-     * ```ts
-     * let sheet = new Sheet('sheet', typecad);
-     * let resistor = new Component("Device:R_Small", 'R1', '1 kOhm', "Resistor_SMD:R_0603_1608Metric");
-     * sheet.hier('output', resistor.pin(1));
-     * sheet.create(resistor);
-     * ```
+     * Used internally
+     * @ignore
      */
-    net(name: string, ...pins: Pin[]): boolean {
+    _net(name: string, ...pins: Pin[]): boolean {
         let dup: boolean = false;
         let err: boolean = false;
         pins.forEach((pin) => {
 
             // check that the information needed for the pin is there
-            if ("Name" in pin == false) {
-                console.log('- ', chalk.red.bold('ERROR: pin passed for DNC is malformed (missing Owner or Number)'));
-                err = false;
-                return false;
-            }
+            // if ("Name" in pin == false) {
+            //     console.log('- ', chalk.red.bold('ERROR: pin passed for DNC is malformed (missing Owner or Number)'));
+            //     err = false;
+            //     return false;
+            // }
 
-            pin.hier = true;
+            //pin.hier = true;
             pin.Name = name;
             this.#pins_list.forEach((_pin) => {
                 if (pin.Name == _pin.Name) {
@@ -163,9 +179,11 @@ export class Sheet extends Schematic {
                 }
             });
             if (dup == false) {
-                this.#pins_list.push(pin); // add to sheet symbol pin list
+                if (pin.hier == true) {
+                    this.#pins_list.push(pin); // add to sheet symbol pin list
+                }
             }
-            super.net(name, pin);    // add hier pin in sheet
+            super._net(name, pin);    // add hier pin in sheet
         });
 
         if (err) {

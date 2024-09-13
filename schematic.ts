@@ -21,6 +21,11 @@ let symbols: string[] = ['▖', '▗', '▘', '▙', '▚', '▛', '▜', '▝',
 const getRandomElement = () =>
     symbols.length ? symbols[Math.floor(Math.random() * symbols.length)] : undefined
 
+export interface INet {
+    net?: string,
+    pins?: Pin[],
+}
+
 /**
  * The main class for typeCAD. Holds all {@link Component} and {@link Sheet} classes, creates work files, and creates nets. 
  *
@@ -37,9 +42,6 @@ export class Schematic {
     #sheets: string[] = [];
     #boxes: string[] = [];
     #dnc: string[] = [];
-    #net_list: NetList[] = [];
-    #tie_count: number = 0;
-
 
     /**
      * `constructor` for Schematic
@@ -157,22 +159,21 @@ export class Schematic {
             return true;
         };
 
-        // console.log(chalk.white("\n+"), chalk.cyan("netlist"));
         process.stdout.write(chalk.white("\n+"));
         process.stdout.write(chalk.cyan("netlist"));
         runCommand(`"${kicad_cli_path}" sch export netlist --output ./build/${this.#Sheetname}.net ./build/${this.#Sheetname}.kicad_sch`)
     }
 
     /**
- * Creates a CSV BOM for the schematic
- * @example
- * ```ts
- * let typecad = new Schematic('sheetname');
- * let r1 = new Component("Device:R_Small", 'R1', '1 kOhm', "Resistor_SMD:R_0603_1608Metric");
- * typecad.create(r1);
- * typecad.bom();
- * ```
- */
+     * Creates a CSV BOM for the schematic
+     * @example
+     * ```ts
+     * let typecad = new Schematic('sheetname');
+     * let r1 = new Component("Device:R_Small", 'R1', '1 kOhm', "Resistor_SMD:R_0603_1608Metric");
+     * typecad.create(r1);
+     * typecad.bom();
+     * ```
+     */
     bom() {
         const runCommand = (command: string) => {
             try {
@@ -184,7 +185,6 @@ export class Schematic {
             return true;
         };
 
-        // console.log(chalk.white("\n+"), chalk.cyan("netlist"));
         process.stdout.write(chalk.white("\n+"));
         process.stdout.write(chalk.red("bom"));
         runCommand(`"${kicad_cli_path}" sch export bom --fields "*" --output ./build/${this.#Sheetname}.csv ./build/${this.#Sheetname}.kicad_sch`)
@@ -193,7 +193,7 @@ export class Schematic {
     /**
      * Runs KiCAD's schematic Electric Rules Checker. Process exits with `1` if errors are found. Run this after a schematic is created.
      */
-    erc(): boolean {
+    erc(show_all: boolean = false): boolean {
         let erc_failed: boolean = false;
         const runCommand = (command: string) => {
             try {
@@ -204,10 +204,8 @@ export class Schematic {
             return true;
         };
 
-        // console.log(chalk.white("\n+"), chalk.magenta("erc"));
         process.stdout.write(chalk.white("\n+"));
         process.stdout.write(chalk.magenta("erc\n"));
-
 
         runCommand(`"${kicad_cli_path}" sch erc --exit-code-violations --output ./build/${this.#Sheetname}.json --format json ./build/${this.#Sheetname}.kicad_sch`);
 
@@ -231,14 +229,16 @@ export class Schematic {
                     );
                 }
 
-                if (erc_results.sheets[0].violations[k].severity == 'warning') {
-                    console.log(
-                        chalk.white(" -"),
-                        chalk.yellow("WARN"),
-                        chalk.white.bold(erc_results.sheets[0].violations[k].type),
-                        ':',
-                        chalk.white(erc_results.sheets[0].violations[k].items[0].description)
-                    );
+                if (show_all) {
+                    if (erc_results.sheets[0].violations[k].severity == 'warning') {
+                        console.log(
+                            chalk.white(" -"),
+                            chalk.yellow("WARN"),
+                            chalk.white.bold(erc_results.sheets[0].violations[k].type),
+                            ':',
+                            chalk.white(erc_results.sheets[0].violations[k].items[0].description)
+                        );
+                    }
                 }
             }
         }
@@ -252,19 +252,44 @@ export class Schematic {
     }
 
     /**
-     * Connects a pin or group of pins into a together under a net
+     * Connects a pin or group of pins together
      *
-     * @param {string} name
-     * @param {...Pin[]} pins
+     * @param {{net?: string, pins?: Pin[]}} {net?: string, pins?: Pin[]}
      * @example
      * ```ts
      * let typecad = new Schematic('sheetname');
      * let r1 = new Component("Device:R_Small", 'R1', '1 kOhm', "Resistor_SMD:R_0603_1608Metric");
      * let r2 = new Component("Device:R_Small", 'R2', '1 kOhm', "Resistor_SMD:R_0603_1608Metric");
-     * typecad.net('vcc', r1.pin(1), r2,pin(1));
+     * 
+     * // named net
+     * typecad.net({ net: 'vcc', pins: [r1.pin(1), r2,pin(1)] });
+     * 
+     * // unnamed net
+     * typecad.net({ pins: [r1.pin(2), r2,pin(1)] });
      * ```
      */
-    net(name: string, ...pins: Pin[]): boolean {
+    net({ net, pins }: INet = {}) {
+        // nothing to do if no pins passed
+        if (!pins) {
+            return;
+        }
+
+        if (net) {
+            // if a net was passed, use that
+            this._net(net, ...pins);
+        }
+        else {
+            // if no net passed, create a name for a net
+            let net_name = pins[0].Owner.Reference + '.' + pins[0].Number;
+            this._net(net_name, ...pins);
+        }
+    }
+
+    /**
+     * Used internally
+     * @ignore
+     */
+    _net(name: string, ...pins: Pin[]): boolean {
         let err: boolean = false;
 
         pins.forEach((pin) => {
@@ -276,34 +301,31 @@ export class Schematic {
             // check that the information needed for the pin is there
             if (pin == undefined) {
                 console.log('\n- ', chalk.red.bold('ERROR: pin is malformed (undefined)'));
-                // process.stdout.write(chalk.white("\n-"));
-                // process.stdout.write(chalk.magenta("erc\n"));
                 err = true;
                 return false;
             }
 
             if ("Owner" in pin == false || "Number" in pin == false) {
                 console.log('\n- ', chalk.red.bold('ERROR: pin is malformed (missing Owner or Number)'));
-                // process.stdout.write(chalk.white("\n-"));
-                // process.stdout.write(chalk.magenta("erc\n"));
                 err = true;
                 return false;
             }
 
             // determine pin locations if there is an owner (symbol associated)
+            // there are a couple variations of the s-expressions
             if (pin.Owner != undefined) {
                 const l = fsexp(pin.Owner.symbol_lib(pin.Owner.symbol)).pop();
                 for (var i in l) {
                     for (var ii in l[i]) {
-                        if (l[i][ii][0] == "pin") {
+                        if (l[i][0] == "pin") {
                             for (var iii in l[i][ii]) {
-                                if (l[i][ii][iii][0] == "number") {
-                                    if (l[i][ii][iii][1] == pin.Number) {
+                                if (l[i][ii][0] == "number") {
+                                    if (l[i][ii][1] == pin.Number) {
                                         for (var iiii in l[i][ii]) {
-                                            if (l[i][ii][iiii][0] == "at") {
-                                                x = parseFloat(l[i][ii][iiii][1]);
-                                                y = parseFloat(l[i][ii][iiii][2]);
-                                                a = parseFloat(l[i][ii][iiii][3]);
+                                            if (l[i][3][0] == "at") {
+                                                x = parseFloat(l[i][3][1]);
+                                                y = parseFloat(l[i][3][2]);
+                                                a = parseFloat(l[i][3][1]);
                                             }
                                         }
                                     }
@@ -312,6 +334,30 @@ export class Schematic {
                         }
                     }
                 }
+
+                // didn't find pins on the first format, try this one
+                if (x == -1) {
+                    for (var i in l) {
+                        for (var ii in l[i]) {
+                            if (l[i][ii][0] == "pin") {
+                                for (var iii in l[i][ii]) {
+                                    if (l[i][ii][iii][0] == "number") {
+                                        if (l[i][ii][iii][1] == pin.Number) {
+                                            for (var iiii in l[i][ii]) {
+                                                if (l[i][ii][iiii][0] == "at") {
+                                                    x = parseFloat(l[i][ii][iiii][1]);
+                                                    y = parseFloat(l[i][ii][iiii][2]);
+                                                    a = parseFloat(l[i][ii][iiii][3]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 if (x == -1) {
                     console.log('\n- ', chalk.red.bold(`ERROR: pin ${pin.Number} of ${pin.Owner.symbol} not found`));
                     err = true;
@@ -348,11 +394,6 @@ export class Schematic {
                     `(hierarchical_label "${pin.Name}"(at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y
                     } ${a})(shape ${pin.type})  ${effects})`
                 );
-                // console.log(
-                //     chalk.white("+"),
-                //     chalk.yellow("hier label"),
-                //     chalk.white.bold(pin.Name)
-                // );
                 process.stdout.write(chalk.yellow(getRandomElement()));
             }
             else if (pin.sheet == true) {
@@ -366,12 +407,7 @@ export class Schematic {
                     `(label "${name}"(at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y
                     } ${a}) ${effects})`
                 );
-                // console.log(
-                // chalk.white("+"),
-                // chalk.blue(getRandomElement()),
                 process.stdout.write(chalk.blue(getRandomElement()));
-                // chalk.white.bold(name)
-                // );
             }
         });
         if (err) {
@@ -428,6 +464,27 @@ export class Schematic {
                     }
                 }
                 if (x == -1) {
+                    for (var i in l) {
+                        for (var ii in l[i]) {
+                            if (l[i][0] == "pin") {
+                                for (var iii in l[i][ii]) {
+                                    if (l[i][ii][0] == "number") {
+                                        if (l[i][ii][1] == pin.Number) {
+                                            for (var iiii in l[i][ii]) {
+                                                if (l[i][3][0] == "at") {
+                                                    x = parseFloat(l[i][3][1]);
+                                                    y = parseFloat(l[i][3][2]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (x == -1) {
                     console.log('\n- ', chalk.red.bold(`ERROR: pin ${pin.Number} of ${pin.Owner.symbol} not found`));
                     err = true;
                 }
@@ -436,10 +493,6 @@ export class Schematic {
             this.#dnc.push(
                 `(no_connect (at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y}))`
             );
-            // console.log(
-            //     chalk.white("+"),
-            //     chalk.gray("dnc")
-            // );
             process.stdout.write(chalk.gray(getRandomElement()));
 
         });
@@ -465,7 +518,6 @@ export class Schematic {
             )`
             );
 
-            // console.log(chalk.white("+"), chalk.gray("box"));
             process.stdout.write(chalk.white(getRandomElement()));
         });
     }
@@ -478,7 +530,7 @@ export class Schematic {
         if (component.symbol_lib == undefined) return;
         this.#symbol_libs.push(component.symbol_lib(component.symbol));      // has to be before next line to get the right references and 
         this.#symbols.push(component.update());
-        // console.log(chalk.white("+"), chalk.green("component"), chalk.white.bold(component.symbol));
+
         process.stdout.write(chalk.greenBright(getRandomElement()));
     }
 
@@ -492,37 +544,5 @@ export class Schematic {
      */
     sheet(sheet: Sheet) {
         this.#sheets.push(sheet.add())
-    }
-
-    
-    /**
-     * Ties 2, 3, or 4 nets together
-     *
-     * @param {string} net1
-     * @param {string} net2
-     * @param {?string} [net3]
-     * @param {?string} [net4]
-     */
-    tie(net1: string, net2: string, net3?: string, net4?: string) {
-        this.#tie_count++;
-        if (net4 && net3) {
-            let nt = new Component("Device:NetTie_4", ("NT" + this.#tie_count), '', "NetTie:NetTie-4_SMD_Pad0.5mm");
-            this.net(net1, nt.pin(1));
-            this.net(net2, nt.pin(2));
-            this.net(net3, nt.pin(3));
-            this.net(net4, nt.pin(4));
-            this.add(nt);
-        } else if (net3) {
-            let nt = new Component("Device:NetTie_3", ("NT" + this.#tie_count), '', "NetTie:NetTie-3_SMD_Pad0.5mm");
-            this.net(net1, nt.pin(1));
-            this.net(net2, nt.pin(2));
-            this.net(net3, nt.pin(3));
-            this.add(nt);
-        } else {
-            let nt = new Component("Device:NetTie_2", ("NT" + this.#tie_count), '', "NetTie:NetTie-2_SMD_Pad0.5mm");
-            this.net(net1, nt.pin(1));
-            this.net(net2, nt.pin(2));
-            this.add(nt);
-        }
     }
 }

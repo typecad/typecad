@@ -9,6 +9,24 @@ export type Bounds = {
     h: number;
 }
 
+/**
+ * Section of schematic
+|    |    |    |    |
+|:---:|:---:|:---:|:---:|
+| 01 | 02  | 03  | 04  |
+| 05  | 06  | 07  | 08  |
+| 09  | 10 | 11 | 12 |
+| 13 | 14 | 15 | 16 |
+
+Section of box
+|    |    |    |    |    |
+|:---:|:---:|:---:|:---:|:---:|
+| 01 | 02 | 03 | 04 | 05 |
+| 06 | 07 | 08 | 09 | 10 |
+| 11 | 12 | 13 | 14 | 15 |
+| 16 | 17 | 18 | 19 | 20 |
+| 21 | 22 | 23 | 24 | 25 |
+ */
 export function Box(n: number, nn?: number): Bounds {
     let qx: number = 0;
     let qy: number = 0;
