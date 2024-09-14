@@ -13,6 +13,9 @@ let symbols:string[] = ['▖', '▗', '▘', '▙', '▚', '▛', '▜', '▝', 
 const getRandomElement = () =>
     symbols.length ? symbols[Math.floor(Math.random() * symbols.length)] : undefined
 
+interface IComponent {
+    symbol?: string, reference?: string, value?: string, footprint?: string, xy?: Bounds
+}
 /**
  * Create a new component, defined as a schematic symbol, a footprint, value, and reference designator. 
  * @export
@@ -30,7 +33,7 @@ const getRandomElement = () =>
  */
 export class Component {
     Footprint?: string;
-    symbol: string;
+    symbol?: string;
     coord? = { x: 0, y: 0 };
     Reference?: string;
     Value: string = '';
@@ -44,20 +47,23 @@ export class Component {
      * `constructor` for Component.
      *
      * @constructor
-     * @param {string} symbol for the component ie. Device:R_Small
-     * @param {string} reference
-     * @param {?string} [value]
-     * @param {?string} [footprint]
-     * @param {?Bounds} [position]
+     * @param {?string} symbol for the component (Device:R_Small)
+     * @param {?string} reference reference designator (R1)
+     * @param {?string} [value] value of component (1 kOhm)
+     * @param {?string} [footprint] footprint (Resistor_SMD:R_0603_1608Metric)
+     * @param {?Bounds} [position] position in schematic 
      * @example
      * ```ts
-     * let resistor = new Component("Device:R_Small", 'R1', '1 kOhm', "Resistor_SMD:R_0603_1608Metric");
+     * let resistor = new Component({symbol: "Device:R_Small", reference: 'R1', value: '1 kOhm', footprint: "Resistor_SMD:R_0603_1608Metric"});
      * ```
      */
-    constructor(symbol: string, reference?: string, value?: string, footprint?: string, position?: Bounds) {
+    constructor({symbol, reference, value, footprint, xy}: IComponent = {}) {
+        // nothing to do if no symbol passed
+        if (!symbol) return;
+
         this.symbol = symbol;
-        if (position != undefined) {
-            this.xy(position.x, position.y);
+        if (xy != undefined) {
+            this.xy(xy.x, xy.y);
         } else {
             this.xy(Math.floor(Math.random() * 200), Math.floor(Math.random() * 200))
         }
@@ -80,7 +86,7 @@ export class Component {
      * @returns {Pin}
      * @example
      * ```ts
-     * let resistor = new Component("Device:R_Small", 'R1', '1 kOhm', "Resistor_SMD:R_0603_1608Metric");
+     * let resistor = new Component({symbol: "Device:R_Small", reference: 'R1', value: '1 kOhm', footprint: "Resistor_SMD:R_0603_1608Metric"});
      * resistor.pin(1);
      * ```
      */

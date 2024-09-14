@@ -8,7 +8,6 @@ import { Pin } from "./pin";
 import { Sheet } from './sheet';
 import { Component } from "./component";
 import { kicad_cli_path } from './kicad'
-import { Bus } from "./buses";
 
 const S = new SExpr()
 /**
@@ -66,8 +65,8 @@ export class Schematic {
      * @example
      * ```ts
      * let typecad = new Schematic('sheetname');
-     * let r1 = new Component("Device:R_Small", 'R1', '1 kOhm', "Resistor_SMD:R_0603_1608Metric");
-     * let r2 = new Component("Device:R_Small", 'R2', '1 kOhm', "Resistor_SMD:R_0603_1608Metric");
+     * let r1 = new Component({symbol: "Device:R_Small", reference: 'R1', value: '1 kOhm', footprint: "Resistor_SMD:R_0603_1608Metric"});
+     * let r2 = new Component({symbol: "Device:R_Small", reference: 'R2', value: '1 kOhm', footprint: "Resistor_SMD:R_0603_1608Metric"});
      * typecad.add(r1, r2);
      * ```
      */
@@ -84,8 +83,8 @@ export class Schematic {
      * @example
      * ```ts
      * let typecad = new Schematic('sheetname');
-     * let r1 = new Component("Device:R_Small", 'R1', '1 kOhm', "Resistor_SMD:R_0603_1608Metric");
-     * let r2 = new Component("Device:R_Small", 'R2', '1 kOhm', "Resistor_SMD:R_0603_1608Metric");
+     * let r1 = new Component({symbol: "Device:R_Small", reference: 'R1', value: '1 kOhm', footprint: "Resistor_SMD:R_0603_1608Metric"});
+     * let r2 = new Component({symbol: "Device:R_Small", reference: 'R2', value: '1 kOhm', footprint: "Resistor_SMD:R_0603_1608Metric"});
      * typecad.create(r1, r2);
      * ```
      */
@@ -143,7 +142,7 @@ export class Schematic {
      * @example
      * ```ts
      * let typecad = new Schematic('sheetname');
-     * let r1 = new Component("Device:R_Small", 'R1', '1 kOhm', "Resistor_SMD:R_0603_1608Metric");
+     * let r1 = new Component({ symbol: "Device:R_Small", reference: 'R1', value: '1 kOhm' });
      * typecad.create(r1);
      * typecad.netlist();
      * ```
@@ -169,7 +168,7 @@ export class Schematic {
      * @example
      * ```ts
      * let typecad = new Schematic('sheetname');
-     * let r1 = new Component("Device:R_Small", 'R1', '1 kOhm', "Resistor_SMD:R_0603_1608Metric");
+     * let r1 = new Component({ symbol: "Device:R_Small", reference: 'R1', value: '1 kOhm' });
      * typecad.create(r1);
      * typecad.bom();
      * ```
@@ -258,8 +257,8 @@ export class Schematic {
      * @example
      * ```ts
      * let typecad = new Schematic('sheetname');
-     * let r1 = new Component("Device:R_Small", 'R1', '1 kOhm', "Resistor_SMD:R_0603_1608Metric");
-     * let r2 = new Component("Device:R_Small", 'R2', '1 kOhm', "Resistor_SMD:R_0603_1608Metric");
+     * let r1 = new Component({symbol: "Device:R_Small", reference: 'R1', value: '1 kOhm', footprint: "Resistor_SMD:R_0603_1608Metric"});
+     * let r2 = new Component({symbol: "Device:R_Small", reference: 'R2', value: '4.7 kOhm', footprint: "Resistor_SMD:R_0603_1608Metric"});
      * 
      * // named net
      * typecad.net({ net: 'vcc', pins: [r1.pin(1), r2,pin(1)] });
@@ -268,10 +267,10 @@ export class Schematic {
      * typecad.net({ pins: [r1.pin(2), r2,pin(1)] });
      * ```
      */
-    net({ net, pins }: INet = {}) {
+    net({ net, pins }: INet = {}): boolean  {
         // nothing to do if no pins passed
         if (!pins) {
-            return;
+            return false;
         }
 
         if (net) {
@@ -424,7 +423,7 @@ export class Schematic {
      * @example
      * ```ts
      * let typecad = new Schematic('sheetname');
-     * let r1 = new Resistor('R1', '10 kOhm');
+     * let r1 = new Resistor({ symbol: "Device:R_Small", reference: 'R1' });
      * typecad.dnc(r1.pin(1));
      * ```
      */
@@ -528,7 +527,8 @@ export class Schematic {
      */
     #component(component: Component) {
         if (component.symbol_lib == undefined) return;
-        this.#symbol_libs.push(component.symbol_lib(component.symbol));      // has to be before next line to get the right references and 
+        if (!component.symbol) return;
+        this.#symbol_libs.push(component.symbol_lib(component.symbol));      // has to be before next line to get the right references 
         this.#symbols.push(component.update());
 
         process.stdout.write(chalk.greenBright(getRandomElement()));

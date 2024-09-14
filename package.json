@@ -1,6 +1,6 @@
 {
   "name": "@typecad/typecad",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Programmatically create hardware designs",
   "keywords": [
     "kicad",
