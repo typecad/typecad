@@ -6,6 +6,7 @@ import fsexp from "fast-sexpr";
 import chalk from 'chalk';
 import { kicad_path } from "./kicad";
 import { platform } from 'node:os';
+import { UUID } from "node:crypto";
 
 // const kicad_symbol = "C:/Program Files/KiCad/8.0/share/kicad/symbols"
 const S = new SExpr()
@@ -42,6 +43,7 @@ export class Component {
     MPN?: string;
     uuid?: string;
     #symbol_lib?: string = '';
+    instance? = {project: 'xx', uuid: 'xx'};
 
     /**
      * `constructor` for Component.
@@ -117,6 +119,15 @@ export class Component {
                 ]);
             }
         });
+
+        // add instances s-expression, added in 8.0.5
+        component_props.push([
+            `instances`,
+            [`project "${this.instance?.project}"`, [
+                `path "/${this.instance?.uuid}" (reference "${this.Reference}") (unit 1)`
+            ]],
+            // [`effects`, [`hide yes`]],
+        ]);
 
         let s = S.serialize(component_props, { includingRootParentheses: false });
         s = "(symbol " + s + ")";

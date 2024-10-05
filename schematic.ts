@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import SExpr from "s-expression.js";
+// import SExpr from "s-expression.js";
 import chalk from 'chalk';
 import fsexp from "fast-sexpr";
 import { execSync } from "node:child_process";
@@ -8,8 +8,9 @@ import { Pin } from "./pin";
 import { Sheet } from './sheet';
 import { Component } from "./component";
 import { kicad_cli_path } from './kicad'
+import { randomUUID, UUID } from "node:crypto";
 
-const S = new SExpr()
+//const S = new SExpr()
 /**
  * Used internally
  * @ignore
@@ -41,6 +42,7 @@ export class Schematic {
     #sheets: string[] = [];
     #boxes: string[] = [];
     #dnc: string[] = [];
+    uuid: UUID;
 
     /**
      * `constructor` for Schematic
@@ -54,9 +56,24 @@ export class Schematic {
      */
     constructor(Sheetname: string) {
         this.#Sheetname = Sheetname;
+        this.uuid = randomUUID();
     }
 
+    /**
+     * Used internally
+     * @ignore
+     */
+    getUUID() {
+        return this.uuid;
+    }
 
+    /**
+     * Used internally
+     * @ignore
+     */
+    getProject() {
+        return this.#Sheetname;
+    }
     /**
      * Adds a component to the schematic. Components can be added to the schematic through {@link create} as well. 
      * It can be useful for conditional builds where not all components will be known before {@link create} is called. 
@@ -72,6 +89,8 @@ export class Schematic {
      */
     add(...components: Component[]) {
         components.forEach((component) => {
+            component.instance!.project = this.#Sheetname;
+            component.instance!.uuid = this.uuid
             this.#component(component);
         });
     }
@@ -90,11 +109,15 @@ export class Schematic {
      */
     create(...components: Component[]): boolean {
         components.forEach((component) => {
+            if (this.constructor.name == 'Schematic') {
+                component.instance!.project = this.#Sheetname;
+                component.instance!.uuid = this.uuid
+            }
             this.#component(component);
         });
 
         this.#schematic =
-            '(kicad_sch(version 20231120)(generator "kicode")(generator_version "8.0")(paper "A4")';
+            `(kicad_sch(version 20231120)(generator "typecad")(generator_version "8.0")(paper "A4")(uuid "${this.uuid}")`;
 
         this.#schematic += "(lib_symbols"
         for (var i in this.#symbol_libs) {
@@ -267,7 +290,7 @@ export class Schematic {
      * typecad.net({ pins: [r1.pin(2), r2,pin(1)] });
      * ```
      */
-    net({ net, pins }: INet = {}): boolean  {
+    net({ net, pins }: INet = {}): boolean {
         // nothing to do if no pins passed
         if (!pins) {
             return false;

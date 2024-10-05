@@ -1,6 +1,6 @@
 {
   "name": "@typecad/typecad",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "Programmatically create hardware designs",
   "keywords": [
     "kicad",
@@ -8,7 +8,8 @@
     "schematic",
     "ee",
     "electrical design",
-    "code as schematic"
+    "code as schematic",
+    "typecad"
   ],
   "homepage": "https://typecad.net",
   "funding": "https://www.buymeacoffee.com/typecad",

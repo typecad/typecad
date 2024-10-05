@@ -4,7 +4,7 @@ import { Component } from ".";
  * Used internally
  * @ignore
  */
-type HierPinType = "passive" | "input" | "output" | "bidirectional" | "tri_state";
+type HierPinType = "passive" | "input" | "output" | "bidirectional" | "tri_state" | "power_in" | "unspecified" | "power_out" | "free" | "open_collector" | "open_emitter" | "no_connect";
 /**
  * Used internally
  * @ignore

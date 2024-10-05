@@ -1,6 +1,8 @@
 import { Schematic, INet } from "./schematic";
 import { HierPin, Pin } from './pin'
 import { Component } from ".";
+import { randomUUID, UUID } from "node:crypto";
+
 import chalk from 'chalk';
 
 let symbols: string[] = ['▖', '▗', '▘', '▙', '▚', '▛', '▜', '▝', '▞', '▟']
@@ -21,6 +23,7 @@ export class Sheet extends Schematic {
     #pins_list: Pin[] = [];
     #Sheetname;
     #Schematic: Schematic;
+    uuid: UUID;
 
 
     /**
@@ -41,6 +44,8 @@ export class Sheet extends Schematic {
         }
         this.#Sheetname = name;
         this.#Schematic = owner;
+        this.uuid = randomUUID();
+
         // pins.forEach((pin) => {
         //     this.#pins_list.push(pin);
         // });
@@ -73,6 +78,7 @@ export class Sheet extends Schematic {
         var s = "";
         s += `(sheet(at ${this.#coord.x} ${this.#coord.y})(size 20 ${pins_in_sheet * 2.54})\n`;
         s += `(property "Sheetname" "${this.#Sheetname}"(at ${this.#coord.x} ${this.#coord.y} 0)(effects(font(size 1.27 1.27))(justify left bottom)))\n`;
+        s += `(uuid "${this.uuid}")`
         s += `(property "Sheetfile" "${this.#Sheetname}.kicad_sch"(at ${this.#coord.x - 13
             } ${this.#coord.y
             } 0)(effects(hide yes)(font(size 1.27 1.27))(justify left top)))\n`;
@@ -120,6 +126,16 @@ export class Sheet extends Schematic {
      */
     create(...components: Component[]): boolean {
         this.#Schematic.sheet(this);
+
+        components.forEach((component) => {
+            component.instance!.project = this.#Schematic.getProject();
+            component.instance!.uuid = (this.#Schematic.uuid + "/" + this.uuid);
+
+            // console.log('sheet.create', component)
+
+            // console.log(component.instance)
+        });
+
         super.create(...components);
 
         return true;
