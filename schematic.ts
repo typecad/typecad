@@ -307,7 +307,6 @@ export class Schematic {
             for (let i = 0; i < pins.length; i++) {
                 if (pins[i].Name) {
                     net_name = pins[i].Name + '.' + pins[0].Owner.Reference;
-                    console.log(net_name)
                     break;
                 }
             }
