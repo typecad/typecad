@@ -302,7 +302,19 @@ export class Schematic {
         }
         else {
             // if no net passed, create a name for a net
-            let net_name = pins[0].Owner.Reference + '.' + pins[0].Number;
+            let net_name;
+
+            for (let i = 0; i < pins.length; i++) {
+                if (pins[i].Name) {
+                    net_name = pins[i].Name + '.' + pins[0].Owner.Reference;
+                    console.log(net_name)
+                    break;
+                }
+            }
+
+            if (net_name == undefined) {
+                net_name = pins[0].Owner.Reference + '.' + pins[0].Number;
+            }
             return this._net(net_name, ...pins);
         }
     }
