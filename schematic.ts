@@ -117,7 +117,7 @@ export class Schematic {
         });
 
         this.#schematic =
-            `(kicad_sch(version 20231120)(generator "typecad")(generator_version "8.0")(paper "A4")(uuid "${this.uuid}")`;
+            `(kicad_sch(version 20231120)(generator "typecad")(generator_version "1.0")(paper "A4")(uuid "${this.uuid}")`;
 
         this.#schematic += "(lib_symbols"
         for (var i in this.#symbol_libs) {
@@ -563,6 +563,7 @@ export class Schematic {
         if (component.symbol_lib == undefined) return;
         if (!component.symbol) return;
         this.#symbol_libs.push(component.symbol_lib(component.symbol));      // has to be before next line to get the right references 
+        
         this.#symbols.push(component.update());
 
         process.stdout.write(chalk.greenBright(getRandomElement()));

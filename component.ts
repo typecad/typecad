@@ -6,7 +6,6 @@ import fsexp from "fast-sexpr";
 import chalk from 'chalk';
 import { kicad_path } from "./kicad";
 import { platform } from 'node:os';
-import { UUID } from "node:crypto";
 
 // const kicad_symbol = "C:/Program Files/KiCad/8.0/share/kicad/symbols"
 const S = new SExpr()
@@ -42,7 +41,9 @@ export class Component {
     Description?: string;
     MPN?: string;
     uuid?: string;
+    pcb: {x: number, y: number, rotation: number} = {x: 0, y: 0, rotation: 0};
     #symbol_lib?: string = '';
+    footprint_file?: string = '';
     instance? = {project: 'xx', uuid: 'xx'};
 
     /**
@@ -135,6 +136,50 @@ export class Component {
     }
 
 
+    footprint_lib(footprint: string): string {
+        // if we already found this symbol, return it before doing anything
+        if (this.footprint_file != '') return this.footprint_file!;
+
+        let footprint_file_contents = "";
+        let footprint_file_name = footprint.split(":");
+        let kicad_footprint: string = '';
+
+        if (platform() == 'win32') {
+            kicad_footprint = kicad_path + 'share/kicad/footprints';
+        } else {
+            kicad_footprint = kicad_path + 'footprints';
+        }
+
+        try {
+            if (fs.existsSync(`${kicad_footprint}/${footprint_file_name[0]}.pretty/${footprint_file_name[1]}.kicad_mod`)) {
+                footprint_file_contents = fs.readFileSync(
+                    `${kicad_footprint}/${footprint_file_name[0]}.pretty/${footprint_file_name[1]}.kicad_mod`,
+                    "utf8"
+                );
+            } else {
+                footprint_file_contents = fs.readFileSync(
+                    `./build/lib/footprints/${footprint_file_name[1]}.kicad_mod`,
+                    "utf8"
+                );
+            }
+
+            footprint_file_contents =footprint_file_contents.replaceAll('"', "`");
+
+            const l = fsexp(footprint_file_contents).pop();
+
+            this.footprint_file = S.serialize(l).replaceAll("`", '"');
+
+        } catch (err) {
+            console.error(err);
+        }
+
+        if (this.footprint_file == '') {
+            console.log('- ', chalk.red.bold(`ERROR: footprint ${footprint} not found`))
+        }
+
+        return this.footprint_file!;
+    }
+
     /**
      * Used internally
      * @ignore
@@ -145,7 +190,6 @@ export class Component {
 
         let symbol_file_contents = "";
         let symbol_file_name = symbol.split(":");
-        //let symbol_lib = '';
         let kicad_symbol: string = '';
 
         if (platform() == 'win32') {

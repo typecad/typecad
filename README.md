@@ -27,7 +27,7 @@ let d1 = new LED();
 
 typecad.net({ pins: [bt1.pin(1), r1.pin(1)] });
 typecad.net({ pins: [r1.pin(2), d1.pin(2)] });
-typecad.net({ pins: [d1.pin(1)] });
+typecad.net({ pins: [d1.pin(1), bt1.pin(2)] });
 
 typecad.create(r1, led, bt1);
 typecad.netlist();
