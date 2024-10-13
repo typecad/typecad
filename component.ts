@@ -6,6 +6,7 @@ import fsexp from "fast-sexpr";
 import chalk from 'chalk';
 import { kicad_path } from "./kicad";
 import { platform } from 'node:os';
+import { randomUUID, UUID } from "node:crypto";
 
 // const kicad_symbol = "C:/Program Files/KiCad/8.0/share/kicad/symbols"
 const S = new SExpr()
@@ -41,7 +42,7 @@ export class Component {
     Description?: string;
     MPN?: string;
     uuid?: string;
-    pcb: {x: number, y: number, rotation: number} = {x: 0, y: 0, rotation: 0};
+    pcb: {x: number, y: number, rotation?: number} = {x: 0, y: 0, rotation: 0};
     #symbol_lib?: string = '';
     footprint_file?: string = '';
     instance? = {project: 'xx', uuid: 'xx'};
@@ -79,6 +80,9 @@ export class Component {
         if (footprint != undefined) {
             this.Footprint = footprint;
         }
+
+        this.uuid = randomUUID();
+
     }
 
 
@@ -167,6 +171,10 @@ export class Component {
 
             const l = fsexp(footprint_file_contents).pop();
 
+            // some footprints have a 'module' instead of 'footprint'
+            if (l[0] == 'module') {
+                l[0] = 'footprint'
+            }
             this.footprint_file = S.serialize(l).replaceAll("`", '"');
 
         } catch (err) {
