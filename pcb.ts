@@ -11,12 +11,36 @@ export class PCB {
     #pcb: string = '';
     #footprints: string[] = [];
     #components: Component[] = [];
+    #groups: string[] = [];
+    #group_uuid = '';
 
+    /**
+     * `constructor` for PCB
+     *
+     * @constructor
+     * @param {string} Boardname Name and filename of generated files
+     * @example
+     * ```ts
+     * let board = new PCB('boardname');
+     * ```
+     */
     constructor(Boardname: string) {
         this.#Boardname = Boardname;
-
     }
 
+    /**
+     * `place` function to place components on the board
+     *
+     * @param {Component[]} components List of components to place on the board
+     * @example
+     * ```ts
+     * let typecad = new Schematic('sheetname');
+     * let r1 = new Component({symbol: "Device:R_Small", reference: 'R1', value: '1 kOhm', footprint: "Resistor_SMD:R_0603_1608Metric"});
+     * 
+     * r1.pcb = {x: 10, y: 10, rotation: 90};
+     * board.place(r1);
+     * ```
+     */
     place(...components: Component[]) {
         components.forEach((component) => {
             this.#footprints.push(component.footprint_lib(component.Footprint!));
@@ -24,6 +48,40 @@ export class PCB {
         });
     }
 
+    /**
+     * `group` function to place components on the board and group them together
+     *
+     * @param {string} group_name Name of the group
+     * @param {Component[]} components List of components to place on the board
+     * @example
+     * ```ts
+     * let typecad = new Schematic('sheetname');
+     * let r1 = new Component({symbol: "Device:R_Small", reference: 'R1', value: '1 kOhm', footprint: "Resistor_SMD:R_0603_1608Metric"});
+     * 
+     * r1.pcb = {x: 10, y: 10, rotation: 90};
+     * board.group('resistor', r1);
+     * ```
+     */
+    group(group_name: string,  ...components: Component[]) {
+        let uuid_list = '';
+        components.forEach((component) => {
+            this.#footprints.push(component.footprint_lib(component.Footprint!));
+            this.#components.push(component);
+            uuid_list += `"${component.uuid}" `;
+        });
+
+        this.#groups.push(`(group "${group_name}" (members ${uuid_list}))`)
+        //console.log(this.#groups);
+    }
+
+    /**
+     * `create` function to create and save the board
+     *
+     * @example
+     * ```ts
+     * board.create();
+     * ```
+     */
     create() {
         let version = '(version 20240108)';
         let generator = '(generator "typecad")';
@@ -31,7 +89,6 @@ export class PCB {
         let general = '(general (thickness 1.6) (legacy_teardrops no))';
         let paper = '(paper "A4")';
         let s_board_contents = [];
-        let group_uuid = '';
 
         // if board exists, keep everything except the footprints
         if (fs.existsSync(`./build/${this.#Boardname}.kicad_pcb`)) {
@@ -43,13 +100,21 @@ export class PCB {
             board_contents = board_contents.replaceAll('"', "`");
             s_board_contents = fsexp(board_contents).pop();
 
-            // delete previous footprints
+            // delete previous footprints and groups
             for (var i in s_board_contents) {
                 if (s_board_contents[i][0] == 'footprint') {
                     delete s_board_contents[i];
                 }
             }
-        } else {
+            for (var i in s_board_contents) {
+                if (s_board_contents[i][0] == 'group') {
+                    delete s_board_contents[i];
+                }
+            }
+        } 
+        
+        // if the board didn't exist or had something wrong with it
+        if (s_board_contents == undefined){
             // if the board file didn't exist, make a blank
             let board_contents = `(kicad_pcb ${version} ${generator} ${generator_version} ${general} ${paper})`;
 
@@ -71,7 +136,7 @@ export class PCB {
 
             // add uuid field to each component, then add to group
             l.splice(2, 0, [`uuid "${this.#components[i].uuid}"`]);
-            group_uuid += `"${this.#components[i].uuid}" `;
+            this.#group_uuid += `"${this.#components[i].uuid}" `;
 
             // correct footprint name
             l[1] = `"${this.#components[i].Footprint}"`;
@@ -117,8 +182,8 @@ export class PCB {
                             // check if there is already a rotation property or not, add/replace it with slice
                             if (l[ii][iii].length == 3) {
                                 l[ii][iii].splice(3, 0, `${this.#components[i].pcb.rotation}`);
-                            } else if (l[ii][iii].length == 3) {
-                                l[ii][iii].splice(3, 1, `${this.#components[i].pcb.rotation}`);
+                            } else if (l[ii][iii].length == 4) {
+                                l[ii][iii].splice(3, 1, `${(this.#components[i].pcb.rotation! - l[ii][iii][3])}`);
                             }
                         }
                     }
@@ -138,14 +203,17 @@ export class PCB {
             s_board_contents.splice(6, 0, l);
             footprint_contents = S.serialize(s_board_contents, { includingRootParentheses: true });
             footprint_contents = footprint_contents.replaceAll("`", '"');
-
             this.#pcb = footprint_contents;
         }
 
         // group components
-        let group = `(group "${this.#Boardname}" (members ${group_uuid})`
-        this.#pcb = this.#pcb.slice(0, (this.#pcb.length - 1)) + group + '))';
-        
+        // let group = `(group "${this.#Boardname}" (members ${this.#group_uuid})`
+        let group_text = '';
+        this.#groups.forEach((group) => {
+            group_text += group;
+        });
+
+        this.#pcb = this.#pcb.slice(0, (this.#pcb.length - 1)) + group_text + ')';
         try {
             fs.writeFileSync(`./build/${this.#Boardname}.kicad_pcb`, this.#pcb);
             process.stdout.write(chalk.white("\n+"));

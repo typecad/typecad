@@ -7,6 +7,8 @@ import chalk from 'chalk';
 import { kicad_path } from "./kicad";
 import { platform } from 'node:os';
 import { randomUUID, UUID } from "node:crypto";
+import { execSync } from "node:child_process";
+import { kicad_cli_path } from './kicad'
 
 // const kicad_symbol = "C:/Program Files/KiCad/8.0/share/kicad/symbols"
 const S = new SExpr()
@@ -31,6 +33,7 @@ interface IComponent {
  * @property {string} Description - Description of component
  * @property {string} MPN - Manufacturer Part Number
  * @property {string} uuid - UUID of component used by KiCAD
+ * @property {pcb} pcb - x, y, rotation of component on PCB
  */
 export class Component {
     Footprint?: string;
@@ -44,7 +47,7 @@ export class Component {
     uuid?: string;
     pcb: {x: number, y: number, rotation?: number} = {x: 0, y: 0, rotation: 0};
     #symbol_lib?: string = '';
-    footprint_file?: string = '';
+    #footprint_file?: string = '';
     instance? = {project: 'xx', uuid: 'xx'};
 
     /**
@@ -141,8 +144,17 @@ export class Component {
 
 
     footprint_lib(footprint: string): string {
+        const runCommand = (command: string) => {
+            try {
+                execSync(`${command}`);
+            } catch (e) {
+
+            }
+            return true;
+        };
+
         // if we already found this symbol, return it before doing anything
-        if (this.footprint_file != '') return this.footprint_file!;
+        if (this.#footprint_file != '') return this.#footprint_file!;
 
         let footprint_file_contents = "";
         let footprint_file_name = footprint.split(":");
@@ -161,6 +173,10 @@ export class Component {
                     "utf8"
                 );
             } else {
+                // if the footprint is in this folder, it came from elsewhere and might be an older format
+                // run kicad-cli to fix/upgrade the footprint
+                runCommand(`"${kicad_cli_path}" fp upgrade ./build/lib/footprints/`);
+
                 footprint_file_contents = fs.readFileSync(
                     `./build/lib/footprints/${footprint_file_name[1]}.kicad_mod`,
                     "utf8"
@@ -175,17 +191,17 @@ export class Component {
             if (l[0] == 'module') {
                 l[0] = 'footprint'
             }
-            this.footprint_file = S.serialize(l).replaceAll("`", '"');
+            this.#footprint_file = S.serialize(l).replaceAll("`", '"');
 
         } catch (err) {
             console.error(err);
         }
 
-        if (this.footprint_file == '') {
+        if (this.#footprint_file == '') {
             console.log('- ', chalk.red.bold(`ERROR: footprint ${footprint} not found`))
         }
 
-        return this.footprint_file!;
+        return this.#footprint_file!;
     }
 
     /**

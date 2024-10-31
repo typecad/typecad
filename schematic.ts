@@ -227,7 +227,7 @@ export class Schematic {
         };
 
         process.stdout.write(chalk.white("\n+"));
-        process.stdout.write(chalk.magenta("erc\n"));
+        process.stdout.write(chalk.magenta("erc - " + this.#Sheetname));
 
         runCommand(`"${kicad_cli_path}" sch erc --exit-code-violations --output ./build/${this.#Sheetname}.json --format json ./build/${this.#Sheetname}.kicad_sch`);
 
