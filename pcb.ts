@@ -43,6 +43,9 @@ export class PCB {
      */
     place(...components: Component[]) {
         components.forEach((component) => {
+            if (component.dnp === true) {
+                return;
+            }
             this.#footprints.push(component.footprint_lib(component.Footprint!));
             this.#components.push(component);
         });
@@ -65,6 +68,9 @@ export class PCB {
     group(group_name: string,  ...components: Component[]) {
         let uuid_list = '';
         components.forEach((component) => {
+            if (component.dnp === true) {
+                return;
+            }
             this.#footprints.push(component.footprint_lib(component.Footprint!));
             this.#components.push(component);
             uuid_list += `"${component.uuid}" `;

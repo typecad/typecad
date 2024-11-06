@@ -33,7 +33,8 @@ interface IComponent {
  * @property {string} Description - Description of component
  * @property {string} MPN - Manufacturer Part Number
  * @property {string} uuid - UUID of component used by KiCAD
- * @property {pcb} pcb - x, y, rotation of component on PCB
+ * @property {PCB} pcb - x, y, rotation of component on PCB
+ * @property {boolean} dnp - TRUE if component is Do Not Place, false to place component
  */
 export class Component {
     Footprint?: string;
@@ -49,6 +50,7 @@ export class Component {
     #symbol_lib?: string = '';
     #footprint_file?: string = '';
     instance? = {project: 'xx', uuid: 'xx'};
+    dnp?: boolean = false;
 
     /**
      * `constructor` for Component.
@@ -111,6 +113,8 @@ export class Component {
      */
     update(): string {
         let component_props = [];
+
+        if (this.dnp === true) return '';
 
         // add symbol-generics
         component_props.push([`lib_id "${this.symbol}"`]); // links to a lib_symbols item
