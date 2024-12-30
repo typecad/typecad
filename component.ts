@@ -6,11 +6,10 @@ import fsexp from "fast-sexpr";
 import chalk from 'chalk';
 import { kicad_path } from "./kicad";
 import { platform } from 'node:os';
-import { randomUUID, UUID } from "node:crypto";
+import { randomUUID } from "node:crypto";
 import { execSync } from "node:child_process";
 import { kicad_cli_path } from './kicad'
 
-// const kicad_symbol = "C:/Program Files/KiCad/8.0/share/kicad/symbols"
 const S = new SExpr()
 let symbols:string[] = ['▖', '▗', '▘', '▙', '▚', '▛', '▜', '▝', '▞', '▟']
 const getRandomElement = () =>
@@ -310,73 +309,4 @@ export class Component {
         this.coord!.y = 2.54 * Math.ceil(y / 2.54);
     }
 
-    
-    /**
-     * Creates a file listing the pinout of the component in `./pinout/[symbol name].md`
-     */
-    pinout() {
-        let _footprint: string = '';
-        let _datasheet: string = '';
-        let _description: string = '';
-        let _type: string = '';
-        let _name: string = '';
-        let _number: number = -1;
-        let _symbol: string = '';
-        let _markdown: string = '';
-
-        let _pins: { type: string, name: string, number: number }[] = [];
-
-        const l = fsexp(this.#symbol_lib).pop();
-        for (var i in l) {
-            for (var ii in l[i]) {
-                if (l[i][ii] == 'Footprint') {
-                    _footprint = l[i][parseInt(ii) + 1];
-                }
-
-                if (l[i][ii] == 'Datasheet') {
-                    _datasheet = l[i][parseInt(ii) + 1];
-                }
-
-                if (l[i][ii] == 'Description') {
-                    _description = l[i][parseInt(ii) + 1];
-                }
-
-                if (l[i][ii] == 'Value') {
-                    _symbol = l[i][parseInt(ii) + 1];
-                }
-
-                if (l[i][ii][0] == "pin") {
-                    _type = l[i][ii][1];
-                    for (var iii in l[i][ii]) {
-                        if (l[i][ii][iii][0] == "name") {
-                            _name = l[i][ii][iii][1];
-                        }
-                        if (l[i][ii][iii][0] == "number") {
-                            _number = l[i][ii][iii][1];
-                        }
-                    }
-                    _pins.push({type: _type, name: _name, number: _number});
-                }
-            }
-        }
-        
-        _markdown = `### ${_symbol}\n`;
-        _markdown += `**${_description}*\n`
-        _markdown += `- Datasheet: ${this.Datasheet}\n`;
-        _markdown += `- Footprint: ${this.Footprint}\n\n`;
-        _markdown += `| Pin # | Name | Type |\n`;
-        _markdown += `| --: | :-- | :-- |\n`
-        _pins.forEach((pin) => {
-            _markdown += `| ${pin.number} | ${pin.name} | ${pin.type} |\n`;
-        });
-
-        try {
-            if (!fs.existsSync('./build/pinout/')){
-                fs.mkdirSync('./build/pinout/');
-            }
-            fs.writeFileSync(`./build/pinout/${_symbol}.md`, _markdown);
-        } catch (err) {
-            console.error(err);
-        }
-    }
 }
