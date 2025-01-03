@@ -21,7 +21,7 @@ import { Schematic, Component } from '@typecad/typecad'
 import { Resistor, LED } from './module/passives/0805'
 
 let typecad = new Schematic('typecad');
-let bt1 = new Component({ symbol: 'Device:Battery_Cell', reference: 'BT1' });
+let bt1 = new Component({ symbol: 'Device:Battery_Cell' });
 let r1 = new Resistor({ value: "1 kOhm" });
 let d1 = new LED();
 

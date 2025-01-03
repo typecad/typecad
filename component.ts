@@ -9,6 +9,8 @@ import { platform } from 'node:os';
 import { randomUUID } from "node:crypto";
 import { execSync } from "node:child_process";
 import { kicad_cli_path } from './kicad'
+import { ReferenceCounter } from "./reference_counter";
+const referenceCounter = new ReferenceCounter();
 
 const S = new SExpr()
 let symbols:string[] = ['▖', '▗', '▘', '▙', '▚', '▛', '▜', '▝', '▞', '▟']
@@ -80,6 +82,7 @@ export class Component {
         }
         if (reference != undefined) {
             this.Reference = reference;
+            referenceCounter.setReference(reference);
         }
         if (footprint != undefined) {
             this.Footprint = footprint;
@@ -248,9 +251,16 @@ export class Component {
                     l[i][1] = `"${symbol_file_name[0]}:${symbol_file_name[1]}"`;
                     for (var ii in l[i]) {
                         if (l[i][ii][1] == '`Reference`') {
-
-                            if (this.Reference == '') {
+                            if ((this.Reference == '') || (this.Reference == undefined)) {
                                 this.Reference = l[i][ii][2].replaceAll(`\``, "");
+
+                                // if there's no reference, set it to X
+                                if (this.Reference == '') {
+                                    this.Reference = 'X';
+                                }
+
+                                // auto-assign a reference if one wasn't provided
+                                this.Reference = referenceCounter.getNextReference(this.Reference!);
                             }
                         }
 
