@@ -273,6 +273,7 @@ export class Schematic {
         return true;
     }
 
+    //TODO rewrite this
     /**
      * Connects a pin or group of pins together
      *
@@ -290,17 +291,17 @@ export class Schematic {
      * typecad.net({ pins: [r1.pin(2), r2,pin(1)] });
      * ```
      */
-    net({ net, pins }: INet = {}): boolean {
+    net(...pins: Pin[]): boolean {
         // nothing to do if no pins passed
         if (!pins) {
             return false;
         }
 
-        if (net) {
-            // if a net was passed, use that
-            return this._net(net, ...pins);
-        }
-        else {
+        // if (net) {
+        //     // if a net was passed, use that
+        //     return this._net(net, ...pins);
+        // }
+        // else {
             // if no net passed, create a name for a net
             let net_name;
 
@@ -315,7 +316,7 @@ export class Schematic {
                 net_name = pins[0].Owner.Reference + '.' + pins[0].Number;
             }
             return this._net(net_name, ...pins);
-        }
+        //}
     }
 
     /**
@@ -416,6 +417,7 @@ export class Schematic {
                 }
             }
 
+            // these pins are inside a sheet and brought in or sent out
             if (pin.hier == true) {
                 // check that the information needed for the pin is there
                 if ("Name" in pin == false) {
@@ -424,20 +426,32 @@ export class Schematic {
                     return false;
                 }
                 this.#nets.push(
-                    `(hierarchical_label "${pin.Name}"(at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y
+                    `(hierarchical_label "${name}"(at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y
                     } ${a})(shape ${pin.type})  ${effects})`
                 );
+
+                // this is a heir -> schematic pin connection
+                if (name != pin.Name) {
+                    this.#nets.push(
+                        `(hierarchical_label "${pin.Name}"(at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y
+                        } ${a})(shape ${pin.type})  ${effects})`
+                    );
+                    // }
+                }
                 process.stdout.write(chalk.yellow(getRandomElement()));
             }
+            // these pins are attached to the sheet on the main schematic
             else if (pin.sheet == true) {
                 this.#nets.push(
                     `(label "${name}"(at ${pin.x} ${(pin.y + (pin.order * 2.54))
                     } 180) (effects(justify right top)))`
                 );
             }
+            // these are regular pins within a sheet/schematic
             else {
                 this.#nets.push(
                     `(label "${name}"(at ${pin.Owner.coord.x + x} ${pin.Owner.coord.y - y
+                        
                     } ${a}) ${effects})`
                 );
                 process.stdout.write(chalk.blue(getRandomElement()));
@@ -563,7 +577,7 @@ export class Schematic {
         if (component.symbol_lib == undefined) return;
         if (!component.symbol) return;
         this.#symbol_libs.push(component.symbol_lib(component.symbol));      // has to be before next line to get the right references 
-        
+
         this.#symbols.push(component.update());
 
         process.stdout.write(chalk.greenBright(getRandomElement()));

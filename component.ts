@@ -18,7 +18,7 @@ const getRandomElement = () =>
     symbols.length ? symbols[Math.floor(Math.random() * symbols.length)] : undefined
 
 interface IComponent {
-    symbol?: string, reference?: string, value?: string, footprint?: string, xy?: Bounds
+    symbol?: string, reference?: string | undefined, value?: string, footprint?: string, xy?: Bounds
 }
 /**
  * Create a new component, defined as a schematic symbol, a footprint, value, and reference designator. 
@@ -83,6 +83,8 @@ export class Component {
         if (reference != undefined) {
             this.Reference = reference;
             referenceCounter.setReference(reference);
+        } else {
+            this.symbol_lib(symbol);
         }
         if (footprint != undefined) {
             this.Footprint = footprint;

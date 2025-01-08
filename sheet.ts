@@ -141,22 +141,7 @@ export class Sheet extends Schematic {
         return true;
     }
 
-    in({ net, pins }: INet = {}) {
-        if (!pins) {
-            return;
-        }
-        if (!net) {
-            return;
-        }
-
-        pins.forEach((pin) => {
-            pin.hier = true;
-            pin.type = "input"
-        });
-        this._net(net, ...pins);
-    }
-
-    out({ net, pins }: INet = {}) {
+    ext(net: string, ...pins: Pin[]) {
         if (!pins) {
             return;
         }

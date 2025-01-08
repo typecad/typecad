@@ -18,16 +18,16 @@ Code can be version controlled, status tracked, git push/pull/PR/issues can be u
 This **type**CAD code...
 ```ts
 import { Schematic, Component } from '@typecad/typecad'
-import { Resistor, LED } from './module/passives/0805'
+import { Resistor, LED } from '@typecad/passives/0805'
 
 let typecad = new Schematic('typecad');
 let bt1 = new Component({ symbol: 'Device:Battery_Cell' });
 let r1 = new Resistor({ value: "1 kOhm" });
 let d1 = new LED();
 
-typecad.net({ pins: [bt1.pin(1), r1.pin(1)] });
-typecad.net({ pins: [r1.pin(2), d1.pin(2)] });
-typecad.net({ pins: [d1.pin(1), bt1.pin(2)] });
+typecad.net(bt1.pin(1), r1.pin(1));
+typecad.net(r1.pin(2), d1.pin(2));
+typecad.net(d1.pin(1), bt1.pin(2));
 
 typecad.create(r1, led, bt1);
 typecad.netlist();
