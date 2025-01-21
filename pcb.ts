@@ -35,7 +35,7 @@ export class PCB {
      * @example
      * ```ts
      * let typecad = new Schematic('sheetname');
-     * let r1 = new Component({symbol: "Device:R_Small", reference: 'R1', value: '1 kOhm', footprint: "Resistor_SMD:R_0603_1608Metric"});
+     * let r1 = new Component({});
      * 
      * r1.pcb = {x: 10, y: 10, rotation: 90};
      * board.place(r1);
@@ -46,7 +46,7 @@ export class PCB {
             if (component.dnp === true) {
                 return;
             }
-            this.#footprints.push(component.footprint_lib(component.Footprint!));
+            this.#footprints.push(component.footprint_lib(component.footprint!));
             this.#components.push(component);
         });
     }
@@ -59,25 +59,26 @@ export class PCB {
      * @example
      * ```ts
      * let typecad = new Schematic('sheetname');
-     * let r1 = new Component({symbol: "Device:R_Small", reference: 'R1', value: '1 kOhm', footprint: "Resistor_SMD:R_0603_1608Metric"});
+     * let r1 = new Component({});
      * 
      * r1.pcb = {x: 10, y: 10, rotation: 90};
      * board.group('resistor', r1);
      * ```
      */
-    group(group_name: string,  ...components: Component[]) {
+    group(group_name: string,  ...component: Component[]) {
         let uuid_list = '';
-        components.forEach((component) => {
-            if (component.dnp === true) {
+        component.forEach((_component) => {
+            if (_component.dnp === true) {
                 return;
             }
-            this.#footprints.push(component.footprint_lib(component.Footprint!));
-            this.#components.push(component);
-            uuid_list += `"${component.uuid}" `;
+            this.#footprints.push(_component.footprint_lib(_component.footprint!));
+            this.#components.push(_component);
+            uuid_list += `"${_component.uuid}" `;
         });
 
         this.#groups.push(`(group "${group_name}" (members ${uuid_list}))`)
-        //console.log(this.#groups);
+        process.stdout.write(chalk.yellow.bold(`${group_name}`) + ` group added` + '\n');
+
     }
 
     /**
@@ -118,7 +119,6 @@ export class PCB {
                 }
             }
         } 
-        
         // if the board didn't exist or had something wrong with it
         if (s_board_contents == undefined){
             // if the board file didn't exist, make a blank
@@ -145,38 +145,45 @@ export class PCB {
             this.#group_uuid += `"${this.#components[i].uuid}" `;
 
             // correct footprint name
-            l[1] = `"${this.#components[i].Footprint}"`;
+            l[1] = `"${this.#components[i].footprint}"`;
 
             // loop through and replace references, values 
             for (var ii in l) {
+                
                 if (l[ii][0] == 'property') {
                     if (l[ii][1] == '`Reference`') {
-                        if (this.#components[i].Reference != undefined) {
-                            l[ii][2] = `"${this.#components[i].Reference}"`;
+                        if (this.#components[i].reference != undefined) {
+                            l[ii][2] = `"${this.#components[i].reference}"`;
                         }
                     }
 
                     if (l[ii][1] == '`Value`') {
-                        if (this.#components[i].Value != undefined) {
-                            l[ii][2] = `"${this.#components[i].Value}"`;
+                        if (this.#components[i].value != undefined) {
+                            l[ii][2] = `"${this.#components[i].value}"`;
                         }
                     }
 
                     if (l[ii][1] == '`Footprint`') {
-                        if (this.#components[i].Footprint != undefined) {
-                            l[ii][2] = `"${this.#components[i].Footprint}"`;
+                        if (this.#components[i].footprint != undefined) {
+                            l[ii][2] = `"${this.#components[i].footprint}"`;
                         }
                     }
 
                     if (l[ii][1] == '`Datasheet`') {
-                        if (this.#components[i].Datasheet != undefined) {
-                            l[ii][2] = `"${this.#components[i].Datasheet}"`;
+                        if (this.#components[i].datasheet != undefined) {
+                            l[ii][2] = `"${this.#components[i].datasheet}"`;
                         }
                     }
 
                     if (l[ii][1] == '`Description`') {
-                        if (this.#components[i].Description != undefined) {
-                            l[ii][2] = `"${this.#components[i].Description}"`;
+                        if (this.#components[i].description != undefined) {
+                            l[ii][2] = `"${this.#components[i].description}"`;
+                        }
+                    }
+
+                    if (l[ii][1] == '`MPN`') {
+                        if (this.#components[i].mpn != undefined) {
+                            l[ii][2] = `"${this.#components[i].mpn}"`;
                         }
                     }
                 }
@@ -198,8 +205,8 @@ export class PCB {
                 // some footprints have the reference in fp_text
                 if (l[ii][0] == 'fp_text') {
                     if (String(l[ii][1]).toLowerCase() == 'reference') {
-                        if (this.#components[i].Reference != undefined) {
-                            l[ii][2] = `"${this.#components[i].Reference}"`;
+                        if (this.#components[i].reference != undefined) {
+                            l[ii][2] = `"${this.#components[i].reference}"`;
                         }
                     }
                 }
@@ -213,7 +220,6 @@ export class PCB {
         }
 
         // group components
-        // let group = `(group "${this.#Boardname}" (members ${this.#group_uuid})`
         let group_text = '';
         this.#groups.forEach((group) => {
             group_text += group;
@@ -222,8 +228,11 @@ export class PCB {
         this.#pcb = this.#pcb.slice(0, (this.#pcb.length - 1)) + group_text + ')';
         try {
             fs.writeFileSync(`./build/${this.#Boardname}.kicad_pcb`, this.#pcb);
-            process.stdout.write(chalk.white("\n+"));
-            process.stdout.write(chalk.bgGreen("board"));
+            //process.stdout.write(chalk.white("\n+"));
+            //process.stdout.write(chalk.bgGreen("board"));
+            // console.log(`  ✳️  PCB created: ${this.#Boardname}`)
+            process.stdout.write(chalk.green.bold(`./build/${this.#Boardname}.kicad_pcb`) + ` written` + '\n');
+
         } catch (err) {
             console.error(err);
         }

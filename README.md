@@ -15,26 +15,25 @@ The schematic portion of hardware design is replaced with a few simple TypeScrip
 Code can be version controlled, status tracked, git push/pull/PR/issues can be used, and all the typical tools for software design can be used for hardware design now
 
 ## Example
-This **type**CAD code...
+_This **type**CAD code..._
 ```ts
 import { Schematic, Component } from '@typecad/typecad'
 import { Resistor, LED } from '@typecad/passives/0805'
 
 let typecad = new Schematic('typecad');
-let bt1 = new Component({ symbol: 'Device:Battery_Cell' });
+let bt1 = new Component({ footprint: 'BatteryHolder_Keystone_500' });
 let r1 = new Resistor({ value: "1 kOhm" });
 let d1 = new LED();
 
-typecad.net(bt1.pin(1), r1.pin(1));
+typecad.named('vin').net(bt1.pin(1), r1.pin(1));
 typecad.net(r1.pin(2), d1.pin(2));
-typecad.net(d1.pin(1), bt1.pin(2));
+typecad.named('gnd').net(d1.pin(1), bt1.pin(2));
 
-typecad.create(r1, led, bt1);
+typecad.create(r1, d1, bt1);
 typecad.netlist();
 ```
 
-...is the same as this schematic.
-
+_...is the same as this schematic._
 
 ![simple led circuit](https://typecad.net/led-circuit.png)
 
