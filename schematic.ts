@@ -81,14 +81,14 @@ export class Schematic {
     private sxexp_components: string[] = [];
     private sxexp_nets: string[] = [];
     private code_counter = 0;
-    Nodes: { name: string | undefined, code: number, nodes: Pin[] }[] = [];
+    Nodes: { name: string, code: number, nodes: Pin[] }[] = [];
     private _chained_name: string = '';
 
     /**
      * Used internally
      * @ignore
      */
-    private _storeNetParams(name: string | undefined, code: number, ...nodes: Pin[]) {
+    private _storeNetParams(name: string, code: number, ...nodes: Pin[]) {
         this.Nodes.push({ name, code, nodes });
     }
 
@@ -251,43 +251,51 @@ export class Schematic {
      */
     net(...pins: Pin[]) {
         this.code_counter++;
-        let match: boolean = false;
 
         // make a net name
         let node_name = this._chained_name ? this._chained_name : `net${this.code_counter}`;
 
-        // Check for existing net parameters and copy pins to existing net
-        // KiCAD won't connect the same pin to a different net
+        // check each pin in each node to see if a pin is connected somewhere else
+        // if so, merge the nets by making their names the same
         pins.forEach((pin) => {
             this.Nodes.forEach((netParam) => {
-                netParam.nodes.forEach((netParamPin, index) => {
+                netParam.nodes.forEach((netParamPin) => {
                     if (netParamPin.reference === pin.reference && netParamPin.number === pin.number) {
-                        if (this._chained_name) {
-                            process.stdout.write(chalk.gray.bold(`${this._chained_name}`) + ` net merged into ` + netParam.name + '\n');
+                        // notify about a merged named net
+                        if (!node_name.startsWith('net')) {
+                            process.stdout.write(chalk.gray.bold(`${node_name}`) + ` net merged into ` + chalk.gray.bold(`${netParam.name}`) + '\n');
                         }
-                        match = true;
-                        netParam.nodes.push(...pins.filter(p => p !== pin));
+                        node_name = netParam.name;
                     }
                 });
             });
         });
 
-        // Remove duplicate pins
-        this.Nodes.forEach((netParam) => {
-            netParam.nodes = netParam.nodes.filter((pin, index, self) =>
+        // store the node
+        this._storeNetParams(node_name, this.code_counter, ...pins);
+
+        // Check for duplicate node names and merge them
+        let nodeMap: { [key: string]: { name: string, code: number, nodes: Pin[] } } = {};
+        this.Nodes.forEach((node) => {
+            if (nodeMap[node.name]) {
+                nodeMap[node.name].nodes.push(...node.nodes);
+            } else {
+                nodeMap[node.name] = { ...node, nodes: [...node.nodes] };
+            }
+        });
+
+        // remove duplicate pins
+        Object.values(nodeMap).forEach((node) => {
+            node.nodes = node.nodes.filter((pin, index, self) =>
                 index === self.findIndex((p) => (
                     p.reference === pin.reference && p.number === pin.number
                 ))
             );
         });
 
-        // if there was a match above, no need to add a new node
-        if (match) {
-            return;
-        }
+        this.Nodes = Object.values(nodeMap);
 
-        // store the node
-        this._storeNetParams(node_name, this.code_counter, ...pins);
+
 
         // clear the name
         this._chained_name = '';
@@ -298,7 +306,7 @@ export class Schematic {
             _net_display += '~ ' + pin.reference + ':' + pin.number + ' ';
         });
 
-        process.stdout.write(chalk.gray.bold(`${node_name}`) + ` net added ` + _net_display + '\n');
+        // process.stdout.write(chalk.gray.bold(`${node_name}`) + ` net added ` + _net_display + '\n');
 
         //return this;
     }

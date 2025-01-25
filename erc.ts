@@ -46,7 +46,7 @@ function erc_node_pin(nodes: Pin[]) {
         if (pin.type === 'input') {
             const hasInput = nodes.some(pin2 => pin2.type === 'output');
             if (!hasInput) {
-                errors.push(`input pin ${pin.reference}:${pin.number} not driven to any output pin`);
+                errors.push(`input pin ${pin.reference}:${pin.number} not driven by an output pin`);
             }
         }
     });
@@ -56,7 +56,7 @@ function erc_node_pin(nodes: Pin[]) {
         if (pin.type === 'power_in') {
             const hasInput = nodes.some(pin2 => pin2.type === 'power_out');
             if (!hasInput) {
-                errors.push(`power_in pin ${pin.reference}:${pin.number} not driven to any power_out pin`);
+                errors.push(`power_in pin ${pin.reference}:${pin.number} not driven by a power_out pin. Use [pin].type = 'power_out' to designate a power_out pin`);
             }
         }
     });

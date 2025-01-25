@@ -2,7 +2,7 @@
 export { Component, IComponent } from './component'
 export { Schematic } from './schematic'
 export { Pin } from './pin'
-export { I2C } from './buses'
+export { I2C, PowerInput, PowerSupply, UART, USB, Power } from './buses'
 export { PCB } from './pcb'
 
 import chalk from 'chalk';
