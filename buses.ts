@@ -64,8 +64,8 @@ interface IPower {
     voltage?: number;
 };
 export class Power {
-    power?: Pin;
-    gnd?: Pin;
+    power: Pin;
+    gnd: Pin;
     voltage?: number;
     constructor({ power, gnd, voltage }: IPower = {}) {
         if (power) {
