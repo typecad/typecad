@@ -365,4 +365,13 @@ export class Schematic {
     erc() {
         erc(this);      // call it this way to make it easy to create a "plugin"-type extension for this
     }
+
+    error(error: string) {
+        process.stdout.write(chalk.bgRed(`ERR:`) +  chalk.bold(` ${error}` + '\n'));
+        process.exit(1);
+    }
+
+    warn(warning: string) {
+        process.stdout.write(chalk.bgYellow(`WARN:`) +  chalk.bold(` ${warning}` + '\n'));
+    }
 }
