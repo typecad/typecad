@@ -261,9 +261,11 @@ export class Schematic {
             this.Nodes.forEach((netParam) => {
                 netParam.nodes.forEach((netParamPin) => {
                     if (netParamPin.reference === pin.reference && netParamPin.number === pin.number) {
-                        // notify about a merged named net
+                        // notify about a merged named net if it isn't an auto-generated net and isn't the same net
                         if (!node_name.startsWith('net')) {
-                            process.stdout.write(chalk.gray.bold(`${node_name}`) + ` net merged into ` + chalk.gray.bold(`${netParam.name}`) + '\n');
+                            if (node_name != netParam.name) {
+                                process.stdout.write(chalk.gray.bold(`${node_name}`) + ` net merged into ` + chalk.gray.bold(`${netParam.name}`) + '\n');
+                            }
                         }
                         node_name = netParam.name;
                     }
