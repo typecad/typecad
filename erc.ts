@@ -30,13 +30,10 @@ export function erc(schematic: Schematic) {
             process.stdout.write(chalk.whiteBright.bgYellow(`ERC warning:`) +  ` ${warning}` + '\n');
         });
     }
-    // process.stdout.write(chalk.bold.yellow('ERC') + ` successful` + '\n');
 
+    process.stdout.write(chalk.bold.magentaBright('ERC') + ` ${errors.length} errors, ${warnings.length} warnings` + '\n');
     if (errors.length > 0) {
-        process.stdout.write('🏳️ ' + chalk.whiteBright.bold('type') + 'CAD quit early due to ERC errors' + '\n');
         process.exit(1);
-    } else {
-        process.stdout.write(chalk.bold.yellow('ERC') + ` successful` + '\n');
     }
 }
 
