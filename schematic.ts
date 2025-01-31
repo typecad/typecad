@@ -82,6 +82,7 @@ export class Schematic {
     private sxexp_nets: string[] = [];
     private code_counter = 0;
     Nodes: { name: string, code: number, nodes: Pin[] }[] = [];
+    merged_nets: { old_name: string, merged_to_number: number}[] = [];
     private _chained_name: string = '';
 
     /**
@@ -258,7 +259,7 @@ export class Schematic {
         // check each pin in each node to see if a pin is connected somewhere else
         // if so, merge the nets by making their names the same
         pins.forEach((pin) => {
-            this.Nodes.forEach((netParam) => {
+            this.Nodes.forEach((netParam, index) => {
                 netParam.nodes.forEach((netParamPin) => {
                     if (netParamPin.reference === pin.reference && netParamPin.number === pin.number) {
                         // notify about a merged named net if it isn't an auto-generated net and isn't the same net
@@ -267,7 +268,10 @@ export class Schematic {
                                 process.stdout.write(chalk.gray.bold(`${node_name}`) + ` net merged into ` + chalk.gray.bold(`${netParam.name}`) + '\n');
                             }
                         }
+                        this.merged_nets.push({old_name: node_name, merged_to_number: this.Nodes[index].code});
+
                         node_name = netParam.name;
+                        // console.log(this.code_counter, this.Nodes[index].code);
                     }
                 });
             });

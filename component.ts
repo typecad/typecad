@@ -16,7 +16,7 @@ export interface IComponent {
     symbol?: string, reference?: string | undefined, value?: string, footprint?: string, 
     prefix?: string, datasheet?: string, description?: string, voltage?: string, 
     wattage?: string, uuid?: string, mpn?: string, dnp?: boolean, 
-    pcb?: { x: number, y: number, rotation: number }, pins?: Pin[]
+    pcb?: { x: number, y: number, rotation: number }, pins?: Pin[], via?: boolean,
 }
 
 /**
@@ -47,6 +47,7 @@ export class Component {
     uuid: string = '';
     #footprint_file?: string = '';
     private pins: Pin[] = [];
+    via: boolean = false;
 
     /**
      * `constructor` for Component.
@@ -67,7 +68,7 @@ export class Component {
      * let resistor = new Component({symbol: "Device:R_Small", reference: 'R1', value: '1 kOhm', footprint: "Resistor_SMD:R_0603_1608Metric"});
      * ```
      */
-    constructor({ reference, value, footprint, prefix, datasheet, description, voltage, wattage, mpn }: IComponent = {}) {
+    constructor({ reference, value, footprint, prefix, datasheet, description, voltage, wattage, mpn, via, uuid }: IComponent = {}) {
         if (reference != undefined) {
             this.reference = reference;
             if (!referenceCounter.setReference(reference)) {
@@ -85,8 +86,13 @@ export class Component {
         if (voltage != undefined) this.voltage = voltage;
         if (wattage != undefined) this.wattage = wattage;
         if (mpn != undefined) this.mpn = mpn;
-        
-        this.uuid = randomUUID();
+        this.via = via || false;
+        if (uuid == undefined){
+             this.uuid = randomUUID();
+        } else {
+            this.uuid = uuid;
+        }
+
         process.stdout.write(chalk.blue.bold(this.reference) + ' created\n');
 
     }

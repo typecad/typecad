@@ -1,17 +1,29 @@
 import { Component } from "./component";
+import { Schematic } from "./schematic";
 import fs from "node:fs";
 import fsexp from "fast-sexpr";
 import SExpr from "s-expression.js";
 import chalk from 'chalk';
+import { randomUUID } from "node:crypto";
 
 const S = new SExpr()
 
+export interface IVia {
+    at?: { x: number, y: number },
+    size?: number,
+    drill?: number,
+    net?: string,
+    uuid?: string,
+}
+
 export class PCB {
     #Boardname: string;
+    // #Schematic: Schematic;
     #pcb: string = '';
     #footprints: string[] = [];
     #components: Component[] = [];
     #groups: string[] = [];
+    #vias: string[] = [];
     #group_uuid = '';
 
     /**
@@ -26,6 +38,7 @@ export class PCB {
      */
     constructor(Boardname: string) {
         this.#Boardname = Boardname;
+        // this.#Schematic = schematic;
     }
 
     /**
@@ -46,8 +59,12 @@ export class PCB {
             if (component.dnp === true) {
                 return;
             }
-            this.#footprints.push(component.footprint_lib(component.footprint!));
-            this.#components.push(component);
+            if (component.via == false) {
+                this.#footprints.push(component.footprint_lib(component.footprint!));
+                this.#components.push(component);
+            } else {
+                this.#components.push(component);
+            }
         });
     }
 
@@ -65,15 +82,19 @@ export class PCB {
      * board.group('resistor', r1);
      * ```
      */
-    group(group_name: string,  ...component: Component[]) {
+    group(group_name: string, ...component: Component[]) {
         let uuid_list = '';
         component.forEach((_component) => {
             if (_component.dnp === true) {
                 return;
             }
-            this.#footprints.push(_component.footprint_lib(_component.footprint!));
-            this.#components.push(_component);
-            uuid_list += `"${_component.uuid}" `;
+            if (_component.via == false) {
+                this.#footprints.push(_component.footprint_lib(_component.footprint!));
+                this.#components.push(_component);
+                uuid_list += `"${_component.uuid}" `;
+            } else {
+                uuid_list += `"${_component.uuid}" `;
+            }
         });
 
         this.#groups.push(`(group "${group_name}" (members ${uuid_list}))`)
@@ -97,7 +118,7 @@ export class PCB {
         let paper = '(paper "A4")';
         let s_board_contents = [];
 
-        // if board exists, keep everything except the footprints
+        // if board exists, keep everything except the footprints, groups, vias and nets
         if (fs.existsSync(`./build/${this.#Boardname}.kicad_pcb`)) {
             let board_contents = fs.readFileSync(
                 `./build/${this.#Boardname}.kicad_pcb`,
@@ -118,9 +139,21 @@ export class PCB {
                     delete s_board_contents[i];
                 }
             }
-        } 
+
+            // for (var i in s_board_contents) {
+            //     if (s_board_contents[i][0] == 'via') {
+            //         delete s_board_contents[i];
+            //     }
+            // }
+            // for (var i in s_board_contents) {
+            //     if (s_board_contents[i][0] == 'net') {
+            //         delete s_board_contents[i];
+            //     }
+            // }
+        }
+
         // if the board didn't exist or had something wrong with it
-        if (s_board_contents == undefined){
+        if (s_board_contents == undefined || s_board_contents.length == 0) {
             // if the board file didn't exist, make a blank
             let board_contents = `(kicad_pcb ${version} ${generator} ${generator_version} ${general} ${paper})`;
 
@@ -149,7 +182,6 @@ export class PCB {
 
             // loop through and replace references, values 
             for (var ii in l) {
-                
                 if (l[ii][0] == 'property') {
                     if (l[ii][1] == '`Reference`') {
                         if (this.#components[i].reference != undefined) {
@@ -219,18 +251,35 @@ export class PCB {
             this.#pcb = footprint_contents;
         }
 
+        // if no footprints
+        if (!this.#pcb) {
+            this.#pcb = S.serialize(s_board_contents, { includingRootParentheses: true });
+            this.#pcb = this.#pcb.replaceAll("`", '"');
+        }
+
+        // add nets
+        // let net_text = '(net 0 "")';
+        // this.#Schematic.Nodes.forEach((node) => {
+        //     net_text += (`(net ${node.code} "${node.name}")`);
+        // });
+
         // group components
         let group_text = '';
         this.#groups.forEach((group) => {
             group_text += group;
         });
-
         this.#pcb = this.#pcb.slice(0, (this.#pcb.length - 1)) + group_text + ')';
+
+        // add vias
+        let via_text = '';
+        this.#vias.forEach((via) => {
+            via_text += via;
+        });
+
+        // this.#pcb = this.#pcb.slice(0, (this.#pcb.length - 1)) + net_text + via_text + ')';
+
         try {
             fs.writeFileSync(`./build/${this.#Boardname}.kicad_pcb`, this.#pcb);
-            //process.stdout.write(chalk.white("\n+"));
-            //process.stdout.write(chalk.bgGreen("board"));
-            // console.log(`  ✳️  PCB created: ${this.#Boardname}`)
             process.stdout.write(chalk.green.bold(`./build/${this.#Boardname}.kicad_pcb`) + ` written` + '\n');
 
         } catch (err) {
@@ -238,5 +287,30 @@ export class PCB {
         }
     }
 
+    // most via-related code has been commented out
+    via({ at, size, drill, net, uuid }: IVia = {}): Component {
+        // if (!at) at = { x: 0, y: 0 };
+        // if (!size) size = 0.6;
+        // if (!drill) drill = 0.3;
+        // if (!net) net = "";
+        // if (!uuid) uuid = randomUUID();
 
+        // let netCode;
+        // this.#Schematic.Nodes.forEach((node) => {
+        //     if (node.name === net) {
+        //         netCode = node.code;
+        //     } else {
+        //         // netCode = 0;
+        //         this.#Schematic.merged_nets.forEach((merged_net) => {
+        //             // console.log(net, merged_net.old_name)
+        //             if (net == merged_net.old_name) {
+        //                 netCode = merged_net.merged_to_number;
+        //             }
+        //         });
+        //     }
+        // });
+        // this.#vias.push(`(via (at ${at.x} ${at.y}) (size ${size}) (drill ${drill}) (layers "F.Cu" "B.Cu") (free yes) (net ${netCode}) (uuid "${uuid}") )`);
+        // return new Component({uuid: uuid, via: true});
+        return new Component();
+    }
 }
