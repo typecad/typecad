@@ -4,6 +4,7 @@ export { Schematic } from './schematic'
 export { Pin } from './pin'
 export { I2C, PowerInput, PowerSupply, UART, USB, Power } from './buses'
 export { PCB } from './pcb'
+export { KiCAD, kicad_cli_path, kicad_path } from './kicad'
 
 import chalk from 'chalk';
 import { KiCAD, kicad_cli_path, kicad_path } from './kicad'

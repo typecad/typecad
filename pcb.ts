@@ -17,7 +17,7 @@ export interface IVia {
 }
 
 export class PCB {
-    #Boardname: string;
+    Boardname: string;
     // #Schematic: Schematic;
     #pcb: string = '';
     #footprints: string[] = [];
@@ -37,7 +37,7 @@ export class PCB {
      * ```
      */
     constructor(Boardname: string) {
-        this.#Boardname = Boardname;
+        this.Boardname = Boardname;
         // this.#Schematic = schematic;
     }
 
@@ -119,9 +119,9 @@ export class PCB {
         let s_board_contents = [];
 
         // if board exists, keep everything except the footprints, groups, vias and nets
-        if (fs.existsSync(`./build/${this.#Boardname}.kicad_pcb`)) {
+        if (fs.existsSync(`./build/${this.Boardname}.kicad_pcb`)) {
             let board_contents = fs.readFileSync(
-                `./build/${this.#Boardname}.kicad_pcb`,
+                `./build/${this.Boardname}.kicad_pcb`,
                 "utf8"
             );
 
@@ -279,8 +279,8 @@ export class PCB {
         // this.#pcb = this.#pcb.slice(0, (this.#pcb.length - 1)) + net_text + via_text + ')';
 
         try {
-            fs.writeFileSync(`./build/${this.#Boardname}.kicad_pcb`, this.#pcb);
-            process.stdout.write(chalk.green.bold(`./build/${this.#Boardname}.kicad_pcb`) + ` written` + '\n');
+            fs.writeFileSync(`./build/${this.Boardname}.kicad_pcb`, this.#pcb);
+            process.stdout.write(chalk.green.bold(`./build/${this.Boardname}.kicad_pcb`) + ` written` + '\n');
 
         } catch (err) {
             console.error(err);

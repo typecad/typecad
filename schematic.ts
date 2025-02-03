@@ -93,18 +93,20 @@ export class Schematic {
         this.Nodes.push({ name, code, nodes });
     }
 
-    bom() {
+    bom(output_folder?: string) {
         let bom: string = '';
+        let _output_folder = output_folder || './build';
+
         bom += 'Reference,Value,Datasheet,Footprint,MPN\n';
         this.Components.forEach(component => {
             bom += `${component.reference},${component.value},${component.datasheet},${component.footprint},${component.mpn}\n`;
         });
 
         try {
-            fs.writeFileSync(`./build/${this.Sheetname}.csv`, bom);
+            fs.writeFileSync(`${_output_folder}/${this.Sheetname}.csv`, bom);
 
             // console.log(`  🔣 Schematic: ${this.Sheetname}`)
-            process.stdout.write(chalk.cyan.bold(`./build/${this.Sheetname}.csv`) + ` BOM written` + '\n');
+            process.stdout.write(chalk.cyan.bold(`${_output_folder}/${this.Sheetname}.csv`) + ` BOM written` + '\n');
         } catch (err) {
             console.error(err);
             return false;
@@ -124,30 +126,6 @@ export class Schematic {
     constructor(Sheetname: string) {
         this.Sheetname = Sheetname;
     }
-
-    // return same type of Component as passed
-    // add<T extends Component>(component: T): T {
-    //     this.Components.push(component);
-    //     let template = Handlebars.compile(comp_template);
-    //     let comp_data: IComponent = { reference: component.reference, value: component.value, footprint: component.footprint };
-    //     if (component.wattage) {
-    //         comp_data.wattage = component.wattage;
-    //     }
-    //     if (component.voltage) {
-    //         comp_data.voltage = component.voltage;
-    //     }
-    //     if (component.datasheet) {
-    //         comp_data.datasheet = component.datasheet;
-    //     }
-    //     if (component.description) {
-    //         comp_data.description = component.description;
-    //     }
-    //     let _comp = template(comp_data);
-    //     this.sxexp_components.push(_comp);
-
-    //     // Object.freeze(component.value);
-    //     return component;
-    // }
 
     /**
      * Adds a component to the schematic.
@@ -271,7 +249,6 @@ export class Schematic {
                         this.merged_nets.push({old_name: node_name, merged_to_number: this.Nodes[index].code});
 
                         node_name = netParam.name;
-                        // console.log(this.code_counter, this.Nodes[index].code);
                     }
                 });
             });
@@ -301,8 +278,6 @@ export class Schematic {
 
         this.Nodes = Object.values(nodeMap);
 
-
-
         // clear the name
         this._chained_name = '';
         // console.log(`  ➰  net ${node_name}`)
@@ -311,10 +286,6 @@ export class Schematic {
         pins.forEach((pin) => {
             _net_display += '~ ' + pin.reference + ':' + pin.number + ' ';
         });
-
-        // process.stdout.write(chalk.gray.bold(`${node_name}`) + ` net added ` + _net_display + '\n');
-
-        //return this;
     }
 
     /**
@@ -354,10 +325,7 @@ export class Schematic {
         try {
             fs.writeFileSync(`./build/${this.Sheetname}.net`, _schematic);
 
-            // console.log(`  🔣 Schematic: ${this.Sheetname}`)
             process.stdout.write(chalk.red.bold(`./build/${this.Sheetname}.net`) + ` file written` + '\n');
-
-            // console.log(`🏁 finished`)
             process.stdout.write('🏁 ' + chalk.whiteBright.bold('type') + 'CAD finished' + '\n');
 
         } catch (err) {
