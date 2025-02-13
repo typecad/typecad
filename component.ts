@@ -17,6 +17,7 @@ export interface IComponent {
     prefix?: string, datasheet?: string, description?: string, voltage?: string, 
     wattage?: string, uuid?: string, mpn?: string, dnp?: boolean, 
     pcb?: { x: number, y: number, rotation: number }, pins?: Pin[], via?: boolean,
+    simulation?: {include: boolean, model?: string}
 }
 
 /**
@@ -46,8 +47,9 @@ export class Component {
     dnp: boolean = false;
     uuid: string = '';
     #footprint_file?: string = '';
-    private pins: Pin[] = [];
+    pins: Pin[] = [];
     via: boolean = false;
+    simulation: {include: boolean, model: string} = {include: false, model: ''};
 
     /**
      * `constructor` for Component.
@@ -68,7 +70,7 @@ export class Component {
      * let resistor = new Component({symbol: "Device:R_Small", reference: 'R1', value: '1 kOhm', footprint: "Resistor_SMD:R_0603_1608Metric"});
      * ```
      */
-    constructor({ reference, value, footprint, prefix, datasheet, description, voltage, wattage, mpn, via, uuid }: IComponent = {}) {
+    constructor({ reference, value, footprint, prefix, datasheet, description, voltage, wattage, mpn, via, uuid, simulation }: IComponent = {}) {
         if (reference != undefined) {
             this.reference = reference;
             if (!referenceCounter.setReference(reference)) {
@@ -86,6 +88,7 @@ export class Component {
         if (voltage != undefined) this.voltage = voltage;
         if (wattage != undefined) this.wattage = wattage;
         if (mpn != undefined) this.mpn = mpn;
+        if (simulation != undefined) this.simulation = { include: simulation.include, model: simulation.model || '' };
         this.via = via || false;
         if (uuid == undefined){
              this.uuid = randomUUID();
