@@ -9,6 +9,7 @@ export let kicad_cli_path: string | undefined;
 
 export class KiCAD {
     #possible_paths: string[] = [
+        'C:/Program Files/KiCad/9.0/',
         'C:/Program Files/KiCad/7.0/',                                  // windows
         'C:/Program Files/KiCad/8.0/',
         '/usr/share/kicad/',                                            // linux
@@ -19,11 +20,12 @@ export class KiCAD {
         // push typecad.json#kicad_path into the list to check
         this.#possible_paths.push(conf.get('kicad_path'));
 
-        this.#possible_paths.forEach((path) => {
+        for (const path of this.#possible_paths) {
             if (fs.existsSync(path)) {
-                kicad_path = path; // share/kicad/symbols
+            kicad_path = path; // share/kicad/symbols
+            break;
             }
-        });
+        }
 
         // if it found a path, figure out where 'kicad-cli' is
         if (kicad_path) {
