@@ -8,16 +8,17 @@ import { kicad_cli_path, kicad_path } from "./kicad";
 import { Pin } from "./pin";
 import chalk from 'chalk';
 import { ReferenceCounter } from "./reference_counter";
+import { Schematic } from "./schematic";
 const referenceCounter = new ReferenceCounter();
 
 const S = new SExpr()
 
 export interface IComponent {
-    symbol?: string, reference?: string | undefined, value?: string, footprint?: string, 
-    prefix?: string, datasheet?: string, description?: string, voltage?: string, 
-    wattage?: string, uuid?: string, mpn?: string, dnp?: boolean, 
+    symbol?: string, reference?: string | undefined, value?: string, footprint?: string,
+    prefix?: string, datasheet?: string, description?: string, voltage?: string,
+    wattage?: string, uuid?: string, mpn?: string, dnp?: boolean,
     pcb?: { x: number, y: number, rotation: number }, pins?: Pin[], via?: boolean,
-    simulation?: {include: boolean, model?: string}
+    simulation?: { include: boolean, model?: string }
 }
 
 /**
@@ -49,7 +50,7 @@ export class Component {
     #footprint_file?: string = '';
     pins: Pin[] = [];
     via: boolean = false;
-    simulation: {include: boolean, model: string} = {include: false, model: ''};
+    simulation: { include: boolean, model: string } = { include: false, model: '' };
 
     /**
      * `constructor` for Component.
@@ -73,6 +74,12 @@ export class Component {
     constructor({ reference, value, footprint, prefix, datasheet, description, voltage, wattage, mpn, via, uuid, simulation }: IComponent = {}) {
         if (reference != undefined) {
             this.reference = reference;
+            const referencePattern = /^[A-Za-z]+\d+$/;
+            if (!referencePattern.test(reference)) {
+                process.stdout.write(chalk.bgRed(`ERR:`) + chalk.bold(` [${reference}, ${value}, ${footprint}] Pin number must be a number or a string` + '\n'));
+                process.exit(1);
+            }
+
             if (!referenceCounter.setReference(reference)) {
                 this.reference = referenceCounter.getNextReference(prefix || 'U');
                 //console.log(`  🚩  renaming ${reference} to ${this.reference}`);
@@ -90,8 +97,8 @@ export class Component {
         if (mpn != undefined) this.mpn = mpn;
         if (simulation != undefined) this.simulation = { include: simulation.include, model: simulation.model || '' };
         this.via = via || false;
-        if (uuid == undefined){
-             this.uuid = randomUUID();
+        if (uuid == undefined) {
+            this.uuid = randomUUID();
         } else {
             this.uuid = uuid;
         }
@@ -112,6 +119,10 @@ export class Component {
      * ```
      */
     pin(number: number | string): Pin {
+        if (typeof number !== 'number' && typeof number !== 'string') {
+            process.stdout.write(chalk.bgRed(`ERR:`) + chalk.bold(` Pin number must be a number or a string` + '\n'));
+            process.exit(1);
+        }
         const existingPin = this.pins.find(pin => pin.number === number);
         if (existingPin) {
             return existingPin;

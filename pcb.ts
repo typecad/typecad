@@ -163,8 +163,13 @@ export class PCB {
 
         // add footprints
         for (let i = 0; i < this.#footprints.length; i++) {
-            let footprint_contents = this.#footprints[i].replaceAll('"', "`");//.replaceAll('REF**', "`" + this.#components[i].Reference + "`" || '');
+            let footprint_contents = this.#footprints[i].replaceAll('"', "`");
             const l = fsexp(footprint_contents).pop();
+
+            if (l == undefined){
+                process.stdout.write(chalk.bgRed(`ERR:`) +  chalk.bold(` [${this.#components[i].footprint} ${this.#components[i].reference} ${this.#components[i].description}] .kicad_mod is missing or empty, does it exist in build/footprints/?` + '\n'));
+                process.exit(1);
+            }
 
             // typeCAD will always insert the rotation, even if it is 0
             if (this.#components[i].pcb.rotation == undefined) {

@@ -1,3 +1,5 @@
+import chalk from 'chalk';
+
 type TPinType = "passive" | "input" | "output" | "bidirectional" | "tri_state" | "power_in" | "unspecified" | "power_out" | "free" | "open_collector" | "open_emitter" | "no_connect";
 
 export class Pin {
