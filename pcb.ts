@@ -185,31 +185,6 @@ export class PCB {
                 } else if (propName === '`MPN`' && component.mpn !== undefined) {
                     subItem[2] = `\`${component.mpn}\``;
                 }
-            } else if (itemType === 'pad') {
-                // ---- START: Remove/Comment out pad 'at' rotation update ----
-                //  for (let j = 0; j < subItem.length; j++) {
-                //     if (Array.isArray(subItem[j]) && subItem[j][0] === 'at') {
-                //         const atArray = subItem[j];
-                //          // Existing pads have absolute rotation, component rotation needs to be applied
-                //          // This logic might need refinement based on how KiCad handles pad rotation relative to component rotation during updates.
-                //          // Let's assume the 'at' for pads includes a rotation relative to the footprint's 0 degrees.
-                //          // The component's rotation needs to be added to the pad's existing rotation.
-                //          // --- KEEP EXISTING ROTATION ---
-                //         //  let existingPadRotation = 0;
-                //         //  if (atArray.length === 4) {
-                //         //     existingPadRotation = parseFloat(atArray[3]) || 0;
-                //         //  }
-                //         //  const newPadRotation = existingPadRotation + component.pcb.rotation; // Simple addition might be wrong, requires testing KiCad behavior. Let's just SET it based on component for now. TODO: Verify this logic.
-                         
-                //         // if (atArray.length === 3) { // No rotation previously
-                //         //      atArray.splice(3, 0, `${component.pcb.rotation}`);
-                //         // } else if (atArray.length === 4) { // Had rotation
-                //         //      atArray[3] = `${component.pcb.rotation}`; // Replace with component rotation
-                //         // }
-                //         break; // Found 'at' for this pad
-                //     }
-                // }
-                 // ---- END: Remove/Comment out pad 'at' rotation update ----
             } else if (itemType === 'fp_text') {
                  if (String(subItem[1]).toLowerCase() === 'reference' && component.reference !== undefined) {
                     subItem[2] = `\`${component.reference}\``;
@@ -327,12 +302,21 @@ export class PCB {
     /**
      * Creates and saves the board to a file.
      *
+     * @param {...Component[]} components - Components to add to the board before creating.
      * @example
      * ```ts
-     * board.create();
+     * let board = new PCB('boardname');
+     * let r1 = new Component({});
+     * let r2 = new Component({});
+     * board.create(r1, r2);
      * ```
      */
-    create() {
+    create(...components: Component[]) {
+        // Add any components passed to create()
+        components.forEach((component) => {
+            this.place(component);
+        });
+
         const version = '(version 20240108)'; // TODO: Consider updating version dynamically or making it configurable
         const generator = '(generator "typecad")';
         const generator_version = '(generator_version "1.0")'; // TODO: Update version
