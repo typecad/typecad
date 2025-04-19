@@ -9,6 +9,16 @@ import { randomUUID } from "node:crypto";
 const S = new SExpr()
 
 /**
+ * Interface representing PCB options.
+ * 
+ * @interface IPcbOptions
+ * @property {boolean} safe_write - Whether to check for lock files before writing. Defaults to true.
+ */
+export interface IPcbOptions {
+    safe_write: boolean;
+}
+
+/**
  * Interface representing a via on a PCB.
  *
  * @interface IVia
@@ -43,6 +53,7 @@ export class PCB {
     #groups: string[] = [];
     #vias: string[] = [];
     #group_uuid = '';
+    #options: IPcbOptions = { safe_write: true };
 
     /**
      * Initializes a new PCB with a given board name.
@@ -56,6 +67,19 @@ export class PCB {
     constructor(Boardname: string) {
         this.Boardname = Boardname;
         // this.#Schematic = schematic;
+    }
+
+    /**
+     * Getter for PCB options.
+     * 
+     * @example
+     * ```ts
+     * let pcb = new PCB('boardname');
+     * pcb.option.safe_write = false; // Disable lock file checking
+     * ```
+     */
+    get option(): IPcbOptions {
+        return this.#options;
     }
 
     /**
@@ -464,8 +488,12 @@ export class PCB {
             const pcbFileName = boardFilePath.split('/').pop() || boardFilePath;
             const lockFilePath = `${pcbDir}/~${pcbFileName}.lck`;
             if (fs.existsSync(lockFilePath)) {
-                process.stdout.write(chalk.bgRed(`👺 Error:`) +  chalk.bold(` ${boardFilePath} is open in KiCAD (${pcbDir}/~${pcbFileName}.lck exists)` + '\n'));
-                return;
+                if (this.#options.safe_write) {
+                    process.stdout.write(chalk.bgRed(`👺 Error:`) +  chalk.bold(` ${boardFilePath} is open in KiCAD (${pcbDir}/~${pcbFileName}.lck exists)` + '\n'));
+                    return;
+                } else {
+                    process.stdout.write(chalk.bgYellow(`🐉 Warning:`) +  chalk.bold(` Writing to ${boardFilePath} while it is open in KiCAD (${pcbDir}/~${pcbFileName}.lck exists)` + '\n'));
+                }
             }
 
             fs.writeFileSync(boardFilePath, this.#pcb);
