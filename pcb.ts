@@ -8,6 +8,19 @@ import { randomUUID } from "node:crypto";
 
 const S = new SExpr()
 
+/**
+ * Interface representing a via on a PCB.
+ *
+ * @interface IVia
+ * @property {Object} [at] - The position of the via.
+ * @property {number} [at.x] - The x-coordinate of the via.
+ * @property {number} [at.y] - The y-coordinate of the via.
+ * @property {number} [size] - The size of the via.
+ * @property {number} [drill] - The drill size of the via.
+ * @property {string} [net] - The net associated with the via.
+ * @property {string} [uuid] - The unique identifier for the via.
+ * @ignore
+ */
 export interface IVia {
     at?: { x: number, y: number },
     size?: number,
@@ -16,6 +29,11 @@ export interface IVia {
     uuid?: string,
 }
 
+/**
+ * Class representing a printed circuit board (PCB).
+ *
+ * @class PCB
+ */
 export class PCB {
     Boardname: string;
     // #Schematic: Schematic;
@@ -27,10 +45,9 @@ export class PCB {
     #group_uuid = '';
 
     /**
-     * `constructor` for PCB
+     * Initializes a new PCB with a given board name.
      *
-     * @constructor
-     * @param {string} Boardname Name and filename of generated files
+     * @param {string} Boardname - Name and filename of generated files.
      * @example
      * ```ts
      * let board = new PCB('boardname');
@@ -42,9 +59,9 @@ export class PCB {
     }
 
     /**
-     * `place` function to place components on the board
+     * Places components on the board.
      *
-     * @param {Component[]} components List of components to place on the board
+     * @param {Component[]} components - List of components to place on the board.
      * @example
      * ```ts
      * let typecad = new Schematic('sheetname');
@@ -69,10 +86,10 @@ export class PCB {
     }
 
     /**
-     * `group` function to place components on the board and group them together
+     * Groups components together on the board.
      *
-     * @param {string} group_name Name of the group
-     * @param {Component[]} components List of components to place on the board
+     * @param {string} group_name - Name of the group.
+     * @param {Component[]} components - List of components to place on the board.
      * @example
      * ```ts
      * let typecad = new Schematic('sheetname');
@@ -103,7 +120,7 @@ export class PCB {
     }
 
     /**
-     * `create` function to create and save the board
+     * Creates and saves the board to a file.
      *
      * @example
      * ```ts
@@ -116,7 +133,7 @@ export class PCB {
         let generator_version = '(generator_version "1.0")';
         let general = '(general (thickness 1.6) (legacy_teardrops no))';
         let paper = '(paper "A4")';
-        let s_board_contents = [];
+        let s_board_contents: any[] = [];
 
         // if board exists, keep everything except the footprints, groups, vias and nets
         if (fs.existsSync(`./build/${this.Boardname}.kicad_pcb`)) {
@@ -128,7 +145,7 @@ export class PCB {
             board_contents = board_contents.replaceAll('"', "`");
             s_board_contents = fsexp(board_contents).pop();
 
-            // delete previous footprints and groups
+            // Process footprints
             for (var i in s_board_contents) {
                 if (s_board_contents[i][0] == 'footprint') {
                     delete s_board_contents[i];
@@ -293,6 +310,13 @@ export class PCB {
     }
 
     // most via-related code has been commented out
+    /**
+     * Handles via-related operations.
+     *
+     * @param {IVia} [via] - The via details.
+     * @returns {Component} - The component representing the via.
+     * @ignore
+     */
     via({ at, size, drill, net, uuid }: IVia = {}): Component {
         // if (!at) at = { x: 0, y: 0 };
         // if (!size) size = 0.6;
