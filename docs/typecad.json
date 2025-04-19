@@ -1,0 +1,5101 @@
+{
+	"id": 0,
+	"name": "Documentation",
+	"variant": "project",
+	"kind": 1,
+	"flags": {},
+	"children": [
+		{
+			"id": 1,
+			"name": "Component",
+			"variant": "declaration",
+			"kind": 128,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Create a new component."
+					}
+				],
+				"blockTags": [
+					{
+						"tag": "@export",
+						"content": [
+							{
+								"kind": "text",
+								"text": "Component"
+							}
+						]
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 2,
+					"name": "constructor",
+					"variant": "declaration",
+					"kind": 512,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 74,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L74"
+						}
+					],
+					"signatures": [
+						{
+							"id": 3,
+							"name": "new Component",
+							"variant": "signature",
+							"kind": 16384,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "code",
+										"text": "`constructor`"
+									},
+									{
+										"kind": "text",
+										"text": " for Component."
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@example",
+										"content": [
+											{
+												"kind": "code",
+												"text": "```ts\r\nlet resistor = new Component({symbol: \"Device:R_Small\", reference: 'R1', value: '1 kOhm', footprint: \"Resistor_SMD:R_0603_1608Metric\"});\r\n```"
+											}
+										]
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "component.ts",
+									"line": 74,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L74"
+								}
+							],
+							"parameters": [
+								{
+									"id": 4,
+									"name": "__namedParameters",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": 33,
+										"name": "IComponent",
+										"package": "@typecad/typecad"
+									},
+									"defaultValue": "{}"
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 1,
+								"name": "Component",
+								"package": "@typecad/typecad"
+							}
+						}
+					]
+				},
+				{
+					"id": 20,
+					"name": "#footprint_file",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isPrivate": true,
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 50,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L50"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"defaultValue": "''"
+				},
+				{
+					"id": 8,
+					"name": "datasheet",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Link to component datasheet"
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 42,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L42"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"defaultValue": "''"
+				},
+				{
+					"id": 9,
+					"name": "description",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Description of component"
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 43,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L43"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"defaultValue": "''"
+				},
+				{
+					"id": 18,
+					"name": "dnp",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "TRUE if component is Do Not Place, false to place component"
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 48,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L48"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					},
+					"defaultValue": "false"
+				},
+				{
+					"id": 7,
+					"name": "footprint",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Footprint of component "
+							},
+							{
+								"kind": "code",
+								"text": "`Resistor_SMD:R_0603_1608Metric`"
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 41,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L41"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"defaultValue": "''"
+				},
+				{
+					"id": 12,
+					"name": "mpn",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Manufacturer Part Number"
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 46,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L46"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"defaultValue": "''"
+				},
+				{
+					"id": 13,
+					"name": "pcb",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "x, y, rotation of component on PCB"
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 47,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L47"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 14,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 17,
+									"name": "rotation",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isOptional": true
+									},
+									"sources": [
+										{
+											"fileName": "component.ts",
+											"line": 47,
+											"character": 33,
+											"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L47"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								},
+								{
+									"id": 15,
+									"name": "x",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {},
+									"sources": [
+										{
+											"fileName": "component.ts",
+											"line": 47,
+											"character": 11,
+											"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L47"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								},
+								{
+									"id": 16,
+									"name": "y",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {},
+									"sources": [
+										{
+											"fileName": "component.ts",
+											"line": 47,
+											"character": 22,
+											"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L47"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										17,
+										15,
+										16
+									]
+								}
+							],
+							"sources": [
+								{
+									"fileName": "component.ts",
+									"line": 47,
+									"character": 9,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L47"
+								}
+							]
+						}
+					},
+					"defaultValue": "..."
+				},
+				{
+					"id": 21,
+					"name": "pins",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 51,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L51"
+						}
+					],
+					"type": {
+						"type": "array",
+						"elementType": {
+							"type": "reference",
+							"target": 109,
+							"name": "Pin",
+							"package": "@typecad/typecad"
+						}
+					},
+					"defaultValue": "[]"
+				},
+				{
+					"id": 5,
+					"name": "reference",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Reference designator for component R1"
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 39,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L39"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"defaultValue": "''"
+				},
+				{
+					"id": 23,
+					"name": "simulation",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 53,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L53"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 24,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 25,
+									"name": "include",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {},
+									"sources": [
+										{
+											"fileName": "component.ts",
+											"line": 53,
+											"character": 18,
+											"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L53"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "boolean"
+									}
+								},
+								{
+									"id": 26,
+									"name": "model",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {},
+									"sources": [
+										{
+											"fileName": "component.ts",
+											"line": 53,
+											"character": 36,
+											"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L53"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										25,
+										26
+									]
+								}
+							],
+							"sources": [
+								{
+									"fileName": "component.ts",
+									"line": 53,
+									"character": 16,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L53"
+								}
+							]
+						}
+					},
+					"defaultValue": "..."
+				},
+				{
+					"id": 19,
+					"name": "uuid",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 49,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L49"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"defaultValue": "''"
+				},
+				{
+					"id": 6,
+					"name": "value",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Value for component "
+							},
+							{
+								"kind": "code",
+								"text": "`1 kOhm`"
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 40,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L40"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"defaultValue": "''"
+				},
+				{
+					"id": 22,
+					"name": "via",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 52,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L52"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					},
+					"defaultValue": "false"
+				},
+				{
+					"id": 10,
+					"name": "voltage",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 44,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L44"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"defaultValue": "''"
+				},
+				{
+					"id": 11,
+					"name": "wattage",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 45,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L45"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"defaultValue": "''"
+				},
+				{
+					"id": 27,
+					"name": "pin",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 121,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L121"
+						}
+					],
+					"signatures": [
+						{
+							"id": 28,
+							"name": "pin",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Returns a "
+									},
+									{
+										"kind": "inline-tag",
+										"tag": "@link",
+										"text": "Pin",
+										"target": 109,
+										"tsLinkText": ""
+									},
+									{
+										"kind": "text",
+										"text": " object from the component"
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@returns",
+										"content": []
+									},
+									{
+										"tag": "@example",
+										"content": [
+											{
+												"kind": "code",
+												"text": "```ts\r\nlet resistor = new Component({});\r\nresistor.pin(1);\r\n```"
+											}
+										]
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "component.ts",
+									"line": 121,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L121"
+								}
+							],
+							"parameters": [
+								{
+									"id": 29,
+									"name": "number",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "intrinsic",
+												"name": "number"
+											}
+										]
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 109,
+								"name": "Pin",
+								"package": "@typecad/typecad"
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"children": [
+						2
+					]
+				},
+				{
+					"title": "Properties",
+					"children": [
+						20,
+						8,
+						9,
+						18,
+						7,
+						12,
+						13,
+						21,
+						5,
+						23,
+						19,
+						6,
+						22,
+						10,
+						11
+					]
+				},
+				{
+					"title": "Methods",
+					"children": [
+						27
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "component.ts",
+					"line": 38,
+					"character": 13,
+					"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L38"
+				}
+			]
+		},
+		{
+			"id": 118,
+			"name": "I2C",
+			"variant": "declaration",
+			"kind": 128,
+			"flags": {},
+			"children": [
+				{
+					"id": 119,
+					"name": "constructor",
+					"variant": "declaration",
+					"kind": 512,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 7,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L7"
+						}
+					],
+					"signatures": [
+						{
+							"id": 120,
+							"name": "new I2C",
+							"variant": "signature",
+							"kind": 16384,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "buses.ts",
+									"line": 7,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L7"
+								}
+							],
+							"parameters": [
+								{
+									"id": 121,
+									"name": "sda",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": 109,
+										"name": "Pin",
+										"package": "@typecad/typecad"
+									}
+								},
+								{
+									"id": 122,
+									"name": "scl",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": 109,
+										"name": "Pin",
+										"package": "@typecad/typecad"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 118,
+								"name": "I2C",
+								"package": "@typecad/typecad"
+							}
+						}
+					]
+				},
+				{
+					"id": 124,
+					"name": "scl",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 6,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L6"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 109,
+						"name": "Pin",
+						"package": "@typecad/typecad"
+					}
+				},
+				{
+					"id": 123,
+					"name": "sda",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 5,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L5"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 109,
+						"name": "Pin",
+						"package": "@typecad/typecad"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"children": [
+						119
+					]
+				},
+				{
+					"title": "Properties",
+					"children": [
+						124,
+						123
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "buses.ts",
+					"line": 4,
+					"character": 13,
+					"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L4"
+				}
+			]
+		},
+		{
+			"id": 191,
+			"name": "KiCAD",
+			"variant": "declaration",
+			"kind": 128,
+			"flags": {},
+			"children": [
+				{
+					"id": 192,
+					"name": "constructor",
+					"variant": "declaration",
+					"kind": 512,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "kicad.ts",
+							"line": 19,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/kicad.ts#L19"
+						}
+					],
+					"signatures": [
+						{
+							"id": 193,
+							"name": "new KiCAD",
+							"variant": "signature",
+							"kind": 16384,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "kicad.ts",
+									"line": 19,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/kicad.ts#L19"
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 191,
+								"name": "KiCAD",
+								"package": "@typecad/typecad"
+							}
+						}
+					]
+				},
+				{
+					"id": 194,
+					"name": "#possible_paths",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "kicad.ts",
+							"line": 11,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/kicad.ts#L11"
+						}
+					],
+					"type": {
+						"type": "array",
+						"elementType": {
+							"type": "intrinsic",
+							"name": "string"
+						}
+					},
+					"defaultValue": "..."
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"children": [
+						192
+					]
+				},
+				{
+					"title": "Properties",
+					"children": [
+						194
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "kicad.ts",
+					"line": 10,
+					"character": 13,
+					"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/kicad.ts#L10"
+				}
+			]
+		},
+		{
+			"id": 168,
+			"name": "PCB",
+			"variant": "declaration",
+			"kind": 128,
+			"flags": {},
+			"children": [
+				{
+					"id": 169,
+					"name": "constructor",
+					"variant": "declaration",
+					"kind": 512,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "pcb.ts",
+							"line": 39,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L39"
+						}
+					],
+					"signatures": [
+						{
+							"id": 170,
+							"name": "new PCB",
+							"variant": "signature",
+							"kind": 16384,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "code",
+										"text": "`constructor`"
+									},
+									{
+										"kind": "text",
+										"text": " for PCB"
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@example",
+										"content": [
+											{
+												"kind": "code",
+												"text": "```ts\r\nlet board = new PCB('boardname');\r\n```"
+											}
+										]
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "pcb.ts",
+									"line": 39,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L39"
+								}
+							],
+							"parameters": [
+								{
+									"id": 171,
+									"name": "Boardname",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "Name and filename of generated files"
+											}
+										]
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 168,
+								"name": "PCB",
+								"package": "@typecad/typecad"
+							}
+						}
+					]
+				},
+				{
+					"id": 175,
+					"name": "#components",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "pcb.ts",
+							"line": 24,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L24"
+						}
+					],
+					"type": {
+						"type": "array",
+						"elementType": {
+							"type": "reference",
+							"target": 1,
+							"name": "Component",
+							"package": "@typecad/typecad"
+						}
+					},
+					"defaultValue": "[]"
+				},
+				{
+					"id": 174,
+					"name": "#footprints",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "pcb.ts",
+							"line": 23,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L23"
+						}
+					],
+					"type": {
+						"type": "array",
+						"elementType": {
+							"type": "intrinsic",
+							"name": "string"
+						}
+					},
+					"defaultValue": "[]"
+				},
+				{
+					"id": 178,
+					"name": "#group_uuid",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "pcb.ts",
+							"line": 27,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L27"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"defaultValue": "''"
+				},
+				{
+					"id": 176,
+					"name": "#groups",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "pcb.ts",
+							"line": 25,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L25"
+						}
+					],
+					"type": {
+						"type": "array",
+						"elementType": {
+							"type": "intrinsic",
+							"name": "string"
+						}
+					},
+					"defaultValue": "[]"
+				},
+				{
+					"id": 173,
+					"name": "#pcb",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "pcb.ts",
+							"line": 22,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L22"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"defaultValue": "''"
+				},
+				{
+					"id": 177,
+					"name": "#vias",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "pcb.ts",
+							"line": 26,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L26"
+						}
+					],
+					"type": {
+						"type": "array",
+						"elementType": {
+							"type": "intrinsic",
+							"name": "string"
+						}
+					},
+					"defaultValue": "[]"
+				},
+				{
+					"id": 172,
+					"name": "Boardname",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "pcb.ts",
+							"line": 20,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L20"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 186,
+					"name": "create",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "pcb.ts",
+							"line": 113,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L113"
+						}
+					],
+					"signatures": [
+						{
+							"id": 187,
+							"name": "create",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "code",
+										"text": "`create`"
+									},
+									{
+										"kind": "text",
+										"text": " function to create and save the board"
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@example",
+										"content": [
+											{
+												"kind": "code",
+												"text": "```ts\r\nboard.create();\r\n```"
+											}
+										]
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "pcb.ts",
+									"line": 113,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L113"
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					]
+				},
+				{
+					"id": 182,
+					"name": "group",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "pcb.ts",
+							"line": 85,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L85"
+						}
+					],
+					"signatures": [
+						{
+							"id": 183,
+							"name": "group",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "code",
+										"text": "`group`"
+									},
+									{
+										"kind": "text",
+										"text": " function to place components on the board and group them together"
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@example",
+										"content": [
+											{
+												"kind": "code",
+												"text": "```ts\r\nlet typecad = new Schematic('sheetname');\r\nlet r1 = new Component({});\r\n\r\nr1.pcb = {x: 10, y: 10, rotation: 90};\r\nboard.group('resistor', r1);\r\n```"
+											}
+										]
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "pcb.ts",
+									"line": 85,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L85"
+								}
+							],
+							"parameters": [
+								{
+									"id": 184,
+									"name": "group_name",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "Name of the group"
+											}
+										]
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 185,
+									"name": "component",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isRest": true
+									},
+									"type": {
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"target": 1,
+											"name": "Component",
+											"package": "@typecad/typecad"
+										}
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					]
+				},
+				{
+					"id": 179,
+					"name": "place",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "pcb.ts",
+							"line": 57,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L57"
+						}
+					],
+					"signatures": [
+						{
+							"id": 180,
+							"name": "place",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "code",
+										"text": "`place`"
+									},
+									{
+										"kind": "text",
+										"text": " function to place components on the board"
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@example",
+										"content": [
+											{
+												"kind": "code",
+												"text": "```ts\r\nlet typecad = new Schematic('sheetname');\r\nlet r1 = new Component({});\r\n\r\nr1.pcb = {x: 10, y: 10, rotation: 90};\r\nboard.place(r1);\r\n```"
+											}
+										]
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "pcb.ts",
+									"line": 57,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L57"
+								}
+							],
+							"parameters": [
+								{
+									"id": 181,
+									"name": "components",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isRest": true
+									},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "List of components to place on the board"
+											}
+										]
+									},
+									"type": {
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"target": 1,
+											"name": "Component",
+											"package": "@typecad/typecad"
+										}
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					]
+				},
+				{
+					"id": 188,
+					"name": "via",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "pcb.ts",
+							"line": 296,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L296"
+						}
+					],
+					"signatures": [
+						{
+							"id": 189,
+							"name": "via",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "pcb.ts",
+									"line": 296,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L296"
+								}
+							],
+							"parameters": [
+								{
+									"id": 190,
+									"name": "__namedParameters",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": {
+											"sourceFileName": "pcb.ts",
+											"qualifiedName": "IVia"
+										},
+										"name": "IVia",
+										"package": "@typecad/typecad"
+									},
+									"defaultValue": "{}"
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 1,
+								"name": "Component",
+								"package": "@typecad/typecad"
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"children": [
+						169
+					]
+				},
+				{
+					"title": "Properties",
+					"children": [
+						175,
+						174,
+						178,
+						176,
+						173,
+						177,
+						172
+					]
+				},
+				{
+					"title": "Methods",
+					"children": [
+						186,
+						182,
+						179,
+						188
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "pcb.ts",
+					"line": 19,
+					"character": 13,
+					"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pcb.ts#L19"
+				}
+			]
+		},
+		{
+			"id": 109,
+			"name": "Pin",
+			"variant": "declaration",
+			"kind": 128,
+			"flags": {},
+			"children": [
+				{
+					"id": 110,
+					"name": "constructor",
+					"variant": "declaration",
+					"kind": 512,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "pin.ts",
+							"line": 10,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pin.ts#L10"
+						}
+					],
+					"signatures": [
+						{
+							"id": 111,
+							"name": "new Pin",
+							"variant": "signature",
+							"kind": 16384,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "pin.ts",
+									"line": 10,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pin.ts#L10"
+								}
+							],
+							"parameters": [
+								{
+									"id": 112,
+									"name": "reference",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 113,
+									"name": "number",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "union",
+										"types": [
+											{
+												"type": "intrinsic",
+												"name": "string"
+											},
+											{
+												"type": "intrinsic",
+												"name": "number"
+											}
+										]
+									}
+								},
+								{
+									"id": 114,
+									"name": "type",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "reference",
+										"target": {
+											"sourceFileName": "pin.ts",
+											"qualifiedName": "TPinType"
+										},
+										"name": "TPinType",
+										"package": "@typecad/typecad"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 109,
+								"name": "Pin",
+								"package": "@typecad/typecad"
+							}
+						}
+					]
+				},
+				{
+					"id": 115,
+					"name": "number",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "pin.ts",
+							"line": 6,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pin.ts#L6"
+						}
+					],
+					"type": {
+						"type": "union",
+						"types": [
+							{
+								"type": "intrinsic",
+								"name": "string"
+							},
+							{
+								"type": "intrinsic",
+								"name": "number"
+							}
+						]
+					},
+					"defaultValue": "''"
+				},
+				{
+					"id": 116,
+					"name": "reference",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "pin.ts",
+							"line": 7,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pin.ts#L7"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"defaultValue": "''"
+				},
+				{
+					"id": 117,
+					"name": "type",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "pin.ts",
+							"line": 8,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pin.ts#L8"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"sourceFileName": "pin.ts",
+							"qualifiedName": "TPinType"
+						},
+						"name": "TPinType",
+						"package": "@typecad/typecad"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"children": [
+						110
+					]
+				},
+				{
+					"title": "Properties",
+					"children": [
+						115,
+						116,
+						117
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "pin.ts",
+					"line": 5,
+					"character": 13,
+					"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/pin.ts#L5"
+				}
+			]
+		},
+		{
+			"id": 161,
+			"name": "Power",
+			"variant": "declaration",
+			"kind": 128,
+			"flags": {},
+			"children": [
+				{
+					"id": 162,
+					"name": "constructor",
+					"variant": "declaration",
+					"kind": 512,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 70,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L70"
+						}
+					],
+					"signatures": [
+						{
+							"id": 163,
+							"name": "new Power",
+							"variant": "signature",
+							"kind": 16384,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "buses.ts",
+									"line": 70,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L70"
+								}
+							],
+							"parameters": [
+								{
+									"id": 164,
+									"name": "__namedParameters",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": {
+											"sourceFileName": "buses.ts",
+											"qualifiedName": "IPower"
+										},
+										"name": "IPower",
+										"package": "@typecad/typecad"
+									},
+									"defaultValue": "{}"
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 161,
+								"name": "Power",
+								"package": "@typecad/typecad"
+							}
+						}
+					]
+				},
+				{
+					"id": 166,
+					"name": "gnd",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 68,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L68"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 109,
+						"name": "Pin",
+						"package": "@typecad/typecad"
+					}
+				},
+				{
+					"id": 165,
+					"name": "power",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 67,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L67"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 109,
+						"name": "Pin",
+						"package": "@typecad/typecad"
+					}
+				},
+				{
+					"id": 167,
+					"name": "voltage",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 69,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L69"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"children": [
+						162
+					]
+				},
+				{
+					"title": "Properties",
+					"children": [
+						166,
+						165,
+						167
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "buses.ts",
+					"line": 66,
+					"character": 13,
+					"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L66"
+				}
+			]
+		},
+		{
+			"id": 125,
+			"name": "PowerInput",
+			"variant": "declaration",
+			"kind": 128,
+			"flags": {},
+			"children": [
+				{
+					"id": 126,
+					"name": "constructor",
+					"variant": "declaration",
+					"kind": 512,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 39,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L39"
+						}
+					],
+					"signatures": [
+						{
+							"id": 127,
+							"name": "new PowerInput",
+							"variant": "signature",
+							"kind": 16384,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "buses.ts",
+									"line": 39,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L39"
+								}
+							],
+							"parameters": [
+								{
+									"id": 128,
+									"name": "power",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": 109,
+										"name": "Pin",
+										"package": "@typecad/typecad"
+									}
+								},
+								{
+									"id": 129,
+									"name": "gnd",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": 109,
+										"name": "Pin",
+										"package": "@typecad/typecad"
+									}
+								},
+								{
+									"id": 130,
+									"name": "voltage",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 125,
+								"name": "PowerInput",
+								"package": "@typecad/typecad"
+							}
+						}
+					]
+				},
+				{
+					"id": 132,
+					"name": "gnd",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 37,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L37"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 109,
+						"name": "Pin",
+						"package": "@typecad/typecad"
+					}
+				},
+				{
+					"id": 131,
+					"name": "power",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 36,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L36"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 109,
+						"name": "Pin",
+						"package": "@typecad/typecad"
+					}
+				},
+				{
+					"id": 133,
+					"name": "voltage",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 38,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L38"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"children": [
+						126
+					]
+				},
+				{
+					"title": "Properties",
+					"children": [
+						132,
+						131,
+						133
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "buses.ts",
+					"line": 35,
+					"character": 13,
+					"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L35"
+				}
+			]
+		},
+		{
+			"id": 134,
+			"name": "PowerSupply",
+			"variant": "declaration",
+			"kind": 128,
+			"flags": {},
+			"children": [
+				{
+					"id": 135,
+					"name": "constructor",
+					"variant": "declaration",
+					"kind": 512,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 52,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L52"
+						}
+					],
+					"signatures": [
+						{
+							"id": 136,
+							"name": "new PowerSupply",
+							"variant": "signature",
+							"kind": 16384,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "buses.ts",
+									"line": 52,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L52"
+								}
+							],
+							"parameters": [
+								{
+									"id": 137,
+									"name": "power",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": 109,
+										"name": "Pin",
+										"package": "@typecad/typecad"
+									}
+								},
+								{
+									"id": 138,
+									"name": "gnd",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": 109,
+										"name": "Pin",
+										"package": "@typecad/typecad"
+									}
+								},
+								{
+									"id": 139,
+									"name": "voltage",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 134,
+								"name": "PowerSupply",
+								"package": "@typecad/typecad"
+							}
+						}
+					]
+				},
+				{
+					"id": 141,
+					"name": "gnd",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 50,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L50"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 109,
+						"name": "Pin",
+						"package": "@typecad/typecad"
+					}
+				},
+				{
+					"id": 140,
+					"name": "power",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 49,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L49"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 109,
+						"name": "Pin",
+						"package": "@typecad/typecad"
+					}
+				},
+				{
+					"id": 142,
+					"name": "voltage",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 51,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L51"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"children": [
+						135
+					]
+				},
+				{
+					"title": "Properties",
+					"children": [
+						141,
+						140,
+						142
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "buses.ts",
+					"line": 48,
+					"character": 13,
+					"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L48"
+				}
+			]
+		},
+		{
+			"id": 57,
+			"name": "Schematic",
+			"variant": "declaration",
+			"kind": 128,
+			"flags": {},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "The main class for typeCAD. Holds all "
+					},
+					{
+						"kind": "inline-tag",
+						"tag": "@link",
+						"text": "Component",
+						"target": 1,
+						"tsLinkText": ""
+					},
+					{
+						"kind": "text",
+						"text": " clases, creates work files, and creates nets."
+					}
+				],
+				"blockTags": [
+					{
+						"tag": "@export",
+						"content": [
+							{
+								"kind": "text",
+								"text": "Schematic"
+							}
+						]
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 58,
+					"name": "constructor",
+					"variant": "declaration",
+					"kind": 512,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 126,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L126"
+						}
+					],
+					"signatures": [
+						{
+							"id": 59,
+							"name": "new Schematic",
+							"variant": "signature",
+							"kind": 16384,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "code",
+										"text": "`constructor`"
+									},
+									{
+										"kind": "text",
+										"text": " for Schematic"
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@example",
+										"content": [
+											{
+												"kind": "code",
+												"text": "```ts\r\nlet typecad = new Schematic('sheetname');\r\n```"
+											}
+										]
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "schematic.ts",
+									"line": 126,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L126"
+								}
+							],
+							"parameters": [
+								{
+									"id": 60,
+									"name": "Sheetname",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"comment": {
+										"summary": [
+											{
+												"kind": "text",
+												"text": "Name and filename of generated files"
+											}
+										]
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 57,
+								"name": "Schematic",
+								"package": "@typecad/typecad"
+							}
+						}
+					]
+				},
+				{
+					"id": 61,
+					"name": "Components",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 79,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L79"
+						}
+					],
+					"type": {
+						"type": "array",
+						"elementType": {
+							"type": "reference",
+							"target": 1,
+							"name": "Component",
+							"package": "@typecad/typecad"
+						}
+					},
+					"defaultValue": "[]"
+				},
+				{
+					"id": 66,
+					"name": "Nodes",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 84,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L84"
+						}
+					],
+					"type": {
+						"type": "array",
+						"elementType": {
+							"type": "reflection",
+							"declaration": {
+								"id": 67,
+								"name": "__type",
+								"variant": "declaration",
+								"kind": 65536,
+								"flags": {},
+								"children": [
+									{
+										"id": 69,
+										"name": "code",
+										"variant": "declaration",
+										"kind": 1024,
+										"flags": {},
+										"sources": [
+											{
+												"fileName": "schematic.ts",
+												"line": 84,
+												"character": 27,
+												"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L84"
+											}
+										],
+										"type": {
+											"type": "intrinsic",
+											"name": "number"
+										}
+									},
+									{
+										"id": 68,
+										"name": "name",
+										"variant": "declaration",
+										"kind": 1024,
+										"flags": {},
+										"sources": [
+											{
+												"fileName": "schematic.ts",
+												"line": 84,
+												"character": 13,
+												"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L84"
+											}
+										],
+										"type": {
+											"type": "intrinsic",
+											"name": "string"
+										}
+									},
+									{
+										"id": 70,
+										"name": "nodes",
+										"variant": "declaration",
+										"kind": 1024,
+										"flags": {},
+										"sources": [
+											{
+												"fileName": "schematic.ts",
+												"line": 84,
+												"character": 41,
+												"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L84"
+											}
+										],
+										"type": {
+											"type": "array",
+											"elementType": {
+												"type": "reference",
+												"target": 109,
+												"name": "Pin",
+												"package": "@typecad/typecad"
+											}
+										}
+									}
+								],
+								"groups": [
+									{
+										"title": "Properties",
+										"children": [
+											69,
+											68,
+											70
+										]
+									}
+								],
+								"sources": [
+									{
+										"fileName": "schematic.ts",
+										"line": 84,
+										"character": 11,
+										"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L84"
+									}
+								]
+							}
+						}
+					},
+					"defaultValue": "[]"
+				},
+				{
+					"id": 62,
+					"name": "Sheetname",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 80,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L80"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"defaultValue": "''"
+				},
+				{
+					"id": 75,
+					"name": "_chained_name",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 86,
+							"character": 12,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L86"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					},
+					"defaultValue": "''"
+				},
+				{
+					"id": 65,
+					"name": "code_counter",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 83,
+							"character": 12,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L83"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					},
+					"defaultValue": "0"
+				},
+				{
+					"id": 71,
+					"name": "merged_nets",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 85,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L85"
+						}
+					],
+					"type": {
+						"type": "array",
+						"elementType": {
+							"type": "reflection",
+							"declaration": {
+								"id": 72,
+								"name": "__type",
+								"variant": "declaration",
+								"kind": 65536,
+								"flags": {},
+								"children": [
+									{
+										"id": 74,
+										"name": "merged_to_number",
+										"variant": "declaration",
+										"kind": 1024,
+										"flags": {},
+										"sources": [
+											{
+												"fileName": "schematic.ts",
+												"line": 85,
+												"character": 37,
+												"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L85"
+											}
+										],
+										"type": {
+											"type": "intrinsic",
+											"name": "number"
+										}
+									},
+									{
+										"id": 73,
+										"name": "old_name",
+										"variant": "declaration",
+										"kind": 1024,
+										"flags": {},
+										"sources": [
+											{
+												"fileName": "schematic.ts",
+												"line": 85,
+												"character": 19,
+												"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L85"
+											}
+										],
+										"type": {
+											"type": "intrinsic",
+											"name": "string"
+										}
+									}
+								],
+								"groups": [
+									{
+										"title": "Properties",
+										"children": [
+											74,
+											73
+										]
+									}
+								],
+								"sources": [
+									{
+										"fileName": "schematic.ts",
+										"line": 85,
+										"character": 17,
+										"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L85"
+									}
+								]
+							}
+						}
+					},
+					"defaultValue": "[]"
+				},
+				{
+					"id": 63,
+					"name": "sxexp_components",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 81,
+							"character": 12,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L81"
+						}
+					],
+					"type": {
+						"type": "array",
+						"elementType": {
+							"type": "intrinsic",
+							"name": "string"
+						}
+					},
+					"defaultValue": "[]"
+				},
+				{
+					"id": 64,
+					"name": "sxexp_nets",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isPrivate": true
+					},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 82,
+							"character": 12,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L82"
+						}
+					],
+					"type": {
+						"type": "array",
+						"elementType": {
+							"type": "intrinsic",
+							"name": "string"
+						}
+					},
+					"defaultValue": "[]"
+				},
+				{
+					"id": 84,
+					"name": "add",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 142,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L142"
+						}
+					],
+					"signatures": [
+						{
+							"id": 85,
+							"name": "add",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Adds a component to the schematic."
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@example",
+										"content": [
+											{
+												"kind": "code",
+												"text": "```ts\r\nlet typecad = new Schematic('sheetname');\r\nlet r1 = new Component({});\r\nlet r2 = new Component({});\r\ntypecad.add(r1, r2);\r\n```"
+											}
+										]
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "schematic.ts",
+									"line": 142,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L142"
+								}
+							],
+							"parameters": [
+								{
+									"id": 86,
+									"name": "components",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isRest": true
+									},
+									"type": {
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"target": 1,
+											"name": "Component",
+											"package": "@typecad/typecad"
+										}
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					]
+				},
+				{
+					"id": 81,
+					"name": "bom",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 96,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L96"
+						}
+					],
+					"signatures": [
+						{
+							"id": 82,
+							"name": "bom",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "schematic.ts",
+									"line": 96,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L96"
+								}
+							],
+							"parameters": [
+								{
+									"id": 83,
+									"name": "output_folder",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "intrinsic",
+										"name": "undefined"
+									},
+									{
+										"type": "literal",
+										"value": false
+									}
+								]
+							}
+						}
+					]
+				},
+				{
+					"id": 98,
+					"name": "create",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 315,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L315"
+						}
+					],
+					"signatures": [
+						{
+							"id": 99,
+							"name": "create",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Creates schematic files"
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@example",
+										"content": [
+											{
+												"kind": "code",
+												"text": "```ts\r\nlet typecad = new Schematic('sheetname');\r\nlet r1 = new Component({});\r\nlet r2 = new Component({});\r\ntypecad.create(r1, r2);\r\n```"
+											}
+										]
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "schematic.ts",
+									"line": 315,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L315"
+								}
+							],
+							"parameters": [
+								{
+									"id": 100,
+									"name": "component",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isRest": true
+									},
+									"type": {
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"target": 1,
+											"name": "Component",
+											"package": "@typecad/typecad"
+										}
+									}
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "intrinsic",
+										"name": "undefined"
+									},
+									{
+										"type": "literal",
+										"value": false
+									}
+								]
+							}
+						}
+					]
+				},
+				{
+					"id": 87,
+					"name": "dnc",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 185,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L185"
+						}
+					],
+					"signatures": [
+						{
+							"id": 88,
+							"name": "dnc",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Add a no-connection flag to a pin"
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@example",
+										"content": [
+											{
+												"kind": "code",
+												"text": "```ts\r\nlet typecad = new Schematic('sheetname');\r\nlet r1 = new Resistor({ symbol: \"Device:R_Small\", reference: 'R1' });\r\ntypecad.dnc(r1.pin(1));\r\n```"
+											}
+										]
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "schematic.ts",
+									"line": 185,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L185"
+								}
+							],
+							"parameters": [
+								{
+									"id": 89,
+									"name": "pins",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isRest": true
+									},
+									"type": {
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"target": 109,
+											"name": "Pin",
+											"package": "@typecad/typecad"
+										}
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					]
+				},
+				{
+					"id": 101,
+					"name": "erc",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 337,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L337"
+						}
+					],
+					"signatures": [
+						{
+							"id": 102,
+							"name": "erc",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "schematic.ts",
+									"line": 337,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L337"
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					]
+				},
+				{
+					"id": 103,
+					"name": "error",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 341,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L341"
+						}
+					],
+					"signatures": [
+						{
+							"id": 104,
+							"name": "error",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "schematic.ts",
+									"line": 341,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L341"
+								}
+							],
+							"parameters": [
+								{
+									"id": 105,
+									"name": "error",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					]
+				},
+				{
+					"id": 90,
+					"name": "named",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 209,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L209"
+						}
+					],
+					"signatures": [
+						{
+							"id": 91,
+							"name": "named",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Connects a group of pins together"
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@example",
+										"content": [
+											{
+												"kind": "code",
+												"text": "```ts\r\nlet typecad = new Schematic('sheetname');\r\nlet r1 = new Component({});\r\nlet r2 = new Component({});\r\n\r\n// named net\r\ntypecad.named('vin').net(r1.pin(1), r2.pin(1));\r\n\r\n// unnamed net\r\ntypecad.net(r1.pin(1), r2.pin(1));\r\n```"
+											}
+										]
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "schematic.ts",
+									"line": 209,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L209"
+								}
+							],
+							"parameters": [
+								{
+									"id": 92,
+									"name": "name",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 57,
+								"name": "Schematic",
+								"package": "@typecad/typecad"
+							}
+						}
+					]
+				},
+				{
+					"id": 93,
+					"name": "net",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 231,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L231"
+						}
+					],
+					"signatures": [
+						{
+							"id": 94,
+							"name": "net",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "Connects a group of pins together"
+									}
+								],
+								"blockTags": [
+									{
+										"tag": "@example",
+										"content": [
+											{
+												"kind": "code",
+												"text": "```ts\r\nlet typecad = new Schematic('sheetname');\r\nlet r1 = new Component({});\r\nlet r2 = new Component({});\r\n\r\n// named net\r\ntypecad.named('vin').net(r1.pin(1), r2.pin(1));\r\n\r\n// unnamed net\r\ntypecad.net(r1.pin(1), r2.pin(1));\r\n```"
+											}
+										]
+									}
+								]
+							},
+							"sources": [
+								{
+									"fileName": "schematic.ts",
+									"line": 231,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L231"
+								}
+							],
+							"parameters": [
+								{
+									"id": 95,
+									"name": "pins",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isRest": true
+									},
+									"type": {
+										"type": "array",
+										"elementType": {
+											"type": "reference",
+											"target": 109,
+											"name": "Pin",
+											"package": "@typecad/typecad"
+										}
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					]
+				},
+				{
+					"id": 106,
+					"name": "warn",
+					"variant": "declaration",
+					"kind": 2048,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "schematic.ts",
+							"line": 346,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L346"
+						}
+					],
+					"signatures": [
+						{
+							"id": 107,
+							"name": "warn",
+							"variant": "signature",
+							"kind": 4096,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "schematic.ts",
+									"line": 346,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L346"
+								}
+							],
+							"parameters": [
+								{
+									"id": 108,
+									"name": "warning",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "void"
+							}
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"children": [
+						58
+					]
+				},
+				{
+					"title": "Properties",
+					"children": [
+						61,
+						66,
+						62,
+						75,
+						65,
+						71,
+						63,
+						64
+					]
+				},
+				{
+					"title": "Methods",
+					"children": [
+						84,
+						81,
+						98,
+						87,
+						101,
+						103,
+						90,
+						93,
+						106
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "schematic.ts",
+					"line": 78,
+					"character": 13,
+					"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/schematic.ts#L78"
+				}
+			]
+		},
+		{
+			"id": 143,
+			"name": "UART",
+			"variant": "declaration",
+			"kind": 128,
+			"flags": {},
+			"children": [
+				{
+					"id": 144,
+					"name": "constructor",
+					"variant": "declaration",
+					"kind": 512,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 18,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L18"
+						}
+					],
+					"signatures": [
+						{
+							"id": 145,
+							"name": "new UART",
+							"variant": "signature",
+							"kind": 16384,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "buses.ts",
+									"line": 18,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L18"
+								}
+							],
+							"parameters": [
+								{
+									"id": 146,
+									"name": "rx",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": 109,
+										"name": "Pin",
+										"package": "@typecad/typecad"
+									}
+								},
+								{
+									"id": 147,
+									"name": "tx",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": 109,
+										"name": "Pin",
+										"package": "@typecad/typecad"
+									}
+								},
+								{
+									"id": 148,
+									"name": "rts",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "reference",
+										"target": 109,
+										"name": "Pin",
+										"package": "@typecad/typecad"
+									}
+								},
+								{
+									"id": 149,
+									"name": "cts",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {
+										"isOptional": true
+									},
+									"type": {
+										"type": "reference",
+										"target": 109,
+										"name": "Pin",
+										"package": "@typecad/typecad"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 143,
+								"name": "UART",
+								"package": "@typecad/typecad"
+							}
+						}
+					]
+				},
+				{
+					"id": 153,
+					"name": "cts",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 17,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L17"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 109,
+						"name": "Pin",
+						"package": "@typecad/typecad"
+					}
+				},
+				{
+					"id": 152,
+					"name": "rts",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 16,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L16"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 109,
+						"name": "Pin",
+						"package": "@typecad/typecad"
+					}
+				},
+				{
+					"id": 151,
+					"name": "rx",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 15,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L15"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 109,
+						"name": "Pin",
+						"package": "@typecad/typecad"
+					}
+				},
+				{
+					"id": 150,
+					"name": "tx",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 14,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L14"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 109,
+						"name": "Pin",
+						"package": "@typecad/typecad"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"children": [
+						144
+					]
+				},
+				{
+					"title": "Properties",
+					"children": [
+						153,
+						152,
+						151,
+						150
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "buses.ts",
+					"line": 13,
+					"character": 13,
+					"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L13"
+				}
+			]
+		},
+		{
+			"id": 154,
+			"name": "USB",
+			"variant": "declaration",
+			"kind": 128,
+			"flags": {},
+			"children": [
+				{
+					"id": 155,
+					"name": "constructor",
+					"variant": "declaration",
+					"kind": 512,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 29,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L29"
+						}
+					],
+					"signatures": [
+						{
+							"id": 156,
+							"name": "new USB",
+							"variant": "signature",
+							"kind": 16384,
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "buses.ts",
+									"line": 29,
+									"character": 4,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L29"
+								}
+							],
+							"parameters": [
+								{
+									"id": 157,
+									"name": "DP",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": 109,
+										"name": "Pin",
+										"package": "@typecad/typecad"
+									}
+								},
+								{
+									"id": 158,
+									"name": "DN",
+									"variant": "param",
+									"kind": 32768,
+									"flags": {},
+									"type": {
+										"type": "reference",
+										"target": 109,
+										"name": "Pin",
+										"package": "@typecad/typecad"
+									}
+								}
+							],
+							"type": {
+								"type": "reference",
+								"target": 154,
+								"name": "USB",
+								"package": "@typecad/typecad"
+							}
+						}
+					]
+				},
+				{
+					"id": 160,
+					"name": "dn",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 28,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L28"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 109,
+						"name": "Pin",
+						"package": "@typecad/typecad"
+					}
+				},
+				{
+					"id": 159,
+					"name": "dp",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"sources": [
+						{
+							"fileName": "buses.ts",
+							"line": 27,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L27"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": 109,
+						"name": "Pin",
+						"package": "@typecad/typecad"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Constructors",
+					"children": [
+						155
+					]
+				},
+				{
+					"title": "Properties",
+					"children": [
+						160,
+						159
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "buses.ts",
+					"line": 26,
+					"character": 13,
+					"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/buses.ts#L26"
+				}
+			]
+		},
+		{
+			"id": 33,
+			"name": "IComponent",
+			"variant": "declaration",
+			"kind": 256,
+			"flags": {},
+			"children": [
+				{
+					"id": 39,
+					"name": "datasheet",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 18,
+							"character": 21,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L18"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 40,
+					"name": "description",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 18,
+							"character": 41,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L18"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 45,
+					"name": "dnp",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 19,
+							"character": 51,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L19"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				},
+				{
+					"id": 37,
+					"name": "footprint",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 17,
+							"character": 69,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L17"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 44,
+					"name": "mpn",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 19,
+							"character": 37,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L19"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 46,
+					"name": "pcb",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 20,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L20"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 47,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 50,
+									"name": "rotation",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {},
+									"sources": [
+										{
+											"fileName": "component.ts",
+											"line": 20,
+											"character": 34,
+											"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L20"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								},
+								{
+									"id": 48,
+									"name": "x",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {},
+									"sources": [
+										{
+											"fileName": "component.ts",
+											"line": 20,
+											"character": 12,
+											"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L20"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								},
+								{
+									"id": 49,
+									"name": "y",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {},
+									"sources": [
+										{
+											"fileName": "component.ts",
+											"line": 20,
+											"character": 23,
+											"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L20"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "number"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										50,
+										48,
+										49
+									]
+								}
+							],
+							"sources": [
+								{
+									"fileName": "component.ts",
+									"line": 20,
+									"character": 10,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L20"
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 51,
+					"name": "pins",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 20,
+							"character": 54,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L20"
+						}
+					],
+					"type": {
+						"type": "array",
+						"elementType": {
+							"type": "reference",
+							"target": 109,
+							"name": "Pin",
+							"package": "@typecad/typecad"
+						}
+					}
+				},
+				{
+					"id": 38,
+					"name": "prefix",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 18,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L18"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 35,
+					"name": "reference",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 17,
+							"character": 21,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L17"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 53,
+					"name": "simulation",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 21,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L21"
+						}
+					],
+					"type": {
+						"type": "reflection",
+						"declaration": {
+							"id": 54,
+							"name": "__type",
+							"variant": "declaration",
+							"kind": 65536,
+							"flags": {},
+							"children": [
+								{
+									"id": 55,
+									"name": "include",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {},
+									"sources": [
+										{
+											"fileName": "component.ts",
+											"line": 21,
+											"character": 19,
+											"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L21"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "boolean"
+									}
+								},
+								{
+									"id": 56,
+									"name": "model",
+									"variant": "declaration",
+									"kind": 1024,
+									"flags": {
+										"isOptional": true
+									},
+									"sources": [
+										{
+											"fileName": "component.ts",
+											"line": 21,
+											"character": 37,
+											"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L21"
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"children": [
+										55,
+										56
+									]
+								}
+							],
+							"sources": [
+								{
+									"fileName": "component.ts",
+									"line": 21,
+									"character": 17,
+									"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L21"
+								}
+							]
+						}
+					}
+				},
+				{
+					"id": 34,
+					"name": "symbol",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 17,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L17"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 43,
+					"name": "uuid",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 19,
+							"character": 22,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L19"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 36,
+					"name": "value",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 17,
+							"character": 53,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L17"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 52,
+					"name": "via",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 20,
+							"character": 68,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L20"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "boolean"
+					}
+				},
+				{
+					"id": 41,
+					"name": "voltage",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 18,
+							"character": 63,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L18"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 42,
+					"name": "wattage",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"sources": [
+						{
+							"fileName": "component.ts",
+							"line": 19,
+							"character": 4,
+							"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L19"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						39,
+						40,
+						45,
+						37,
+						44,
+						46,
+						51,
+						38,
+						35,
+						53,
+						34,
+						43,
+						36,
+						52,
+						41,
+						42
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "component.ts",
+					"line": 16,
+					"character": 17,
+					"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/component.ts#L16"
+				}
+			]
+		},
+		{
+			"id": 195,
+			"name": "kicad_cli_path",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "kicad.ts",
+					"line": 8,
+					"character": 11,
+					"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/kicad.ts#L8"
+				}
+			],
+			"type": {
+				"type": "union",
+				"types": [
+					{
+						"type": "intrinsic",
+						"name": "string"
+					},
+					{
+						"type": "intrinsic",
+						"name": "undefined"
+					}
+				]
+			}
+		},
+		{
+			"id": 196,
+			"name": "kicad_path",
+			"variant": "declaration",
+			"kind": 32,
+			"flags": {},
+			"sources": [
+				{
+					"fileName": "kicad.ts",
+					"line": 7,
+					"character": 11,
+					"url": "https://github.com/typecad/typecad/blob/5bf9a47b3501a55e34f44398a7c39c7b6c73abe5/kicad.ts#L7"
+				}
+			],
+			"type": {
+				"type": "union",
+				"types": [
+					{
+						"type": "intrinsic",
+						"name": "string"
+					},
+					{
+						"type": "intrinsic",
+						"name": "undefined"
+					}
+				]
+			}
+		}
+	],
+	"groups": [
+		{
+			"title": "Classes",
+			"children": [
+				1,
+				118,
+				191,
+				168,
+				109,
+				161,
+				125,
+				134,
+				57,
+				143,
+				154
+			]
+		},
+		{
+			"title": "Interfaces",
+			"children": [
+				33
+			]
+		},
+		{
+			"title": "Variables",
+			"children": [
+				195,
+				196
+			]
+		}
+	],
+	"symbolIdMap": {
+		"0": {
+			"sourceFileName": "index.ts",
+			"qualifiedName": ""
+		},
+		"1": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component"
+		},
+		"2": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.__constructor"
+		},
+		"3": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component"
+		},
+		"4": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "__0"
+		},
+		"5": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.reference"
+		},
+		"6": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.value"
+		},
+		"7": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.footprint"
+		},
+		"8": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.datasheet"
+		},
+		"9": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.description"
+		},
+		"10": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.voltage"
+		},
+		"11": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.wattage"
+		},
+		"12": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.mpn"
+		},
+		"13": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.pcb"
+		},
+		"14": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "__type"
+		},
+		"15": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "__type.x"
+		},
+		"16": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "__type.y"
+		},
+		"17": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "__type.rotation"
+		},
+		"18": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.dnp"
+		},
+		"19": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.uuid"
+		},
+		"20": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.#footprint_file"
+		},
+		"21": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.pins"
+		},
+		"22": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.via"
+		},
+		"23": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.simulation"
+		},
+		"24": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "__type"
+		},
+		"25": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "__type.include"
+		},
+		"26": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "__type.model"
+		},
+		"27": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.pin"
+		},
+		"28": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "Component.pin"
+		},
+		"29": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "number"
+		},
+		"33": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent"
+		},
+		"34": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent.symbol"
+		},
+		"35": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent.reference"
+		},
+		"36": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent.value"
+		},
+		"37": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent.footprint"
+		},
+		"38": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent.prefix"
+		},
+		"39": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent.datasheet"
+		},
+		"40": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent.description"
+		},
+		"41": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent.voltage"
+		},
+		"42": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent.wattage"
+		},
+		"43": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent.uuid"
+		},
+		"44": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent.mpn"
+		},
+		"45": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent.dnp"
+		},
+		"46": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent.pcb"
+		},
+		"47": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "__type"
+		},
+		"48": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "__type.x"
+		},
+		"49": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "__type.y"
+		},
+		"50": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "__type.rotation"
+		},
+		"51": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent.pins"
+		},
+		"52": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent.via"
+		},
+		"53": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "IComponent.simulation"
+		},
+		"54": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "__type"
+		},
+		"55": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "__type.include"
+		},
+		"56": {
+			"sourceFileName": "component.ts",
+			"qualifiedName": "__type.model"
+		},
+		"57": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic"
+		},
+		"58": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.__constructor"
+		},
+		"59": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic"
+		},
+		"60": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Sheetname"
+		},
+		"61": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.Components"
+		},
+		"62": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.Sheetname"
+		},
+		"63": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.sxexp_components"
+		},
+		"64": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.sxexp_nets"
+		},
+		"65": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.code_counter"
+		},
+		"66": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.Nodes"
+		},
+		"67": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "__type"
+		},
+		"68": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "__type.name"
+		},
+		"69": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "__type.code"
+		},
+		"70": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "__type.nodes"
+		},
+		"71": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.merged_nets"
+		},
+		"72": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "__type"
+		},
+		"73": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "__type.old_name"
+		},
+		"74": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "__type.merged_to_number"
+		},
+		"75": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic._chained_name"
+		},
+		"81": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.bom"
+		},
+		"82": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.bom"
+		},
+		"83": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "output_folder"
+		},
+		"84": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.add"
+		},
+		"85": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.add"
+		},
+		"86": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "components"
+		},
+		"87": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.dnc"
+		},
+		"88": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.dnc"
+		},
+		"89": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "pins"
+		},
+		"90": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.named"
+		},
+		"91": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.named"
+		},
+		"92": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "name"
+		},
+		"93": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.net"
+		},
+		"94": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.net"
+		},
+		"95": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "pins"
+		},
+		"98": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.create"
+		},
+		"99": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.create"
+		},
+		"100": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "component"
+		},
+		"101": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.erc"
+		},
+		"102": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.erc"
+		},
+		"103": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.error"
+		},
+		"104": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.error"
+		},
+		"105": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "error"
+		},
+		"106": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.warn"
+		},
+		"107": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "Schematic.warn"
+		},
+		"108": {
+			"sourceFileName": "schematic.ts",
+			"qualifiedName": "warning"
+		},
+		"109": {
+			"sourceFileName": "pin.ts",
+			"qualifiedName": "Pin"
+		},
+		"110": {
+			"sourceFileName": "pin.ts",
+			"qualifiedName": "Pin.__constructor"
+		},
+		"111": {
+			"sourceFileName": "pin.ts",
+			"qualifiedName": "Pin"
+		},
+		"112": {
+			"sourceFileName": "pin.ts",
+			"qualifiedName": "reference"
+		},
+		"113": {
+			"sourceFileName": "pin.ts",
+			"qualifiedName": "number"
+		},
+		"114": {
+			"sourceFileName": "pin.ts",
+			"qualifiedName": "type"
+		},
+		"115": {
+			"sourceFileName": "pin.ts",
+			"qualifiedName": "Pin.number"
+		},
+		"116": {
+			"sourceFileName": "pin.ts",
+			"qualifiedName": "Pin.reference"
+		},
+		"117": {
+			"sourceFileName": "pin.ts",
+			"qualifiedName": "Pin.type"
+		},
+		"118": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "I2C"
+		},
+		"119": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "I2C.__constructor"
+		},
+		"120": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "I2C"
+		},
+		"121": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "sda"
+		},
+		"122": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "scl"
+		},
+		"123": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "I2C.sda"
+		},
+		"124": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "I2C.scl"
+		},
+		"125": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "PowerInput"
+		},
+		"126": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "PowerInput.__constructor"
+		},
+		"127": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "PowerInput"
+		},
+		"128": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "power"
+		},
+		"129": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "gnd"
+		},
+		"130": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "voltage"
+		},
+		"131": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "PowerInput.power"
+		},
+		"132": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "PowerInput.gnd"
+		},
+		"133": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "PowerInput.voltage"
+		},
+		"134": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "PowerSupply"
+		},
+		"135": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "PowerSupply.__constructor"
+		},
+		"136": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "PowerSupply"
+		},
+		"137": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "power"
+		},
+		"138": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "gnd"
+		},
+		"139": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "voltage"
+		},
+		"140": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "PowerSupply.power"
+		},
+		"141": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "PowerSupply.gnd"
+		},
+		"142": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "PowerSupply.voltage"
+		},
+		"143": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "UART"
+		},
+		"144": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "UART.__constructor"
+		},
+		"145": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "UART"
+		},
+		"146": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "rx"
+		},
+		"147": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "tx"
+		},
+		"148": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "rts"
+		},
+		"149": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "cts"
+		},
+		"150": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "UART.tx"
+		},
+		"151": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "UART.rx"
+		},
+		"152": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "UART.rts"
+		},
+		"153": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "UART.cts"
+		},
+		"154": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "USB"
+		},
+		"155": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "USB.__constructor"
+		},
+		"156": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "USB"
+		},
+		"157": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "DP"
+		},
+		"158": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "DN"
+		},
+		"159": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "USB.dp"
+		},
+		"160": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "USB.dn"
+		},
+		"161": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "Power"
+		},
+		"162": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "Power.__constructor"
+		},
+		"163": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "Power"
+		},
+		"164": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "__0"
+		},
+		"165": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "Power.power"
+		},
+		"166": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "Power.gnd"
+		},
+		"167": {
+			"sourceFileName": "buses.ts",
+			"qualifiedName": "Power.voltage"
+		},
+		"168": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB"
+		},
+		"169": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB.__constructor"
+		},
+		"170": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB"
+		},
+		"171": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "Boardname"
+		},
+		"172": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB.Boardname"
+		},
+		"173": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB.#pcb"
+		},
+		"174": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB.#footprints"
+		},
+		"175": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB.#components"
+		},
+		"176": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB.#groups"
+		},
+		"177": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB.#vias"
+		},
+		"178": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB.#group_uuid"
+		},
+		"179": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB.place"
+		},
+		"180": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB.place"
+		},
+		"181": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "components"
+		},
+		"182": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB.group"
+		},
+		"183": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB.group"
+		},
+		"184": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "group_name"
+		},
+		"185": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "component"
+		},
+		"186": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB.create"
+		},
+		"187": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB.create"
+		},
+		"188": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB.via"
+		},
+		"189": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "PCB.via"
+		},
+		"190": {
+			"sourceFileName": "pcb.ts",
+			"qualifiedName": "__0"
+		},
+		"191": {
+			"sourceFileName": "kicad.ts",
+			"qualifiedName": "KiCAD"
+		},
+		"192": {
+			"sourceFileName": "kicad.ts",
+			"qualifiedName": "KiCAD.__constructor"
+		},
+		"193": {
+			"sourceFileName": "kicad.ts",
+			"qualifiedName": "KiCAD"
+		},
+		"194": {
+			"sourceFileName": "kicad.ts",
+			"qualifiedName": "KiCAD.#possible_paths"
+		},
+		"195": {
+			"sourceFileName": "kicad.ts",
+			"qualifiedName": "kicad_cli_path"
+		},
+		"196": {
+			"sourceFileName": "kicad.ts",
+			"qualifiedName": "kicad_path"
+		}
+	}
+}

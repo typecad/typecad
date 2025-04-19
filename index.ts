@@ -18,6 +18,6 @@ console.log('🏁 ' + chalk.whiteBright.bold('type') + 'CAD starting...');
 
 if (kicad_path && kicad_cli_path) {
 } else {
-    console.log('- ', chalk.red.bold('ERROR: KiCAD not found, go to https://github.com/typecad/typecad/wiki/typecad.json for more information'));
+    console.log('- ', chalk.red.bold('👺 Error: KiCAD not found, go to https://github.com/typecad/typecad/wiki/typecad.json for more information'));
     exit();
 }

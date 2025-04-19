@@ -1,0 +1,18 @@
+{
+  "name": "@typecad/rd_esp32s3",
+  "version": "1.0.10",
+  "description": "rd-ESP32S3 typeCAD package",
+  "main": "index.ts",
+  "author": "",
+  "license": "ISC",
+  "keywords": ["typecad", "package", "layout", "esp32", "esp32-s3", "esp32s3"],
+  "devDependencies": {
+    "@typecad/passives": "~0.0.15",
+    "@typecad/typecad": "~0.0.18",
+    "tsx": "^4.19.1"
+  },
+  "scripts": {
+    "postinstall": "node postinstall.js",
+    "package_publish": "npm publish --access public"
+  }
+}

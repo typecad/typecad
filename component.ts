@@ -26,14 +26,32 @@ export interface IComponent {
  * @export
  * @class Component
  * @typedef {Component}
- * @property {string} footprint - Footprint of component `Resistor_SMD:R_0603_1608Metric`
- * @property {string} reference - Reference designator for component R1
- * @property {string} value - Value for component `1 kOhm`
+ * @property {string} reference - Reference designator for component (e.g., R1)
+ * @property {string} value - Value for component (e.g., 1 kOhm)
+ * @property {string} footprint - Footprint of component (e.g., Resistor_SMD:R_0603_1608Metric)
  * @property {string} datasheet - Link to component datasheet
  * @property {string} description - Description of component
  * @property {string} mpn - Manufacturer Part Number
- * @property {PCB} pcb - x, y, rotation of component on PCB
+ * @property {object} pcb - x, y, rotation of component on PCB
  * @property {boolean} dnp - TRUE if component is Do Not Place, false to place component
+ * @property {string} uuid - Unique identifier for the component
+ * @property {Pin[]} pins - Array of pins associated with the component
+ * @property {boolean} via - Indicates if the component has a via
+ * @property {object} simulation - Simulation details including model
+ * @example
+ * ```ts
+ * let resistor = new Component({
+ *   symbol: "Device:R_Small",
+ *   reference: 'R1',
+ *   value: '1 kOhm',
+ *   footprint: "Resistor_SMD:R_0603_1608Metric",
+ *   datasheet: 'http://example.com/datasheet',
+ *   description: 'A small resistor',
+ *   mpn: '123-456',
+ *   pcb: { x: 10, y: 20, rotation: 90 },
+ *   dnp: false
+ * });
+ * ```
  */
 export class Component {
     reference: string = '';
@@ -56,19 +74,30 @@ export class Component {
      * `constructor` for Component.
      *
      * @constructor
-     * @param {?string} reference reference designator (R1)
-     * @param {?string} value value of component (1 kOhm)
-     * @param {?string} footprint footprint (Resistor_SMD:R_0603_1608Metric)
-     * @param {?string} prefix prefix for reference designator (U)
-     * @param {?string} datasheet link to component datasheet
-     * @param {?string} description description of component
-     * @param {?string} voltage voltage rating of component
-     * @param {?string} wattage wattage rating of component
-     * @param {?string} mpn Manufacturer Part Number
-     * @param {?boolean} dnp TRUE if component is Do Not Populate, false to place component
+     * @param {?string} reference - Reference designator (e.g., R1)
+     * @param {?string} value - Value of component (e.g., 1 kOhm)
+     * @param {?string} footprint - Footprint (e.g., Resistor_SMD:R_0603_1608Metric)
+     * @param {?string} prefix - Prefix for reference designator (e.g., U)
+     * @param {?string} datasheet - Link to component datasheet
+     * @param {?string} description - Description of component
+     * @param {?string} voltage - Voltage rating of component
+     * @param {?string} wattage - Wattage rating of component
+     * @param {?string} mpn - Manufacturer Part Number
+     * @param {?boolean} dnp - TRUE if component is Do Not Populate, false to place component
+     * @param {?boolean} via - Indicates if the component has a via
+     * @param {?string} uuid - Unique identifier for the component
+     * @param {?object} simulation - Simulation details including model
      * @example
      * ```ts
-     * let resistor = new Component({symbol: "Device:R_Small", reference: 'R1', value: '1 kOhm', footprint: "Resistor_SMD:R_0603_1608Metric"});
+     * let capacitor = new Component({
+     *   reference: 'C1',
+     *   value: '10 uF',
+     *   footprint: "Capacitor_SMD:C_0805",
+     *   voltage: '16V',
+     *   wattage: '0.1W',
+     *   mpn: '789-012',
+     *   dnp: true
+     * });
      * ```
      */
     constructor({ reference, value, footprint, prefix, datasheet, description, voltage, wattage, mpn, via, uuid, simulation }: IComponent = {}) {
@@ -76,7 +105,7 @@ export class Component {
             this.reference = reference;
             const referencePattern = /^[A-Za-z]+\d+$/;
             if (!referencePattern.test(reference)) {
-                process.stdout.write(chalk.bgRed(`ERR:`) + chalk.bold(` [${reference}, ${value}, ${footprint}] Pin number must be a number or a string` + '\n'));
+                process.stdout.write(chalk.bgRed(`👺 Error:`) + chalk.bold(` [${reference}, ${value}, ${footprint}] Pin number must be a number or a string` + '\n'));
                 process.exit(1);
             }
 
@@ -110,17 +139,18 @@ export class Component {
     /**
      * Returns a {@link Pin} object from the component
      * 
-     * @param {(number | string)} number
-     * @returns {Pin}
+     * @param {(number | string)} number - The pin number or identifier
+     * @returns {Pin} - The pin object associated with the given number
      * @example
      * ```ts
      * let resistor = new Component({});
-     * resistor.pin(1);
+     * let pin1 = resistor.pin(1);
+     * console.log(pin1);
      * ```
      */
     pin(number: number | string): Pin {
         if (typeof number !== 'number' && typeof number !== 'string') {
-            process.stdout.write(chalk.bgRed(`ERR:`) + chalk.bold(` Pin number must be a number or a string` + '\n'));
+            process.stdout.write(chalk.bgRed(`👺 Error:`) + chalk.bold(` Pin number must be a number or a string` + '\n'));
             process.exit(1);
         }
         const existingPin = this.pins.find(pin => pin.number === number);
@@ -135,15 +165,19 @@ export class Component {
     }
 
     /**
-     * Used internally
+     * Retrieves the footprint library for the component.
+     * Used internally to manage footprint files.
+     * 
+     * @param {string} footprint - The footprint identifier
+     * @returns {string} - The serialized footprint data
      * @ignore
      */
     footprint_lib(footprint: string): string {
         const runCommand = (command: string) => {
             try {
-                execSync(`${command}`);
+                execSync(`${command}`, { stdio: 'ignore' });
             } catch (e) {
-
+                console.log(e)
             }
             return true;
         };

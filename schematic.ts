@@ -53,6 +53,14 @@ let nets_template = `{{#each nets}}
 )
 {{/each}}`;
 
+/**
+ * Recursively freezes an object to make it immutable.
+ *
+ * @template T
+ * @param {T} obj - The object to freeze.
+ * @returns {Readonly<T>} - The frozen object.
+ * @ignore
+ */
 function deepFreeze<T>(obj: T): Readonly<T> {
     if (typeof obj !== 'object' || obj === null) {
         return obj; // Not an object, no need to freeze
@@ -69,7 +77,7 @@ function deepFreeze<T>(obj: T): Readonly<T> {
 }
 
 /**
- * The main class for typeCAD. Holds all {@link Component} clases, creates work files, and creates nets. 
+ * The main class for typeCAD. Holds all {@link Component} classes, creates work files, and creates nets.
  *
  * @export
  * @class Schematic
@@ -114,10 +122,9 @@ export class Schematic {
 
     }
     /**
-     * `constructor` for Schematic
+     * Initializes a new schematic with a given sheet name.
      *
-     * @constructor
-     * @param {string} Sheetname Name and filename of generated files
+     * @param {string} Sheetname - Name and filename of generated files.
      * @example
      * ```ts
      * let typecad = new Schematic('sheetname');
@@ -128,9 +135,9 @@ export class Schematic {
     }
 
     /**
-     * Adds a component to the schematic.
+     * Adds components to the schematic.
      *
-     * @param {...Component[]} components
+     * @param {...Component[]} components - Components to add to the schematic.
      * @example
      * ```ts
      * let typecad = new Schematic('sheetname');
@@ -172,9 +179,9 @@ export class Schematic {
     }
 
     /**
-     * Add a no-connection flag to a pin
+     * Adds a no-connection flag to a pin.
      *
-     * @param {...Pin[]} pins
+     * @param {...Pin[]} pins - Pins to mark as no-connect.
      * @example
      * ```ts
      * let typecad = new Schematic('sheetname');
@@ -190,7 +197,7 @@ export class Schematic {
     }
 
     /**
-     * Connects a group of pins together
+     * Sets a name for a net.
      *
      * @param {{pins: Pin[]}} pins: Pin[]}
      * @example
@@ -212,9 +219,9 @@ export class Schematic {
     }
 
     /**
-     * Connects a group of pins together
+     * Connects a group of pins together.
      *
-     * @param {{pins: Pin[]}} pins: Pin[]}
+     * @param {...Pin[]} pins - Pins to connect.
      * @example
      * ```ts
      * let typecad = new Schematic('sheetname');
@@ -301,9 +308,9 @@ export class Schematic {
     }
 
     /**
-     * Creates schematic files
+     * Creates schematic files.
      *
-     * @param {...Component[]} components All the components to be included in the schematic
+     * @param {...Component[]} components - All the components to be included in the schematic.
      * @example
      * ```ts
      * let typecad = new Schematic('sheetname');
@@ -334,15 +341,28 @@ export class Schematic {
         }
     }
 
+    /**
+     * Performs electrical rule checks.
+     */
     erc() {
         erc(this);      // call it this way to make it easy to create a "plugin"-type extension for this
     }
 
+    /**
+     * Logs an error message and exits.
+     *
+     * @param {string} error - The error message to log.
+     */
     error(error: string) {
-        process.stdout.write(chalk.bgRed(`ERR:`) +  chalk.bold(` ${error}` + '\n'));
+        process.stdout.write(chalk.bgRed(`👺 Error:`) +  chalk.bold(` ${error}` + '\n'));
         process.exit(1);
     }
 
+    /**
+     * Logs a warning message.
+     *
+     * @param {string} warning - The warning message to log.
+     */
     warn(warning: string) {
         process.stdout.write(chalk.bgYellow(`WARN:`) +  chalk.bold(` ${warning}` + '\n'));
     }

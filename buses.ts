@@ -71,13 +71,13 @@ export class Power {
         if (power) {
             this.power = power;
         } else {
-            process.stdout.write('🏳️ ' + chalk.whiteBright.bold('ERR') + ' `Power` missing required `power` element' + '\n');
+            process.stdout.write('🏳️ ' + chalk.whiteBright.bold('Error:') + ' `Power` missing required `power` element' + '\n');
             process.exit(1);
         }
         if (gnd) {
             this.gnd = gnd;
         } else {
-            process.stdout.write('🏳️ ' + chalk.whiteBright.bold('ERR') + ' `Power` missing required `gnd` element' + '\n');
+            process.stdout.write('🏳️ ' + chalk.whiteBright.bold('Error:') + ' `Power` missing required `gnd` element' + '\n');
             process.exit(1);
         }
         if (voltage) {

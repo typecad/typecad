@@ -5,6 +5,12 @@ let warnings: string[] = [];
 
 import chalk from 'chalk';
 
+/**
+ * Performs electrical rule checks on a given schematic.
+ * Logs errors and warnings based on pin connections.
+ *
+ * @param {Schematic} schematic - The schematic to perform ERC on.
+ */
 export function erc(schematic: Schematic) {
     // loop through all nodes checking each pin connection
     schematic.Nodes.forEach(_node => {
@@ -21,7 +27,7 @@ export function erc(schematic: Schematic) {
 
     if (errors.length > 0) {
         errors.forEach(error => {
-            process.stdout.write(chalk.whiteBright.bgRed(`ERC error:`) +  ` ${error}` + '\n');
+            process.stdout.write(chalk.whiteBright.bgRed(`👺 ERC error:`) +  ` ${error}` + '\n');
         });
     }
 
@@ -37,6 +43,11 @@ export function erc(schematic: Schematic) {
     }
 }
 
+/**
+ * Checks each node's pins to ensure that input and power input pins are driven by the appropriate output pins.
+ *
+ * @param {Pin[]} nodes - The array of pins in a node to check.
+ */
 function erc_node_pin(nodes: Pin[]) {
     // input pin not driven to any output pin
     nodes.forEach(pin => {
@@ -60,6 +71,12 @@ function erc_node_pin(nodes: Pin[]) {
 
 }
 
+/**
+ * Checks the connections between two pins and logs errors or warnings based on their types.
+ *
+ * @param {Pin} pin1 - The first pin to check.
+ * @param {Pin} pin2 - The second pin to check.
+ */
 function erc_pin_pin(pin1: Pin, pin2: Pin) {
     // check pin-to-pin connections
     switch (pin1.type) {
