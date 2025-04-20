@@ -77,6 +77,33 @@ function deepFreeze<T>(obj: T): Readonly<T> {
 }
 
 /**
+ * Type representing available BOM fields.
+ */
+export type BomField = 
+    | 'Reference'
+    | 'Value'
+    | 'Datasheet'
+    | 'Footprint'
+    | 'MPN'
+    | 'Description'
+    | 'Voltage'
+    | 'Wattage';
+
+/**
+ * Interface representing Schematic options.
+ * 
+ * @interface ISchematicOptions
+ * @property {string} net_prefix - Prefix for auto-generated net names. Defaults to 'net'.
+ * @property {BomField[]} bom_fields - Fields to include in BOM. Defaults to ['Reference', 'Value', 'Datasheet', 'Footprint', 'MPN'].
+ * @property {string} bom_separator - Separator for BOM CSV. Defaults to ','.
+ */
+export interface ISchematicOptions {
+    net_prefix: string;
+    bom_fields: BomField[];
+    bom_separator: string;
+}
+
+/**
  * The main class for typeCAD. Holds all {@link Component} classes, creates work files, and creates nets.
  *
  * @export
@@ -92,6 +119,25 @@ export class Schematic {
     Nodes: { name: string, code: number, nodes: Pin[] }[] = [];
     merged_nets: { old_name: string, merged_to_number: number}[] = [];
     private _chained_name: string = '';
+    #options: ISchematicOptions = {
+        net_prefix: 'net',
+        bom_fields: ['Reference', 'Value', 'Datasheet', 'Footprint', 'MPN'],
+        bom_separator: ','
+    };
+
+    /**
+     * Getter for Schematic options.
+     * 
+     * @example
+     * ```ts
+     * let schematic = new Schematic('sheetname');
+     * schematic.option.safe_write = false;
+     * schematic.option.build_dir = './custom_build/';
+     * ```
+     */
+    get option(): ISchematicOptions {
+        return this.#options;
+    }
 
     /**
      * Used internally
@@ -105,22 +151,35 @@ export class Schematic {
         let bom: string = '';
         let _output_folder = output_folder || './build';
 
-        bom += 'Reference,Value,Datasheet,Footprint,MPN\n';
+        // Create header from configured fields
+        bom += this.#options.bom_fields.join(this.#options.bom_separator) + '\n';
+        
         this.Components.forEach(component => {
-            bom += `${component.reference},${component.value},${component.datasheet},${component.footprint},${component.mpn}\n`;
+            const fields = this.#options.bom_fields.map(field => {
+                switch(field.toLowerCase()) {
+                    case 'reference': return component.reference;
+                    case 'value': return component.value;
+                    case 'datasheet': return component.datasheet;
+                    case 'footprint': return component.footprint;
+                    case 'mpn': return component.mpn;
+                    case 'description': return component.description;
+                    case 'voltage': return component.voltage;
+                    case 'wattage': return component.wattage;
+                    default: return '';
+                }
+            });
+            bom += fields.join(this.#options.bom_separator) + '\n';
         });
 
         try {
             fs.writeFileSync(`${_output_folder}/${this.Sheetname}.csv`, bom);
-
-            // console.log(`  🔣 Schematic: ${this.Sheetname}`)
             process.stdout.write(chalk.cyan.bold(`${_output_folder}/${this.Sheetname}.csv`) + ` BOM written` + '\n');
         } catch (err) {
             console.error(err);
             return false;
         }
-
     }
+
     /**
      * Initializes a new schematic with a given sheet name.
      *
@@ -238,8 +297,8 @@ export class Schematic {
     net(...pins: Pin[]) {
         this.code_counter++;
 
-        // make a net name
-        let node_name = this._chained_name ? this._chained_name : `net${this.code_counter}`;
+        // make a net name using configured prefix
+        let node_name = this._chained_name ? this._chained_name : `${this.#options.net_prefix}${this.code_counter}`;
 
         // check each pin in each node to see if a pin is connected somewhere else
         // if so, merge the nets by making their names the same
@@ -337,6 +396,7 @@ export class Schematic {
 
         } catch (err) {
             console.error(err);
+            process.exit(1);
             return false;
         }
     }
@@ -345,7 +405,7 @@ export class Schematic {
      * Performs electrical rule checks.
      */
     erc() {
-        erc(this);      // call it this way to make it easy to create a "plugin"-type extension for this
+        erc(this);
     }
 
     /**

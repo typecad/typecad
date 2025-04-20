@@ -10,8 +10,9 @@ import chalk from 'chalk';
  * Logs errors and warnings based on pin connections.
  *
  * @param {Schematic} schematic - The schematic to perform ERC on.
+ * @param {boolean} exit_on_error - Whether to exit the process on errors. Defaults to true.
  */
-export function erc(schematic: Schematic) {
+export function erc(schematic: Schematic, exit_on_error: boolean = true) {
     // loop through all nodes checking each pin connection
     schematic.Nodes.forEach(_node => {
         erc_node_pin(_node.nodes);
@@ -38,7 +39,7 @@ export function erc(schematic: Schematic) {
     }
 
     process.stdout.write(chalk.bold.magentaBright('ERC') + ` ${errors.length} errors, ${warnings.length} warnings` + '\n');
-    if (errors.length > 0) {
+    if (errors.length > 0 && exit_on_error) {
         process.exit(1);
     }
 }
