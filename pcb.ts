@@ -450,7 +450,8 @@ export class PCB {
                         }
                     } else {
                         // No matching component found for this existing footprint
-                        // This footprint should be removed as it's no longer in the schematic
+                        // Preserve the footprint as is (likely manually added in KiCAD)
+                        final_board_contents.push(item);
                     }
                 }
             });
