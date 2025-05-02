@@ -303,6 +303,9 @@ export class Schematic {
         // check each pin in each node to see if a pin is connected somewhere else
         // if so, merge the nets by making their names the same
         pins.forEach((pin) => {
+            if (!(pin instanceof Pin)) {
+                this.error(`Invalid object passed to net(). Expected Pin, received ${typeof pin}`);
+            }
             this.Nodes.forEach((netParam, index) => {
                 netParam.nodes.forEach((netParamPin) => {
                     if (netParamPin.reference === pin.reference && netParamPin.number === pin.number) {
@@ -337,7 +340,7 @@ export class Schematic {
         Object.values(nodeMap).forEach((node) => {
             node.nodes = node.nodes.filter((pin, index, self) =>
                 index === self.findIndex((p) => (
-                    p.reference === pin.reference && p.number === pin.number
+                    p && pin && p.reference === pin.reference && p.number === pin.number
                 ))
             );
         });

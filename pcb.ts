@@ -52,6 +52,7 @@ export class PCB {
     #components: Component[] = [];
     #groups: string[] = [];
     #vias: string[] = [];
+    #outlines: string[] = [];
     #group_uuid = '';
     #options: IPcbOptions = { safe_write: true };
 
@@ -166,12 +167,10 @@ export class PCB {
      * @private
      */
     #_update_footprint_node(node: any[], component: Component): any[] {
-        // Ensure rotation is defined (still needed for potential property updates, though not for 'at')
-        // if (component.pcb.rotation === undefined) {
-        //     component.pcb.rotation = 0;
-        // }
+        // Ensure component rotation is defined (default to 0)
+        component.pcb.rotation = component.pcb.rotation ?? 0;
 
-        // Ensure UUID exists and is correct (it should exist if we matched by it)
+        // Ensure UUID exists and is correct
         let uuidNodeFound = false;
         for (let i = 0; i < node.length; i++) {
             if (Array.isArray(node[i]) && node[i][0] === 'uuid') {
@@ -184,37 +183,79 @@ export class PCB {
              node.splice(2, 0, [`uuid \`${component.uuid}\``]); // Add if missing
          }
 
-        // Update footprint name (usually shouldn't change if UUID matches, but safe)
+        // Update footprint name
         node[1] = `\`${component.footprint}\``;
 
-        // Loop through and update properties and pads
+        // Loop through and update properties, text, pads, etc.
         for (let i = 0; i < node.length; i++) {
             const subItem = node[i];
             if (!Array.isArray(subItem)) continue;
 
             const itemType = subItem[0];
 
+            // Update Properties (Content Only - Preserve nested nodes like at, layer, effects)
             if (itemType === 'property') {
                 const propName = subItem[1];
+                let newValue: string | undefined = undefined;
+
+                // Determine the new value based on the property name
                 if (propName === '`Reference`' && component.reference !== undefined) {
-                    subItem[2] = `\`${component.reference}\``;
+                    newValue = `\`${component.reference}\``;
                 } else if (propName === '`Value`' && component.value !== undefined) {
-                    subItem[2] = `\`${component.value}\``;
+                    newValue = `\`${component.value}\``;
                 } else if (propName === '`Footprint`' && component.footprint !== undefined) {
-                    subItem[2] = `\`${component.footprint}\``;
+                    newValue = `\`${component.footprint}\``;
                 } else if (propName === '`Datasheet`' && component.datasheet !== undefined) {
-                    subItem[2] = `\`${component.datasheet}\``;
+                    newValue = `\`${component.datasheet}\``;
                 } else if (propName === '`Description`' && component.description !== undefined) {
-                    subItem[2] = `\`${component.description}\``;
+                    newValue = `\`${component.description}\``;
                 } else if (propName === '`MPN`' && component.mpn !== undefined) {
-                    subItem[2] = `\`${component.mpn}\``;
+                    newValue = `\`${component.mpn}\``;
                 }
-            } else if (itemType === 'fp_text') {
-                 if (String(subItem[1]).toLowerCase() === 'reference' && component.reference !== undefined) {
-                    subItem[2] = `\`${component.reference}\``;
+
+                // If there's a new value to set, replace the old value string(s)
+                if (newValue !== undefined) {
+                    let firstNodeIndex = -1;
+                    // Find the index of the first node (array) after the name
+                    for (let k = 2; k < subItem.length; k++) {
+                        if (Array.isArray(subItem[k])) {
+                            firstNodeIndex = k;
+                            break;
+                        }
+                    }
+
+                    // Determine the number of elements representing the old value
+                    const valueElementsCount = (firstNodeIndex === -1) ? (subItem.length - 2) : (firstNodeIndex - 2);
+
+                    // Replace the old value elements with the single new value
+                    if (valueElementsCount >= 0) { // Ensure we don't splice negative count
+                         subItem.splice(2, valueElementsCount, newValue);
+                     } else {
+                         // This case should theoretically not happen if structure is [prop, name, value...]
+                         // If it does, just insert at index 2
+                         subItem.splice(2, 0, newValue);
+                     }
                 }
-                // Potentially update other fp_text types if needed
             }
+
+            // Update Text Elements (Content and Rotation)
+            else if (itemType === 'fp_text') {
+                const textType = String(subItem[1]).toLowerCase();
+                if (textType === 'reference' && component.reference !== undefined) {
+                    subItem[2] = `\`${component.reference}\``;
+                } else if (textType === 'value' && component.value !== undefined) {
+                     // Update value text if needed (assuming structure ['fp_text', 'value', '`VALUE`', ...])
+                     subItem[2] = `\`${component.value}\``;
+                 }
+            }
+
+            // Update Pad Rotation (Relative to component)
+            else if (itemType === 'pad') {
+             }
+
+             // TODO: Add similar rotation logic for other graphical elements if needed (fp_line, fp_circle, etc.)
+             // TODO: Add rotation update for 'property' elements if they have 'at' sub-nodes (less common but possible)
+
         }
         return node;
     }
@@ -254,71 +295,56 @@ export class PCB {
          // Correct footprint name (use component's, not the one from the lib file)
          l[1] = `\`${component.footprint}\``;
 
-         // Loop through and replace references, values
-            for (var ii in l) {
-             if (Array.isArray(l[ii]) && l[ii][0] == 'property') {
-                    if (l[ii][1] == '`Reference`') {
-                     if (component.reference != undefined) {
-                         l[ii][2] = `\`${component.reference}\``;
-                        }
-                    }
+         // Loop through and replace references, values, and update rotations
+         for (var ii in l) {
+             if (!Array.isArray(l[ii])) continue; // Skip non-array elements
 
-                    if (l[ii][1] == '`Value`') {
-                     if (component.value != undefined) {
-                         l[ii][2] = `\`${component.value}\``;
-                        }
-                    }
+             const itemType = l[ii][0];
 
-                    if (l[ii][1] == '`Footprint`') {
-                     if (component.footprint != undefined) {
-                         l[ii][2] = `\`${component.footprint}\``;
-                        }
-                    }
-
-                    if (l[ii][1] == '`Datasheet`') {
-                     if (component.datasheet != undefined) {
-                         l[ii][2] = `\`${component.datasheet}\``;
-                        }
-                    }
-
-                    if (l[ii][1] == '`Description`') {
-                     if (component.description != undefined) {
-                         l[ii][2] = `\`${component.description}\``;
-                        }
-                    }
-
-                    if (l[ii][1] == '`MPN`') {
-                     if (component.mpn != undefined) {
-                         l[ii][2] = `\`${component.mpn}\``;
-                        }
-                    }
+             // Update Property Content
+             if (itemType === 'property') {
+                const propName = l[ii][1];
+                if (propName === '`Reference`' && component.reference !== undefined) {
+                    l[ii].length = 2;
+                    l[ii].push(`\`${component.reference}\``);
+                } else if (propName === '`Value`' && component.value !== undefined) {
+                    l[ii].length = 2;
+                    l[ii].push(`\`${component.value}\``);
+                } else if (propName === '`Footprint`' && component.footprint !== undefined) {
+                    l[ii].length = 2;
+                    l[ii].push(`\`${component.footprint}\``);
+                } else if (propName === '`Datasheet`' && component.datasheet !== undefined) {
+                    l[ii].length = 2;
+                    l[ii].push(`\`${component.datasheet}\``);
+                } else if (propName === '`Description`' && component.description !== undefined) {
+                    l[ii].length = 2;
+                    l[ii].push(`\`${component.description}\``);
+                } else if (propName === '`MPN`' && component.mpn !== undefined) {
+                    l[ii].length = 2;
+                    l[ii].push(`\`${component.mpn}\``);
                 }
-
-             // All pads need their rotation adjusted relative to the component rotation
-             if (Array.isArray(l[ii]) && l[ii][0] == 'pad') {
-                    for (var iii in l[ii]) {
-                     if (Array.isArray(l[ii][iii]) && l[ii][iii][0] == 'at') {
-                         const atArray = l[ii][iii];
-                         // Check if there is already a rotation property or not, add/replace it
-                         let padBaseRotation = 0;
-                          if (atArray.length === 4) {
-                             padBaseRotation = parseFloat(atArray[3]) || 0; // Rotation from footprint file
-                             atArray.splice(3, 1, `${(component.pcb.rotation! + padBaseRotation)}`); // Add component rotation to pad rotation
-                         } else if (atArray.length === 3) {
-                              atArray.splice(3, 0, `${component.pcb.rotation}`); // Add component rotation if none existed
-                         }
-                     }
-                 }
              }
 
-             // Some footprints have the reference in fp_text
-             if (Array.isArray(l[ii]) && l[ii][0] == 'fp_text') {
-                    if (String(l[ii][1]).toLowerCase() == 'reference') {
+             // Update Pad Rotation
+             if (itemType === 'pad') {
+             }
+
+             // Update Text Elements (Content and Rotation)
+             if (itemType === 'fp_text') {
+                 const textType = String(l[ii][1]).toLowerCase();
+                 if (textType === 'reference') {
                      if (component.reference != undefined) {
                          l[ii][2] = `\`${component.reference}\``;
                      }
+                 } else if (textType === 'value') {
+                     if (component.value != undefined) {
+                          l[ii][2] = `\`${component.value}\``;
+                     }
                  }
              }
+
+             // TODO: Add similar rotation logic for properties with 'at', fp_line, fp_circle etc. if needed
+
          }
         return l;
      }
@@ -341,17 +367,16 @@ export class PCB {
             this.place(component);
         });
 
-        const version = '(version 20240108)'; // TODO: Consider updating version dynamically or making it configurable
+        const version = '(version 20240108)';
         const generator = '(generator "typecad")';
-        const generator_version = '(generator_version "1.0")'; // TODO: Update version
+        const generator_version = '(generator_version "1.0")';
         const general = '(general (thickness 1.6) (legacy_teardrops no))';
         const paper = '(paper "A4")';
 
         // Create a map of components keyed by UUID for efficient lookup
         const componentMap = new Map<string, Component>();
         this.#components.forEach(comp => {
-            // Only consider placeable components (not DNP) that have a UUID and are not vias (vias handled separately)
-             if (!comp.dnp && comp.uuid && comp.via === false) {
+            if (!comp.dnp && comp.uuid && comp.via === false) {
                 componentMap.set(comp.uuid, comp);
             }
         });
@@ -363,19 +388,17 @@ export class PCB {
         if (fs.existsSync(boardFilePath)) {
             try {
                 let board_contents_str = fs.readFileSync(boardFilePath, "utf8");
-                // Replace quotes for SExpr parser compatibility
                 board_contents_str = board_contents_str.replaceAll('"', "`");
-                // Parse the S-expression. Assumes the root is (kicad_pcb ...)
-                 const parsed = fsexp(board_contents_str);
-                 if (Array.isArray(parsed) && parsed.length > 0 && Array.isArray(parsed[0]) && parsed[0][0] === 'kicad_pcb') {
-                     existing_board_contents = parsed[0]; // Get content inside (kicad_pcb ...)
-                 } else {
-                     console.warn(chalk.yellow(`WARN: Could not parse existing board file structure: ${boardFilePath}. Starting new.`));
+                const parsed = fsexp(board_contents_str);
+                if (Array.isArray(parsed) && parsed.length > 0 && Array.isArray(parsed[0]) && parsed[0][0] === 'kicad_pcb') {
+                    existing_board_contents = parsed[0];
+                } else {
+                    console.warn(chalk.yellow(`WARN: Could not parse existing board file structure: ${boardFilePath}. Starting new.`));
                     existing_board_contents = [];
-                 }
+                }
             } catch (e: any) {
                 console.error(chalk.red(`👺 Error: Failed to read or parse existing board file ${boardFilePath}: ${e.message}. Starting new.`));
-                existing_board_contents = []; // Start fresh if parsing fails
+                existing_board_contents = [];
             }
         }
 
@@ -384,30 +407,41 @@ export class PCB {
         let headerItems = [version, generator, generator_version, general, paper];
 
         // If existing board had content, try to preserve header and setup, otherwise use defaults
-        if (existing_board_contents.length > 1) { // existing_board_contents[0] is 'kicad_pcb'
-             // Copy existing non-footprint, non-group items first
-             existing_board_contents.slice(1).forEach(item => { // Skip 'kicad_pcb' symbol
-                 if (typeof item === 'string' && item.startsWith('(')) { // Keep raw string elements like version, generator etc.
-                     final_board_contents.push(item);
-                 } else if (Array.isArray(item)) {
-                     const nodeType = item[0];
-                     // Only keep non-footprint and non-group items
-                     if (nodeType !== 'footprint' && nodeType !== 'group') {
-                         final_board_contents.push(item);
-                     }
-                 }
-             });
-             // Ensure essential headers are present if they were missing
-             headerItems.forEach(header => {
-                 const headerSymbol = header.substring(1, header.indexOf(" "));
-                 if (!final_board_contents.some(item => (typeof item === 'string' && item.includes(`(${headerSymbol}`)) || (Array.isArray(item) && item[0] === headerSymbol))) {
-                     final_board_contents.unshift(header); // Add missing headers at the beginning
-                 }
-             });
+        if (existing_board_contents.length > 1) {
+            existing_board_contents.slice(1).forEach(item => {
+                if (typeof item === 'string' && item.startsWith('(')) {
+                    final_board_contents.push(item);
+                } else if (Array.isArray(item)) {
+                    const nodeType = item[0];
+                    if (nodeType !== 'footprint' && nodeType !== 'group' && nodeType !== 'gr_rect') {
+                        final_board_contents.push(item);
+                    }
+                }
+            });
+            headerItems.forEach(header => {
+                const headerSymbol = header.substring(1, header.indexOf(" "));
+                if (!final_board_contents.some(item => (typeof item === 'string' && item.includes(`(${headerSymbol}`)) || (Array.isArray(item) && item[0] === headerSymbol))) {
+                    final_board_contents.unshift(header);
+                }
+            });
         } else {
-            // No existing content or parsing failed, use default headers
             final_board_contents = [...headerItems];
         }
+
+        // Add outlines to the board
+        this.#outlines.forEach(outline => {
+            try {
+                const outlineNode = fsexp(outline.replaceAll('"', "`")).pop();
+                if (outlineNode) {
+                    final_board_contents.push(outlineNode);
+                }
+            } catch (e: any) {
+                console.error(chalk.red(`👺 Error: Failed to parse outline: ${outline} - ${e.message}`));
+            }
+        });
+
+        // Clear outlines after they've been added to the board
+        this.#outlines = [];
 
         // Add groups (rebuilds groups based on current definitions)
          this.#groups.forEach((groupString) => {
@@ -536,5 +570,35 @@ export class PCB {
         // this.#vias.push(`(via (at ${at.x} ${at.y}) (size ${size}) (drill ${drill}) (layers "F.Cu" "B.Cu") (free yes) (net ${netCode}) (uuid "${uuid}") )`);
         // return new Component({uuid: uuid, via: true});
         return new Component();
+    }
+
+    /**
+     * Creates a rectangular outline on the Edge.Cuts layer.
+     * 
+     * @param {number} x - The x-coordinate of the rectangle's start point
+     * @param {number} y - The y-coordinate of the rectangle's start point
+     * @param {number} width - The width of the rectangle
+     * @param {number} height - The height of the rectangle
+     * @param {string} [uuid] - Optional UUID for the rectangle. If not provided, a new UUID will be generated.
+     * @example
+     * ```ts
+     * let board = new PCB('boardname');
+     * board.outline(0, 0, 100, 50); // Creates a 100x50mm rectangle starting at (0,0)
+     * board.outline(0, 0, 100, 50, "custom-uuid-123"); // Creates a rectangle with a specific UUID
+     * ```
+     */
+    outline(x: number, y: number, width: number, height: number, uuid?: string): void {
+        const endX = x + width;
+        const endY = y + height;
+        const rectUuid = uuid || randomUUID();
+        
+        this.#outlines.push(`(gr_rect
+            (start ${x} ${y})
+            (end ${endX} ${endY})
+            (layer "Edge.Cuts")
+            (width 0.05)
+            (fill no)
+            (uuid "${rectUuid}")
+        )`);
     }
 }
