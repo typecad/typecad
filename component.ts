@@ -18,7 +18,7 @@ export interface IComponent {
     prefix?: string, datasheet?: string, description?: string, voltage?: string,
     wattage?: string, uuid?: string, mpn?: string, dnp?: boolean,
     pcb?: { x: number, y: number, rotation: number }, pins?: Pin[], via?: boolean,
-    simulation?: { include: boolean, model?: string }
+    simulation?: { include: boolean, model?: string }, sch?: { x: number, y: number, rotation: number }
 }
 
 /**
@@ -69,6 +69,8 @@ export class Component {
     pins: Pin[] = [];
     via: boolean = false;
     simulation: { include: boolean, model: string } = { include: false, model: '' };
+    symbol?: string = '';
+    sch: { x: number, y: number, rotation?: number } = { x: 0, y: 0, rotation: 0 };
 
     /**
      * `constructor` for Component.
@@ -158,7 +160,7 @@ export class Component {
             return existingPin;
         }
 
-        const newPin = new Pin(this.reference, number);
+        const newPin = new Pin(this.reference, number, undefined, this);
         this.pins.push(newPin);
         return newPin;
         //return new Pin(this.reference, number);

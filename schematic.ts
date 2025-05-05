@@ -4,6 +4,7 @@ import fs from "node:fs";
 import Handlebars from "handlebars";
 import chalk from 'chalk';
 import { erc } from "./erc";
+import { randomUUID, UUID } from "node:crypto";
 
 let schematic_template = `(export (version "E")
   (design
@@ -113,10 +114,11 @@ export interface ISchematicOptions {
 export class Schematic {
     Components: Component[] = [];
     Sheetname: string = '';
+    uuid: UUID = randomUUID();
     private sxexp_components: string[] = [];
     private sxexp_nets: string[] = [];
     private code_counter = 0;
-    Nodes: { name: string, code: number, nodes: Pin[] }[] = [];
+    Nodes: { name: string, code: number, nodes: Pin[], owner: Component | null }[] = [];
     merged_nets: { old_name: string, merged_to_number: number}[] = [];
     private _chained_name: string = '';
     #options: ISchematicOptions = {
@@ -144,7 +146,7 @@ export class Schematic {
      * @ignore
      */
     private _storeNetParams(name: string, code: number, ...nodes: Pin[]) {
-        this.Nodes.push({ name, code, nodes });
+        this.Nodes.push({ name, code, nodes, owner: null });
     }
 
     bom(output_folder?: string) {
@@ -327,7 +329,7 @@ export class Schematic {
         this._storeNetParams(node_name, this.code_counter, ...pins);
 
         // Check for duplicate node names and merge them
-        let nodeMap: { [key: string]: { name: string, code: number, nodes: Pin[] } } = {};
+        let nodeMap: { [key: string]: { name: string, code: number, nodes: Pin[], owner: Component | null } } = {};
         this.Nodes.forEach((node) => {
             if (nodeMap[node.name]) {
                 nodeMap[node.name].nodes.push(...node.nodes);

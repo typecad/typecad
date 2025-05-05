@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-
+import { Component } from './component';
 /**
  * Type representing the possible types of a pin.
  *
@@ -16,6 +16,7 @@ export class Pin {
     number: number | string = '';
     reference: string = '';
     type: TPinType;
+    owner: Component | null;
 
     /**
      * Initializes a new pin with a given reference, number, and optional type.
@@ -28,9 +29,10 @@ export class Pin {
      * let pin = new Pin('R1', 1, 'input');
      * ```
      */
-    constructor(reference: string, number: number | string, type?: TPinType) {
+    constructor(reference: string, number: number | string, type?: TPinType, owner?: Component) {
         this.reference = reference;
         this.number = number;
         this.type = type || 'passive';
+        this.owner = owner || null;
     }
 }
